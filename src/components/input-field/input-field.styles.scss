@@ -1,0 +1,13 @@
+.input-field {
+    padding: 5px;
+    margin: 5px 0;
+    border: none;
+    border-bottom: .8px solid black;
+    width: 50%;
+    font-size: 3rem;
+
+    &:focus {
+        outline: none;
+    }
+
+}

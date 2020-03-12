@@ -1,0 +1,43 @@
+.todo-item {
+  width: 70%;
+  display: inline-block;
+  font-size: 3rem;
+  border-bottom: 1px solid black;
+  margin: 2rem 0;
+  padding: 1rem;
+  border-radius: 2px;
+
+  transition: all 0.2s;
+
+  &:hover {
+    transform: translateY(-0.3rem) scale(1.04);
+  }
+
+  &:hover &__icon {
+    opacity: .9;
+  }
+
+  &__text {
+    display: inline-block;
+
+    &--done {
+      text-decoration: line-through;
+    }
+
+    &--pending {
+      text-decoration: none;
+    }
+  }
+
+  &__icon {
+    float: right;
+    font-size: 4rem;
+    opacity: 0;
+    transition: all .2s;
+    margin: 0 1rem;
+
+    &:hover {
+        transform: translateY(-0.3rem) scale(1.04);
+    }
+  }
+}

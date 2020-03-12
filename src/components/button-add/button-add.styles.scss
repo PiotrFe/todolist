@@ -1,0 +1,31 @@
+.button-add {
+  &,
+  &:link,
+  &:visited {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 10rem;
+    background-color: black;
+    border: 1px solid black;
+    font-size: 2.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: white;
+    display: inline-block;
+    position: relative;
+    top: 0.5rem;
+    transition: all 0.2s;
+
+    &:hover {
+      cursor: pointer;
+      background-color: white;
+      color: black;
+      transform: translateY(-0.3rem);
+    }
+
+    &:active {
+      transform: translateY(-0.1rem);
+    }
+  }
+}
