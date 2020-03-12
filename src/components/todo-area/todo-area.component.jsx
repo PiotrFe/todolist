@@ -5,7 +5,7 @@ import ToDoItems from "../../components/todo-items/todo-items.component";
 
 import { ActionTypes } from "../../constants/constants";
 
-import Aux from "../../components/hoc/aux.component";
+import Aux from "../hoc/auxiliary.component";
 
 class TodoArea extends React.Component {
   constructor(props) {
@@ -20,7 +20,8 @@ class TodoArea extends React.Component {
     const newToDo = {
       text: newToDoText,
       draft: "",
-      done: false
+      done: false,
+      editMode: false
     };
 
     this.setState(prevState => ({
@@ -42,7 +43,9 @@ class TodoArea extends React.Component {
     this.setState(prevState => {
       const updatedToDos = prevState.todoItems.map((item, index) => {
         if (idx === index) {
-          return (item.text = text);
+          item.editMode = true;
+
+          return item;
         }
       });
 
@@ -83,6 +86,7 @@ class TodoArea extends React.Component {
         if (index === idx) {
           item.text = item.draft;
           item.draft = "";
+          item.editMode = false;
 
           return item;
         }

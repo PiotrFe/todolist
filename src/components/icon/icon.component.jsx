@@ -7,7 +7,7 @@ import "./icon.styles.scss";
 const Icon = props => (
   <i
     className={`todo-item__icon ${IconClasses[props.type]}`}
-    onClick={() => props.onClick(props.idx, "this item has been edited")}
+    onClick={() => props.onClick(props.idx)}
   ></i>
 );
 

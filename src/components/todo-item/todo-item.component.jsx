@@ -15,7 +15,10 @@ const ToDoItem = (props) => (
         <Icon idx={props.idx} type={IconTypes.remove} onClick={props.actions.remove} />
         <Icon idx={props.idx} type={IconTypes.edit} onClick={props.actions.edit} />
         <Icon idx={props.idx} type={IconTypes.done} onClick={props.actions.done} />
-        <InputField idx={props.idx} value={props.draft} actions={props.actions} />
+        {props.editMode 
+        ? <InputField idx={props.idx} value={props.draft} actions={props.actions} />
+        : null }
+        
     </div>
 
 )
