@@ -1,13 +1,15 @@
 export const IconTypes = {
-    done: "done",
-    remove: "remove",
-    edit: "edit",
-    update: "update",
-    submit: "submit"
+    DONE: "done",
+    REMOVE: "remove",
+    EDIT: "edit",
+    UPDATE: "update",
+    SUBMIT: "submit",
+    BACKSPACE: "backspace"
 }
 
 export const IconClasses = {
-    [IconTypes.done]: "fas fa-check",
-    [IconTypes.remove]: "fas fa-trash",
-    [IconTypes.edit]: "fas fa-pen"
+    [IconTypes.DONE]: "fas fa-check",
+    [IconTypes.REMOVE]: "fas fa-trash",
+    [IconTypes.EDIT]: "fas fa-pen",
+    [IconTypes.BACKSPACE]: "fas fa-backspace"
 }

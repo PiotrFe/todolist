@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import ButtonAdd from "../button-add/button-add.component";
 import InputField from "../input-field/input-field.component";
 
-import { ActionTypes } from "../../constants/constants";
+import { ActionTypes, Sizes } from "../../constants/constants";
 
 import "./todo-input.styles.scss";
 
@@ -24,8 +24,11 @@ const TodoInput = props => {
       <div className="input-box">
         <InputField
           actions={{ 
-            [ActionTypes.UPDATE]: handleChange }}
+            [ActionTypes.UPDATE]: handleChange,
+            [ActionTypes.SUBMIT]: handleClick }}
           value={inputValue}
+          size={Sizes.LARGE}
+          
         />
         <ButtonAdd onClick={handleClick} />
       </div>

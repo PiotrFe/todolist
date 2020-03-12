@@ -1,26 +1,36 @@
 import React from "react";
 
+import Icon from "../icon/icon.component";
+import { IconTypes } from "../icon/icon.types";
+import { Components, Sizes } from "../../constants/constants";
+
 import "./input-field.styles.scss";
 
-const InputField = props => {
+const InputField = ({ idx, size, actions, value }) => {
   return (
     <form
       action="/"
       className="input-form"
-      onSubmit={(e) => {
+      onSubmit={e => {
         e.preventDefault();
-        props.actions.submit(props.idx)
-      }
-    }
+        actions.submit(idx);
+      }}
     >
-      <input
-        className="input-field"
-        type="text"
-        value={props.value}
-        placeholder="Enter to-do item"
-        onChange={e => props.actions.update(props.idx, e.target.value)
-        }
-      />
+      <div className="input-form-group">
+        <input
+          className={`input-field input-field--${size}`}
+          type="text"
+          value={value}
+          placeholder="Edit here"
+          onChange={e => actions.update(idx, e.target.value)}
+        />
+        <Icon
+          type={IconTypes.BACKSPACE}
+          onClick={actions.remove}
+          parent={Components.INPUT_FIELD}
+          size={Sizes.MEDIUM}
+        />
+      </div>
     </form>
   );
 };

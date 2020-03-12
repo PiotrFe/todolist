@@ -57,7 +57,8 @@ class TodoArea extends React.Component {
     this.setState(prevState => {
       const updatedToDos = prevState.todoItems.map((item, index) => {
         if (idx === index) {
-          return (item.done = !item.done);
+          item.done = !item.done;
+          return item;
         }
       });
 
