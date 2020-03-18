@@ -8,7 +8,9 @@ import "./icon.styles.scss";
 const Icon = ({type, onClick, idx, parent, size}) => (
   <i
     className={`icon icon--${size} ${parent}__icon ${IconClasses[type]}`}
-    onClick={() => onClick(idx)}
+    onClick={() => {
+      onClick(idx);
+    } }
   ></i>
 );
 

@@ -1,0 +1,16 @@
+@mixin sticky {
+    position: fixed;
+    top: 0;
+}
+
+@mixin themeDark {
+    &--theme-dark {
+        @content;
+    }
+}
+
+@mixin themeLight {
+    &--theme-light {
+        @content;
+    }
+}

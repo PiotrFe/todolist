@@ -1,0 +1,11 @@
+.todo-area {
+    padding-top: 10rem;
+
+    &__input-wrapper {
+        &.sticky {
+            position: fixed;
+            top: 0;
+        }
+        
+    }
+}

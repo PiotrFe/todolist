@@ -1,13 +1,26 @@
+@import "../../constants/mixins";
+@import "../../constants//constants";
+
 .input-container {
-    text-align: center;
+  text-align: center;
+
+  .test-button {
+    background-color: black;
+
+    @include themeDark {
+      background-color: $color-black;
+    }
+
+    @include themeLight {
+      background-color: $color-white;
+    }
 
     .input-box {
-        display: inline-block;
-        width: 70vw;
-        // border: 2px solid black;
-        margin: 2rem 0;
-        padding: 2rem 0;
-
+      display: inline-block;
+      width: 70vw;
+      margin: 2rem 0;
+      padding: 2rem 0;
+      z-index: 100;
     }
+  }
 }
-

@@ -3,17 +3,41 @@ import React from "react";
 import TodoInput from "../../components/todo-input/todo-input.component";
 import ToDoItems from "../../components/todo-items/todo-items.component";
 
-import { ActionTypes } from "../../constants/constants";
+import { ActionTypes, Themes } from "../../constants/constants";
 
-import Aux from "../hoc/auxiliary.component";
+import "./todo-area.styles.scss";
 
 class TodoArea extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      todoItems: []
+      todoItems: [],
+      theme: Themes.LIGHT
     };
+
+    this.inputRef = React.createRef();
+    this.scrollHandler = this.scrollHandler.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener("scroll", this.scrollHandler);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.scrollHandler);
+  }
+
+  scrollHandler() {
+    console.log("Search field offset: " + this.inputRef.current.offsetTop);
+    console.log("Page Y offset: " + window.pageYOffset);
+
+    const sticky = this.inputRef.current.offsetTop;
+    if (window.pageYOffset > sticky) {
+      this.inputRef.current.classList.add("sticky");
+    } else {
+      this.inputRef.current.classList.remove("sticky");
+    }
   }
 
   submitHandler = newToDoText => {
@@ -66,14 +90,14 @@ class TodoArea extends React.Component {
     });
   };
 
-  updateHandler = (idx, text) => {
+  updateHandler = (idx, text = "") => {
     this.setState(prevState => {
       const updatedToDos = prevState.todoItems.map((item, index) => {
         if (index === idx) {
           item.draft = text;
           item.text = text;
 
-          return item;  
+          return item;
         }
       });
 
@@ -93,15 +117,19 @@ class TodoArea extends React.Component {
         }
       });
 
-      return {ToDoItems: updatedToDos}
-    })
-
-  }
+      return { ToDoItems: updatedToDos };
+    });
+  };
 
   render() {
     return (
-      <Aux>
-        <TodoInput onSubmit={this.submitHandler} />
+      <div className="todo-area">
+        <div className="todo-area__input-wrapper" ref={this.inputRef}>
+          <TodoInput
+            className="todo-input-main"
+            onSubmit={this.submitHandler}
+          />
+        </div>
         <ToDoItems
           items={this.state.todoItems}
           actions={{
@@ -112,7 +140,7 @@ class TodoArea extends React.Component {
             [ActionTypes.SUBMIT]: this.submitUpdateHandler
           }}
         />
-      </Aux>
+      </div>
     );
   }
 }

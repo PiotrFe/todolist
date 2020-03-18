@@ -1,5 +1,16 @@
 .input-form {
   width: 70%;
+  margin: 0 auto;
+  position: relative;
+
+  &--large {
+    display: inline-block;
+    z-index: 100;
+  }
+
+  &--small {
+    display: block;
+  }
 
   .input-form-group {
     position: relative;
@@ -13,10 +24,6 @@
     &:focus {
       outline: 2px solid blue;
     }
-
-    // &:focus+&__icon {
-    //   opacity: 1;
-    // }
 
     &--large {
       font-size: 3rem;
@@ -32,7 +39,7 @@
   
     &__icon {
       position: absolute;
-      top: 28%;
+      top: 30%;
       right: 0.1%;
       opacity: 0;
       // transform: translate(-130%, -50%);
