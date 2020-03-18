@@ -40,12 +40,15 @@ class TodoArea extends React.Component {
     }
   }
 
-  submitHandler = newToDoText => {
+  submitHandler = newToDoObj => {
+    const { newToDoTitle, newToDoDetails } = newToDoObj;
     const newToDo = {
-      text: newToDoText,
+      title: newToDoTitle,
+      details: newToDoDetails,
       draft: "",
       done: false,
-      editMode: false
+      editMode: false,
+      detailsVisible: false
     };
 
     this.setState(prevState => ({
@@ -95,7 +98,7 @@ class TodoArea extends React.Component {
       const updatedToDos = prevState.todoItems.map((item, index) => {
         if (index === idx) {
           item.draft = text;
-          item.text = text;
+          item.title = text;
 
           return item;
         }
@@ -109,14 +112,25 @@ class TodoArea extends React.Component {
     this.setState(prevState => {
       const updatedToDos = prevState.todoItems.map((item, index) => {
         if (index === idx) {
-          item.text = item.draft;
+          item.title = item.draft;
           item.draft = "";
           item.editMode = false;
-
           return item;
         }
       });
 
+      return { ToDoItems: updatedToDos };
+    });
+  };
+
+  toggleDetailsHandler = idx => {
+    this.setState(prevState => {
+      const updatedToDos = prevState.todoItems.map((item, index) => {
+        if (index === idx) {
+          item.detailsVisible = !item.detailsVisible;
+          return item;
+        }
+      });
       return { ToDoItems: updatedToDos };
     });
   };
@@ -137,7 +151,8 @@ class TodoArea extends React.Component {
             [ActionTypes.EDIT]: this.editHandler,
             [ActionTypes.DONE]: this.doneHandler,
             [ActionTypes.UPDATE]: this.updateHandler,
-            [ActionTypes.SUBMIT]: this.submitUpdateHandler
+            [ActionTypes.SUBMIT]: this.submitUpdateHandler,
+            [ActionTypes.TOGGLE_DETAILS]: this.toggleDetailsHandler
           }}
         />
       </div>

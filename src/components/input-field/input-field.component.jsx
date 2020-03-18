@@ -16,10 +16,6 @@ const InputField = ({ idx, size, actions, value }) => {
     textInput.current.focus();
   };
 
-  const unFocusInput = () => {
-    textInput.current.blur();
-  };
-
   const conditionalProps = {
     ...(size === Sizes.LARGE && {
       onFocus() {
@@ -27,8 +23,12 @@ const InputField = ({ idx, size, actions, value }) => {
       },
       onSubmit() {
         actions.update(idx);
-        unFocusInput();
         toggleOverlay(!overlayVisible);
+      }
+    }),
+    ...(size === Sizes.SMALL && {
+      onBlur() {
+        actions.submit(idx);
       }
     })
   };
@@ -68,11 +68,12 @@ const InputField = ({ idx, size, actions, value }) => {
           />
         </div>
       </form>
-
-      <Overlay
-        show={overlayVisible}
-        onClick={() => toggleOverlay(!overlayVisible)}
-      />
+      {size === Sizes.LARGE ? (
+        <Overlay
+          show={overlayVisible}
+          onClick={() => toggleOverlay(!overlayVisible)}
+        />
+      ) : null}
     </Aux>
   );
 };

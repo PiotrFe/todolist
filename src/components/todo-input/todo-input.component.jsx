@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 
 import ButtonAdd from "../button-add/button-add.component";
 import InputField from "../input-field/input-field.component";
-import ButtonToggle from "../button-toggle/button-toggle.component";
 
 import ThemeContext from "../../contexts/ThemeContext";
 
@@ -28,8 +27,6 @@ const TodoInput = props => {
 
   return (
     <div className="input-container">
-      <button class={`test-button test-button--${themeType}`} onClick={() => toggle()}>Click me to change theme!</button>
-      <ButtonToggle />
       <div className="input-box">
         <InputField
           actions={{ 

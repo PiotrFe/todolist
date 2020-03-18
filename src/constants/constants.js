@@ -4,7 +4,8 @@ export const ActionTypes = {
   REMOVE: "remove",
   EDIT: "edit",
   UPDATE: "update",
-  SUBMIT: "submit"
+  SUBMIT: "submit",
+  TOGGLE_DETAILS: "toggleDetails"
 };
 
 export const Sizes = {

@@ -2,35 +2,47 @@
 @import "../../constants//mixins";
 
 .header {
-    width: 100%;
-    height: 10%;
-    border: 1px solid black;
-    position: fixed;
-    background-image: linear-gradient(to right, $color-primary, $color-primary-dark);
-    color: $color-white;
+  width: 100%;
+  height: 10%;
+  border: 1px solid black;
+  position: fixed;
+  background-image: linear-gradient(
+    to right,
+    $color-primary,
+    $color-primary-dark
+  );
+  
 }
 
 .header-logo {
-    width: 30%;
-    font-size: 2rem;
-    display: inline-block;
-    padding: 1.5rem;
+  width: 30%;
+  color: $color-white;
+  font-size: 2rem;
+  display: inline-block;
+  padding: 1.5rem;
 }
 
 .header-list {
-    width: 70%;
-    display: inline-block;
-    position: relative;
-    text-align: right;
+  width: 70%;
+  display: inline-block;
+  position: relative;
+  text-align: right;
 }
 
 .header-item {
-    font-size: 1.2rem;
-    font-weight: bolder;
-    text-transform: uppercase;
-    padding: 1rem;
-    position: relative;
-    display: inline-block;
-    // float: right;
-    
+  &__link {
+    &:link,
+    &:visited {
+      text-decoration: none;
+      color: $color-white;
+    }
+  }
+  color: $color-white;
+  font-size: 1.2rem;
+  font-weight: bolder;
+  text-transform: uppercase;
+  padding: 1rem;
+  position: relative;
+  display: inline-block;
+  // float: right;
 }

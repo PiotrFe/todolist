@@ -3,6 +3,12 @@
     top: 0;
 }
 
+@mixin clearLinkStyles {
+    a, a:link, a:visited {
+        text-decoration: none;
+    }
+}
+
 @mixin themeDark {
     &--theme-dark {
         @content;

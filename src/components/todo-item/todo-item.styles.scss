@@ -1,40 +1,124 @@
 @import "../../constants/constants";
 
 .todo-item {
+  perspective: 150rem;
+
   width: 70%;
+  height: 20rem;
+  margin-bottom: 5rem;
+  position: relative;
   display: inline-block;
-  font-size: 3rem;
-  line-height: 3rem;
-  border-bottom: 1px solid $color-black;
-  margin: 2rem 0;
-  padding: 1rem;
-  border-radius: 2px;
-
-  box-shadow: 0 1rem 3rem rgba($color-black, .15);
-
-  transition: all 0.2s;
 
   &:hover {
     transform: translateY(-0.3rem) scale(1.04);
+  }
+
+  &:hover &__side--front {
+    // transform: rotateX(180deg);
+  }
+
+  &:hover &__side--back {
+    // transform: rotateX(0);
+  }
+
+  &__side {
+    font-size: 3rem;
+    line-height: 3rem;
+    border-bottom: 1px solid $color-black;
+    margin: 2rem 0;
+    padding: 1rem;
+    border-radius: 2px;
+    box-shadow: 0 1rem 3rem rgba($color-black, 0.15);
+    height: 100%;
+    width: 100%;
+    // transition: all 0.2s;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    backface-visibility: hidden;
+    width: 100%;
+
+    transition: all 0.8s ease;
+
+    //FRONTSIDE STYLING
+
+    &--front {
+      transform: rotateX(180deg);
+      z-index: -10;
+
+      &--visible {
+        transform: rotateX(0);
+        z-index: 10;
+
+        & > .todo-item__text {
+          display: inline-block;
+
+          &--done {
+            text-decoration: line-through;
+          }
+
+          &--pending {
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+    &--back {
+      transform: rotateX(-180deg);
+      z-index: -10;
+
+      &--visible {
+        transform: rotateX(0);
+        z-index: 10;
+      }
+
+      & > .todo-item__text {
+        font-size: 1.5rem;
+        margin: 1rem 0;
+        width: 100%;
+        line-height: .5rem;
+      }
+
+      & > .todo-item__icons {
+        padding: 1rem 0;
+      }
+    }
+  }
+
+  &__side--front:hover &__icon {
+    opacity: 0.9;
+  }
+
+  &__side--back:hover &__icon {
+    opacity: 0.9;
+  }
+
+  &__icons {
+    padding: 0.5rem 0;
+    display: block;
+    width: 100%;
+    height: 15%;
   }
 
   &__icon {
     opacity: 0;
   }
 
-  &:hover &__icon {
-    opacity: 0.9;
+  &__text {
+    margin: 3rem 0;
+    width: 80%;
   }
 
-  &__text {
-    display: inline-block;
+  //BACKSIDE STYLING
 
-    &--done {
-      text-decoration: line-through;
-    }
-
-    &--pending {
-      text-decoration: none;
-    }
+  &__details {
+    font-size: 1.2rem;
+    line-height: normal;
+    border: 1px solid $color-black;
+    padding: 0.5rem 0;
+    overflow: auto;
+    height: 70%;
   }
 }
