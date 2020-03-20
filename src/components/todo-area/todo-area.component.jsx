@@ -41,11 +41,12 @@ class TodoArea extends React.Component {
   }
 
   submitHandler = newToDoObj => {
-    const { newToDoTitle, newToDoDetails } = newToDoObj;
+    const { newToDoTitle } = newToDoObj;
     const newToDo = {
       title: newToDoTitle,
-      details: newToDoDetails,
+      details: "",
       draft: "",
+      detailsDraft: "",
       done: false,
       editMode: false,
       detailsVisible: false
@@ -56,7 +57,7 @@ class TodoArea extends React.Component {
     }));
   };
 
-  removeHandler = idx => {
+  removeHandler = (idx) => {
     this.setState(prevState => {
       const updatedToDos = prevState.todoItems.filter((item, index) => {
         return index !== idx;
@@ -93,13 +94,19 @@ class TodoArea extends React.Component {
     });
   };
 
-  updateHandler = (idx, text = "") => {
+  updateHandler = ({ idx, parent: field, value }) => {
     this.setState(prevState => {
       const updatedToDos = prevState.todoItems.map((item, index) => {
         if (index === idx) {
-          item.draft = text;
-          item.title = text;
+          if (field === "title") {
+            item.title = value;
+            item.draft = value;
+          }
 
+          if (field === "details") {
+            item.details = value;
+            item.detailsDraft = value;
+          }
           return item;
         }
       });
@@ -108,13 +115,21 @@ class TodoArea extends React.Component {
     });
   };
 
-  submitUpdateHandler = idx => {
+  submitUpdateHandler = ({ idx, parent: field }) => {
     this.setState(prevState => {
       const updatedToDos = prevState.todoItems.map((item, index) => {
         if (index === idx) {
-          item.title = item.draft;
-          item.draft = "";
-          item.editMode = false;
+          if (field === "title") {
+            item.title = item.draft;
+            item.draft = "";
+            item.editMode = false;
+          }
+          if (field === "details") {
+            item.details = item.detailsDraft;
+            item.detailsDraft = "";
+            item.editMode = false;
+          }
+
           return item;
         }
       });

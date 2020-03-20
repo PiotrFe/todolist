@@ -8,9 +8,18 @@
   margin-bottom: 5rem;
   position: relative;
   display: inline-block;
+   transition: all 0.2s;
 
   &:hover {
     transform: translateY(-0.3rem) scale(1.04);
+  }
+
+  &:hover &__side--front--visible > &__icons {
+    opacity: 0.9;
+  }
+
+  &:hover &__side--back--visible > &__icons {
+    opacity: 0.9;
   }
 
   &:hover &__side--front {
@@ -50,17 +59,18 @@
       &--visible {
         transform: rotateX(0);
         z-index: 10;
+      }
 
-        & > .todo-item__text {
-          display: inline-block;
+      & > .todo-item__text {
+        display: inline-block;
+        margin: 3rem auto;
 
-          &--done {
-            text-decoration: line-through;
-          }
+        &--done {
+          text-decoration: line-through;
+        }
 
-          &--pending {
-            text-decoration: none;
-          }
+        &--pending {
+          text-decoration: none;
         }
       }
     }
@@ -75,24 +85,19 @@
       }
 
       & > .todo-item__text {
+        display: inline-block;
         font-size: 1.5rem;
         margin: 1rem 0;
-        width: 100%;
-        line-height: .5rem;
+        width: 50%;
+        line-height: 0.5rem;
       }
 
       & > .todo-item__icons {
+        display: inline-block;
+        width: 50%;
         padding: 1rem 0;
       }
     }
-  }
-
-  &__side--front:hover &__icon {
-    opacity: 0.9;
-  }
-
-  &__side--back:hover &__icon {
-    opacity: 0.9;
   }
 
   &__icons {
@@ -100,10 +105,9 @@
     display: block;
     width: 100%;
     height: 15%;
-  }
-
-  &__icon {
     opacity: 0;
+
+     transition: all 0.2s;
   }
 
   &__text {

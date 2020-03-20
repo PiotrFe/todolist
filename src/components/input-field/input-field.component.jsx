@@ -2,13 +2,12 @@ import React, { useState, useRef } from "react";
 
 import Icon from "../icon/icon.component";
 import Overlay from "../../components/overlay/overlay.component";
-import Aux from "../../components/hoc/auxiliary.component";
 import { IconTypes } from "../icon/icon.types";
 import { Components, Sizes, ActionTypes } from "../../constants/constants";
 
 import "./input-field.styles.scss";
 
-const InputField = ({ idx, size, actions, value }) => {
+const InputField = ({ idx, size, actions, value, parent }) => {
   const textInput = useRef(null);
   const [overlayVisible, toggleOverlay] = useState(false);
 
@@ -16,33 +15,43 @@ const InputField = ({ idx, size, actions, value }) => {
     textInput.current.focus();
   };
 
-  const conditionalProps = {
+  const blurInput = () => {
+    textInput.current.blur();
+  };
+
+  const conditionalInputProps = {
     ...(size === Sizes.LARGE && {
       onFocus() {
         if (!overlayVisible) toggleOverlay(!overlayVisible);
-      },
-      onSubmit() {
-        actions.update(idx);
-        toggleOverlay(!overlayVisible);
       }
     }),
     ...(size === Sizes.SMALL && {
       onBlur() {
-        actions.submit(idx);
+        actions[ActionTypes.SUBMIT]({ idx: idx });
+      }
+    })
+  };
+
+  const conditionalFormProps = {
+    ...(size === Sizes.LARGE && {
+      onSubmit() {
+        actions[ActionTypes.UPDATE]({ value: "" });
+        toggleOverlay(!overlayVisible);
+        blurInput();
       }
     })
   };
 
   return (
-    <Aux>
+    <>
       <form
         action="/"
         className={`input-form input-form--${size}`}
         onSubmit={e => {
           e.preventDefault();
-          actions.submit(idx);
+          actions[ActionTypes.SUBMIT]({ idx: idx, parent: parent });
           if (size === Sizes.LARGE) {
-            conditionalProps.onSubmit();
+            conditionalFormProps.onSubmit();
           }
         }}
       >
@@ -50,18 +59,24 @@ const InputField = ({ idx, size, actions, value }) => {
           <input
             className={`input-field input-field--${size}`}
             type="text"
+            ref={textInput}
             value={value}
             placeholder="Edit here"
-            onChange={e => actions.update(idx, e.target.value)}
-            {...conditionalProps}
-            ref={textInput}
+            onChange={e =>
+              actions[ActionTypes.UPDATE]({
+                idx: idx,
+                parent: parent,
+                value: e.target.value
+              })
+            }
+            {...conditionalInputProps}
           />
           <Icon
             idx={idx}
             type={IconTypes.BACKSPACE}
             onClick={() => {
               focusInput();
-              actions.update(idx);
+              actions[ActionTypes.UPDATE]({ idx: idx, parent: parent, value: "" });
             }}
             parent={Components.INPUT_FIELD}
             size={size}
@@ -74,7 +89,7 @@ const InputField = ({ idx, size, actions, value }) => {
           onClick={() => toggleOverlay(!overlayVisible)}
         />
       ) : null}
-    </Aux>
+    </>
   );
 };
 

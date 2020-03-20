@@ -9,29 +9,30 @@ import { ActionTypes, Sizes, Themes } from "../../constants/constants";
 
 import "./todo-input.styles.scss";
 
-const TodoInput = props => {
+const TodoInput = ({ onSubmit }) => {
   const [inputValue, updateInputValue] = useState("");
-  const {themeType, toggle} = useContext(ThemeContext);
+  const { themeType, toggle } = useContext(ThemeContext);
 
-  function handleChange(idx = null, updatedVal = "") {
-    updateInputValue(updatedVal);
+  function handleChange({ value }) {
+    updateInputValue(value);
   }
 
   function handleClick() {
-    props.onSubmit(inputValue);
+    onSubmit({ newToDoTitle: inputValue });
   }
 
-  function handleFocus() {
-    props.onFocus();
-  }
+  // function handleFocus() {
+  //   props.onFocus();
+  // }
 
   return (
     <div className="input-container">
       <div className="input-box">
         <InputField
-          actions={{ 
+          actions={{
             [ActionTypes.UPDATE]: handleChange,
-            [ActionTypes.SUBMIT]: handleClick }}
+            [ActionTypes.SUBMIT]: handleClick
+          }}
           value={inputValue}
           size={Sizes.LARGE}
         />
