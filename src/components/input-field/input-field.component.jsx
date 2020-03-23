@@ -20,14 +20,12 @@ const InputField = ({ idx, size, actions, value, parent }) => {
   };
 
   const conditionalInputProps = {
-    ...(size === Sizes.LARGE && {
       onFocus() {
-        if (!overlayVisible) toggleOverlay(!overlayVisible);
-      }
-    }),
+        if (!overlayVisible) toggleOverlay(true);
+      },
     ...(size === Sizes.SMALL && {
       onBlur() {
-        actions[ActionTypes.SUBMIT]({ idx: idx });
+        // actions[ActionTypes.SUBMIT]({ idx: idx, parent: parent });
       }
     })
   };
@@ -36,7 +34,6 @@ const InputField = ({ idx, size, actions, value, parent }) => {
     ...(size === Sizes.LARGE && {
       onSubmit() {
         actions[ActionTypes.UPDATE]({ value: "" });
-        toggleOverlay(!overlayVisible);
         blurInput();
       }
     })
@@ -50,6 +47,7 @@ const InputField = ({ idx, size, actions, value, parent }) => {
         onSubmit={e => {
           e.preventDefault();
           actions[ActionTypes.SUBMIT]({ idx: idx, parent: parent });
+          toggleOverlay(false);
           if (size === Sizes.LARGE) {
             conditionalFormProps.onSubmit();
           }
@@ -76,19 +74,28 @@ const InputField = ({ idx, size, actions, value, parent }) => {
             type={IconTypes.BACKSPACE}
             onClick={() => {
               focusInput();
-              actions[ActionTypes.UPDATE]({ idx: idx, parent: parent, value: "" });
+              actions[ActionTypes.UPDATE]({
+                idx: idx,
+                parent: parent,
+                value: ""
+              });
+              
             }}
             parent={Components.INPUT_FIELD}
             size={size}
           />
         </div>
       </form>
-      {size === Sizes.LARGE ? (
+      {/* {size === Sizes.LARGE ? ( */}
         <Overlay
           show={overlayVisible}
-          onClick={() => toggleOverlay(!overlayVisible)}
+          onClick={() => {
+            toggleOverlay(false);
+            actions[ActionTypes.SUBMIT]({ idx: idx, parent: parent });
+          } }
+          opaque={size === Sizes.LARGE ? true : false}
         />
-      ) : null}
+      {/* // ) : null} */}
     </>
   );
 };

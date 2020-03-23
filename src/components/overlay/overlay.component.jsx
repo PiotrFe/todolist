@@ -2,10 +2,10 @@ import React from "react";
 
 import "./overlay.styles.scss";
 
-const Overlay = ({ show, onClick }) => {
+const Overlay = ({ show, onClick, opaque }) => {
   return (
     <div
-      className={`overlay overlay--show-${show}`}
+      className={`overlay overlay--${opaque ? "opaque" : "transparent"} overlay--show-${show}`}
       onClick={onClick}
     >
     </div>

@@ -22,10 +22,15 @@ class TodoArea extends React.Component {
 
   componentDidMount() {
     window.addEventListener("scroll", this.scrollHandler);
+
+    fetch("http://localhost:9000/api/todos")
+      .then(todos => todos.json())
+      .then(data => this.setState({todoItems: data}));
   }
 
   componentWillUnmount() {
     window.removeEventListener("scroll", this.scrollHandler);
+
   }
 
   scrollHandler() {
@@ -45,7 +50,7 @@ class TodoArea extends React.Component {
     const newToDo = {
       title: newToDoTitle,
       details: "",
-      draft: "",
+      draft: newToDoTitle,
       detailsDraft: "",
       done: false,
       editMode: false,
@@ -121,12 +126,10 @@ class TodoArea extends React.Component {
         if (index === idx) {
           if (field === "title") {
             item.title = item.draft;
-            item.draft = "";
             item.editMode = false;
           }
           if (field === "details") {
             item.details = item.detailsDraft;
-            item.detailsDraft = "";
             item.editMode = false;
           }
 

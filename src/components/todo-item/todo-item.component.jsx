@@ -59,25 +59,25 @@ const ToDoItem = ({
           detailsVisible ? "" : "--visible"
         }`}
       >
-        <div className="todo-item__icons">
-          {icons}
+        <div className="todo-item__icons">{icons}</div>
+        <div className="todo-item__text-group">
+          <div
+            className={`todo-item__text todo-item__text--${
+              done ? "done" : "pending"
+            }`}
+          >
+            {title}
+          </div>
+          {editMode ? (
+            <InputField
+              idx={idx}
+              value={draft}
+              parent="title"
+              actions={actions}
+              size={Sizes.SMALL}
+            />
+          ) : null}
         </div>
-        <div
-          className={`todo-item__text todo-item__text--${
-            done ? "done" : "pending"
-          }`}
-        >
-          {title}
-        </div>
-        {editMode ? (
-          <InputField
-            idx={idx}
-            value={draft}
-            parent="title"
-            actions={actions}
-            size={Sizes.SMALL}
-          />
-        ) : null}
       </div>
       <div
         className={`todo-item__side todo-item__side--back todo-item__side--back${
@@ -91,19 +91,19 @@ const ToDoItem = ({
         >
           {title}
         </div>
-        <div className="todo-item__icons">
-          {icons}
+        <div className="todo-item__icons">{icons}</div>
+        <div className="todo-item__text-group">
+          <div className="todo-item__details">{details}</div>
+          {editMode ? (
+            <InputField
+              idx={idx}
+              value={detailsDraft}
+              parent="details"
+              actions={actions}
+              size={Sizes.SMALL}
+            />
+          ) : null}
         </div>
-        <div className="todo-item__details">{details}</div>
-        {editMode ? (
-          <InputField
-            idx={idx}
-            value={detailsDraft}
-            parent="details"
-            actions={actions}
-            size={Sizes.SMALL}
-          />
-        ) : null}
       </div>
     </div>
   );

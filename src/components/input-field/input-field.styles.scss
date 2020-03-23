@@ -1,15 +1,21 @@
 .input-form {
   width: 70%;
-  margin: 0 auto;
   position: relative;
+  z-index: 50;
+
 
   &--large {
     display: inline-block;
     z-index: 100;
+    margin: 0 auto;
+    position: relative;
   }
 
   &--small {
     display: block;
+    position: absolute;
+    top: 2rem;
+    left: 0;
   }
 
   .input-form-group {
