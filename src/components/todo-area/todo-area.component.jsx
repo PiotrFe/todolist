@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 
 import TodoInput from "../../components/todo-input/todo-input.component";
 import ToDoItems from "../../components/todo-items/todo-items.component";
+import Overlay from "../../components/overlay/overlay.component";
+import LoadingSpinner from "../../components/loading-spinner/loading-spinner.component";
 
 import { ActionTypes, Themes } from "../../constants/constants";
 
@@ -10,8 +12,8 @@ import "./todo-area.styles.scss";
 const TodoArea = props => {
   const [todoItems, updateToDoItems] = useState([]);
   const [theme, toggleTheme] = useState(Themes.LIGHT);
-  const [loading, toggleLoading] = useState(false);
-  
+  const [loading, updateLoading] = useState(false);
+
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -39,6 +41,8 @@ const TodoArea = props => {
   };
 
   const submitHandler = newToDoObj => {
+    updateLoading(true);
+
     const { newToDoTitle = "" } = newToDoObj;
     const newToDo = {
       title: newToDoTitle,
@@ -60,6 +64,7 @@ const TodoArea = props => {
       .then(res => res.json())
       .then(todo => {
         updateToDoItems(prevState => [...prevState, JSON.parse(todo)]);
+        updateLoading(false);
       });
   };
 
@@ -113,7 +118,6 @@ const TodoArea = props => {
   };
 
   const updateHandler = ({ id, parent: field, value }) => {
-    
     updateToDoItems(prevState => {
       return prevState.map(item => {
         if (item._id === id) {
@@ -151,17 +155,17 @@ const TodoArea = props => {
       },
       body: JSON.stringify(todo)
     })
-    .then(res => res.json())
-    .then(todo => {
-      updateToDoItems(prevState => {
-        return prevState.map(item => {
-          if (item._id === todo._id) {
-            item = todo;
-          }
-          return item;
+      .then(res => res.json())
+      .then(todo => {
+        updateToDoItems(prevState => {
+          return prevState.map(item => {
+            if (item._id === todo._id) {
+              item = todo;
+            }
+            return item;
+          });
         });
       });
-    })
   };
 
   const toggleDetailsHandler = id => {
@@ -191,6 +195,12 @@ const TodoArea = props => {
           [ActionTypes.TOGGLE_DETAILS]: toggleDetailsHandler
         }}
       />
+      {loading ? (
+        <>
+        <Overlay show={loading} onClick={null} opaque={true} />
+        <LoadingSpinner />
+        </>
+      ) : null}
     </div>
   );
 };
