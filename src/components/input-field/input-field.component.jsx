@@ -7,7 +7,7 @@ import { Components, Sizes, ActionTypes } from "../../constants/constants";
 
 import "./input-field.styles.scss";
 
-const InputField = ({ idx, size, actions, value, parent }) => {
+const InputField = ({ id, size, actions, value, parent }) => {
   const textInput = useRef(null);
   const [overlayVisible, toggleOverlay] = useState(false);
 
@@ -46,7 +46,7 @@ const InputField = ({ idx, size, actions, value, parent }) => {
         className={`input-form input-form--${size}`}
         onSubmit={e => {
           e.preventDefault();
-          actions[ActionTypes.SUBMIT]({ idx: idx, parent: parent });
+          actions[ActionTypes.SUBMIT]({ id: id, parent: parent });
           toggleOverlay(false);
           if (size === Sizes.LARGE) {
             conditionalFormProps.onSubmit();
@@ -62,7 +62,7 @@ const InputField = ({ idx, size, actions, value, parent }) => {
             placeholder="Edit here"
             onChange={e =>
               actions[ActionTypes.UPDATE]({
-                idx: idx,
+                id: id,
                 parent: parent,
                 value: e.target.value
               })
@@ -70,12 +70,12 @@ const InputField = ({ idx, size, actions, value, parent }) => {
             {...conditionalInputProps}
           />
           <Icon
-            idx={idx}
+            id={id}
             type={IconTypes.BACKSPACE}
             onClick={() => {
               focusInput();
               actions[ActionTypes.UPDATE]({
-                idx: idx,
+                id: id,
                 parent: parent,
                 value: ""
               });
@@ -91,7 +91,7 @@ const InputField = ({ idx, size, actions, value, parent }) => {
           show={overlayVisible}
           onClick={() => {
             toggleOverlay(false);
-            actions[ActionTypes.SUBMIT]({ idx: idx, parent: parent });
+            actions[ActionTypes.SUBMIT]({ id: id, parent: parent });
           } }
           opaque={size === Sizes.LARGE ? true : false}
         />

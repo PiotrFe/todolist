@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import TodoInput from "../../components/todo-input/todo-input.component";
 import ToDoItems from "../../components/todo-items/todo-items.component";
@@ -7,46 +7,39 @@ import { ActionTypes, Themes } from "../../constants/constants";
 
 import "./todo-area.styles.scss";
 
-class TodoArea extends React.Component {
-  constructor(props) {
-    super(props);
+const TodoArea = props => {
+  const [todoItems, updateToDoItems] = useState([]);
+  const [theme, toggleTheme] = useState(Themes.LIGHT);
+  const [loading, toggleLoading] = useState(false);
+  
+  const inputRef = useRef(null);
 
-    this.state = {
-      todoItems: [],
-      theme: Themes.LIGHT
-    };
-
-    this.inputRef = React.createRef();
-    this.scrollHandler = this.scrollHandler.bind(this);
-  }
-
-  componentDidMount() {
-    window.addEventListener("scroll", this.scrollHandler);
+  useEffect(() => {
+    window.addEventListener("scroll", scrollHandler);
 
     fetch("http://localhost:9000/api/todos")
       .then(todos => todos.json())
-      .then(data => this.setState({todoItems: data}));
-  }
+      .then(data => updateToDoItems(data));
 
-  componentWillUnmount() {
-    window.removeEventListener("scroll", this.scrollHandler);
+    return () => {
+      window.removeEventListener("scroll", scrollHandler);
+    };
+  }, []);
 
-  }
-
-  scrollHandler() {
-    console.log("Search field offset: " + this.inputRef.current.offsetTop);
+  const scrollHandler = () => {
+    console.log("Search field offset: " + inputRef.current.offsetTop);
     console.log("Page Y offset: " + window.pageYOffset);
 
-    const sticky = this.inputRef.current.offsetTop;
+    const sticky = inputRef.current.offsetTop;
     if (window.pageYOffset > sticky) {
-      this.inputRef.current.classList.add("sticky");
+      inputRef.current.classList.add("sticky");
     } else {
-      this.inputRef.current.classList.remove("sticky");
+      inputRef.current.classList.remove("sticky");
     }
-  }
+  };
 
-  submitHandler = newToDoObj => {
-    const { newToDoTitle } = newToDoObj;
+  const submitHandler = newToDoObj => {
+    const { newToDoTitle = "" } = newToDoObj;
     const newToDo = {
       title: newToDoTitle,
       details: "",
@@ -57,52 +50,73 @@ class TodoArea extends React.Component {
       detailsVisible: false
     };
 
-    this.setState(prevState => ({
-      todoItems: [...prevState.todoItems, newToDo]
-    }));
-  };
-
-  removeHandler = (idx) => {
-    this.setState(prevState => {
-      const updatedToDos = prevState.todoItems.filter((item, index) => {
-        return index !== idx;
+    fetch("http://localhost:9000/api/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(newToDo)
+    })
+      .then(res => res.json())
+      .then(todo => {
+        updateToDoItems(prevState => [...prevState, JSON.parse(todo)]);
       });
-
-      return { todoItems: updatedToDos };
-    });
   };
 
-  editHandler = (idx, text) => {
-    this.setState(prevState => {
-      const updatedToDos = prevState.todoItems.map((item, index) => {
-        if (idx === index) {
+  const removeHandler = id => {
+    fetch(`http://localhost:9000/api/todos/${id}`, {
+      method: "POST"
+    })
+      .then(res => res.json())
+      .then(idObj => {
+        updateToDoItems(prevState => {
+          return prevState.filter(item => {
+            return item._id !== idObj._id;
+          });
+        });
+      });
+  };
+
+  const editHandler = id => {
+    updateToDoItems(prevState => {
+      return prevState.map(item => {
+        if (item._id === id) {
           item.editMode = true;
-
-          return item;
         }
+        return item;
       });
-
-      return { ToDoItems: updatedToDos };
     });
   };
 
-  doneHandler = idx => {
-    this.setState(prevState => {
-      const updatedToDos = prevState.todoItems.map((item, index) => {
-        if (idx === index) {
-          item.done = !item.done;
-          return item;
-        }
-      });
+  const doneHandler = id => {
+    const todo = todoItems.find(item => item._id === id);
+    todo.done = !todo.done;
 
-      return { ToDoItems: updatedToDos };
-    });
+    fetch(`http://localhost:9000/api/todos/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(todo)
+    })
+      .then(res => res.json())
+      .then(todo => {
+        updateToDoItems(prevState => {
+          return prevState.map(item => {
+            if (item._id === todo._id) {
+              item = todo;
+            }
+            return item;
+          });
+        });
+      });
   };
 
-  updateHandler = ({ idx, parent: field, value }) => {
-    this.setState(prevState => {
-      const updatedToDos = prevState.todoItems.map((item, index) => {
-        if (index === idx) {
+  const updateHandler = ({ id, parent: field, value }) => {
+    
+    updateToDoItems(prevState => {
+      return prevState.map(item => {
+        if (item._id === id) {
           if (field === "title") {
             item.title = value;
             item.draft = value;
@@ -112,70 +126,73 @@ class TodoArea extends React.Component {
             item.details = value;
             item.detailsDraft = value;
           }
-          return item;
         }
+        return item;
       });
-
-      return { ToDoItems: updatedToDos };
     });
   };
 
-  submitUpdateHandler = ({ idx, parent: field }) => {
-    this.setState(prevState => {
-      const updatedToDos = prevState.todoItems.map((item, index) => {
-        if (index === idx) {
-          if (field === "title") {
-            item.title = item.draft;
-            item.editMode = false;
-          }
-          if (field === "details") {
-            item.details = item.detailsDraft;
-            item.editMode = false;
-          }
+  const submitUpdateHandler = ({ id, parent: field }) => {
+    const todo = todoItems.find(item => item._id === id);
 
+    if (field === "title") {
+      todo.title = todo.draft;
+      todo.editMode = false;
+    }
+    if (field === "details") {
+      todo.details = todo.detailsDraft;
+      todo.editMode = false;
+    }
+
+    fetch(`http://localhost:9000/api/todos/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(todo)
+    })
+    .then(res => res.json())
+    .then(todo => {
+      updateToDoItems(prevState => {
+        return prevState.map(item => {
+          if (item._id === todo._id) {
+            item = todo;
+          }
           return item;
-        }
+        });
       });
-
-      return { ToDoItems: updatedToDos };
-    });
+    })
   };
 
-  toggleDetailsHandler = idx => {
-    this.setState(prevState => {
-      const updatedToDos = prevState.todoItems.map((item, index) => {
-        if (index === idx) {
+  const toggleDetailsHandler = id => {
+    updateToDoItems(prevState => {
+      return prevState.map(item => {
+        if (item._id === id) {
           item.detailsVisible = !item.detailsVisible;
-          return item;
         }
+        return item;
       });
-      return { ToDoItems: updatedToDos };
     });
   };
 
-  render() {
-    return (
-      <div className="todo-area">
-        <div className="todo-area__input-wrapper" ref={this.inputRef}>
-          <TodoInput
-            className="todo-input-main"
-            onSubmit={this.submitHandler}
-          />
-        </div>
-        <ToDoItems
-          items={this.state.todoItems}
-          actions={{
-            [ActionTypes.REMOVE]: this.removeHandler,
-            [ActionTypes.EDIT]: this.editHandler,
-            [ActionTypes.DONE]: this.doneHandler,
-            [ActionTypes.UPDATE]: this.updateHandler,
-            [ActionTypes.SUBMIT]: this.submitUpdateHandler,
-            [ActionTypes.TOGGLE_DETAILS]: this.toggleDetailsHandler
-          }}
-        />
+  return (
+    <div className="todo-area">
+      <div className="todo-area__input-wrapper" ref={inputRef}>
+        <TodoInput className="todo-input-main" onSubmit={submitHandler} />
       </div>
-    );
-  }
-}
+      <ToDoItems
+        items={todoItems}
+        actions={{
+          [ActionTypes.REMOVE]: removeHandler,
+          [ActionTypes.EDIT]: editHandler,
+          [ActionTypes.DONE]: doneHandler,
+          [ActionTypes.UPDATE]: updateHandler,
+          [ActionTypes.SUBMIT]: submitUpdateHandler,
+          [ActionTypes.TOGGLE_DETAILS]: toggleDetailsHandler
+        }}
+      />
+    </div>
+  );
+};
 
 export default TodoArea;

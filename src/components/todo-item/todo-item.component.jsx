@@ -9,41 +9,41 @@ import InputField from "../input-field/input-field.component";
 import "./todo-item.styles.scss";
 
 const ToDoItem = ({
-  done,
-  title,
-  details,
-  idx,
   actions,
-  draft,
+  details,
   detailsDraft,
+  detailsVisible,
+  done,
+  draft,
+  id,
+  title,
   editMode,
-  detailsVisible
 }) => {
   const icons = (
     <>
       <Icon
-        idx={idx}
+        id={id}
         type={IconTypes.REMOVE}
         onClick={actions[ActionTypes.REMOVE]}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
-        idx={idx}
+        id={id}
         type={IconTypes.EDIT}
         onClick={actions[ActionTypes.EDIT]}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
-        idx={idx}
+        id={id}
         type={IconTypes.DONE}
         onClick={actions[ActionTypes.DONE]}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
-        idx={idx}
+        id={id}
         type={IconTypes.TOGGLE_DETAILS}
         onClick={actions[ActionTypes.TOGGLE_DETAILS]}
         parent={Components.TODO_ITEM}
@@ -70,7 +70,7 @@ const ToDoItem = ({
           </div>
           {editMode ? (
             <InputField
-              idx={idx}
+              id={id}
               value={draft}
               parent="title"
               actions={actions}
@@ -96,7 +96,7 @@ const ToDoItem = ({
           <div className="todo-item__details">{details}</div>
           {editMode ? (
             <InputField
-              idx={idx}
+              id={id}
               value={detailsDraft}
               parent="details"
               actions={actions}

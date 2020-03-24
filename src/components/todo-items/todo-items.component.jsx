@@ -8,18 +8,18 @@ const ToDoItems = props => (
   <div className="todo-items">
     <h1>To do items go here</h1>
     <div className="todo-items__list">
-      {props.items.map(({ title, details, draft, detailsDraft, done, editMode, detailsVisible }, idx) => (
+      {props.items.map(({_id, title, details, draft, detailsDraft, done, editMode, detailsVisible } ) => (
         <ToDoItem
-          key={idx}
-          idx={idx}
-          title={title}
-          details={details}
-          draft={draft}
-          detailsDraft={detailsDraft}
-          done={done}
-          editMode={editMode}
-          detailsVisible={detailsVisible}
-          actions={props.actions}
+        actions={props.actions}
+        details={details}
+        detailsDraft={detailsDraft}
+        detailsVisible={detailsVisible}
+        done={done}
+        draft={draft}
+        editMode={editMode}
+        id={_id}
+        key={_id}
+        title={title}
         />
       ))}
     </div>
