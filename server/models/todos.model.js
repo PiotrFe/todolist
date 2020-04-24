@@ -5,6 +5,8 @@ const todoSchema = new mongoose.Schema({
     details: String,
     draft: String,
     detailsDraft: String,
+    owner: String,
+    dueDate: Date,
     done: Boolean,
     editMode: Boolean,
     detailsVisible: Boolean

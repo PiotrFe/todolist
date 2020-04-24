@@ -1,0 +1,32 @@
+.header-top {
+  height: 6rem;
+  background-color: greenyellow;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &__items {
+    display: flex;
+    margin-left: 2rem;
+  }
+
+  &__action-icons {
+    margin-right: 2rem;
+  }
+
+  &__item-box {
+    font-size: 1.7rem;
+
+    display: flex;
+    align-items: center;
+
+    &:not(:first-child) {
+      margin-left: 2rem;
+    }
+  }
+
+  &__item-title {
+    margin-right: .3rem;
+  }
+}

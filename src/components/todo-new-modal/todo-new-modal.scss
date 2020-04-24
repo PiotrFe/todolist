@@ -1,0 +1,134 @@
+@import "../../constants/constants";
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    z-index: 20;
+
+    height: 80vh;
+    width: 70vw;
+    background-color: orangered;
+
+    display: flex;
+    flex-direction: column;
+
+    box-shadow: 0 2rem 5rem rgba(0, 0, 0, .2);
+
+    &__header {
+        flex: 0 0 12%;
+        background-color: $color-grey-dark-1;
+        font-size: 3rem;
+        color: $color-grey-light-1;
+        font-weight: 600;
+
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;;
+
+    }
+
+    &__form {
+        flex: 0 0 80%;
+        padding: 2rem;
+
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: [title-start] 1fr [title-end date-owner-start] 1fr [date-owner-end details-start] 50% [details-end buttons-start] 1fr [buttons-end];
+        
+
+    }
+
+    &__form-group {
+        width: 100%;
+        padding: .7rem 0;
+
+        display: flex;
+        flex-direction: column;
+
+        &--title {
+            grid-row: title-start / title-end;
+            grid-column: 1 / -1;
+        }
+
+        &--duedate {
+            grid-row: date-owner-start / date-owner-end;
+        }
+
+        &--details {
+            grid-row: details-start / details-end;
+            grid-column: 1 / -1;
+        }
+
+        &--buttons {
+            grid-row: buttons-start / buttons-end;
+            grid-column: 2 / -1;
+
+            display: flex;
+            flex-direction: row;
+
+        }
+
+    }
+
+}
+
+.modal-label {
+    padding-bottom: .5rem;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: .1rem;
+
+
+}
+
+.modal-input {
+    height: 3rem;
+    border-radius: 2px;
+    border: none;
+    border-bottom: 3px solid transparent;
+    width: 90%;
+    padding: 1rem;
+    color: inherit;
+    font-family: inherit;
+
+    &--details {
+        height: 100%;
+        // line-height: 10rem;
+    }
+
+    &__charcount {
+
+    }
+
+}
+
+.modal-button {
+    width: 10rem;
+    height: 3rem;
+    margin: 1rem .5rem;
+    font-family: inherit;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all .2s;
+
+    &--submit {
+        background-color: $color-blue-light-2;
+        color: $color-grey-light-1;
+    }
+
+    &:not(:last-child) {
+        margin-right: 3rem;
+    }
+
+    &:hover {
+        background-color: $color-grey-dark-1;
+        color: $color-grey-light-1;
+    }
+
+}

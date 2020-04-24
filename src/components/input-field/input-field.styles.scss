@@ -1,14 +1,9 @@
 .input-form {
-  width: 70%;
-  position: relative;
   z-index: 50;
 
 
   &--large {
-    display: inline-block;
     z-index: 100;
-    margin: 0 auto;
-    position: relative;
   }
 
   &--small {
@@ -19,22 +14,25 @@
   }
 
   .input-form-group {
-    position: relative;
+    display: flex;
+    align-items: center;
   }
 
   .input-field {
     border: none;
     border-bottom: 0.8px solid black;
-    width: 100%;
+    font-family: inherit;
+    transition: all .2s;
   
     &:focus {
       outline: 2px solid blue;
+      // width: 80%;
     }
 
     &--large {
       font-size: 3rem;
-      padding: 0.7rem;
-      margin: 0.7rem 0;
+      padding: .7rem;
+      margin: 1rem -5rem 1rem 0;
     }
   
     &--small {
@@ -44,10 +42,10 @@
     }
   
     &__icon {
-      position: absolute;
-      top: 30%;
-      right: 0.1%;
-      opacity: 0;
+      // position: absolute;
+      // top: 30%;
+      // right: 0.1%;
+      // opacity: 0;
       // transform: translate(-130%, -50%);
       // transition: all .2s;
     }

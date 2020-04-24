@@ -1,9 +1,14 @@
-.todo-items {
-    text-align: center;
+.todo-area {
+    display: flex;
+    flex-direction: column;
 
-    &__list {
-        width: 70%;
-        margin: 0 auto;
-    }
+    align-items: center;
+    // background-color: orangered;
+}
+
+
+.todo-items {
+    display: flex;
+    flex-direction: column;
 
 }

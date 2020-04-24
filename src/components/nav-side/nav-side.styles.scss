@@ -1,0 +1,29 @@
+@import "../../constants/constants";
+
+.sidebar {
+    background-color: $color-grey-dark-1;
+    height: 100%;
+}
+
+.side-nav {
+    list-style: none;
+    padding: 2rem;
+    font: #fff;
+
+    &__item {
+        font-size: 1.5rem;
+        padding: .5rem 0;
+    }
+
+    &__link {
+        &,
+        &:link,
+        &:visited {
+            text-transform: uppercase;
+            text-decoration: none;
+            color: #fff;
+            cursor: pointer;
+        }
+    }
+
+}

@@ -3,12 +3,11 @@
 .todo-item {
   perspective: 150rem;
 
-  width: 70%;
-  height: 20rem;
-  margin-bottom: 5rem;
-  position: relative;
-  display: inline-block;
+  width: 35rem;
+  height: 15rem;
+  margin: 2rem 0 5rem 2rem;
   transition: all 0.2s;
+  padding: 1rem;
 
   &:hover {
     transform: translateY(-0.3rem) scale(1.04);
@@ -22,35 +21,41 @@
     opacity: 0.9;
   }
 
-  &:hover &__side--front {
-    // transform: rotateX(180deg);
+  // ICONS
+
+  &__icons {
+    padding: 1rem 0 2rem 0;
+    display: block;
+    width: 100%;
+    height: 15%;
+    opacity: 0;
+
+    transition: all 0.2s;
   }
 
-  &:hover &__side--back {
-    // transform: rotateX(0);
+  &__text {
+    width: 100%;
+    height: calc(85% - 1rem);
+    padding: 0 1.2rem;
+
+    display: flex;
+    flex-direction: column;
   }
 
   &__side {
-    font-size: 3rem;
-    line-height: 3rem;
-    border-bottom: 1px solid $color-black;
-    margin: 2rem 0;
-    padding: 1rem;
     border-radius: 2px;
+    border-bottom: 1px solid $color-black;
     box-shadow: 0 1rem 3rem rgba($color-black, 0.15);
     height: 100%;
     width: 100%;
-    // transition: all 0.2s;
-
     position: absolute;
     top: 0;
     left: 0;
     backface-visibility: hidden;
-    width: 100%;
 
     transition: all 0.8s ease;
 
-    //FRONTSIDE STYLING
+    // FRONTSIDE STYLING
 
     &--front {
       transform: rotateX(180deg);
@@ -62,8 +67,7 @@
       }
 
       & > .todo-item__text {
-        display: inline-block;
-        margin: 3rem auto;
+        justify-content: space-between;
 
         &--done {
           text-decoration: line-through;
@@ -74,6 +78,8 @@
         }
       }
     }
+
+    // BACKSIDE STYLING
 
     &--back {
       transform: rotateX(-180deg);
@@ -86,47 +92,58 @@
 
       & > .todo-item__text {
         font-size: 1.5rem;
-        line-height: 0.5rem;
         padding: 0 1rem;
       }
     }
   }
 
-  &__icons {
-    padding: 0.5rem 0;
-    display: block;
-    width: 100%;
-    height: 15%;
-    opacity: 0;
-    float: right;
+  // FRONT - DETAILS
 
-    transition: all 0.2s;
+  &__front-title {
+    font-size: 3rem;
   }
 
-  &__text-group {
-    margin: 2rem 0;
-    height: 80%;
-    position: relative;
+  &__front-details {
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+
+    display: flex;
+    justify-content: space-between;
+  }
+
+  // BACK - DETAILS
+
+  &__back-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.7rem;
+
+    display: grid;
+    grid-template-columns: 1fr max-content 1fr;
+    grid-column-gap: 1.2rem;
+    align-items: center;
+  }
+
+
+  &__back-title::before,
+  &__back-title::after {
+    content: "";
+    height: 1px;
+    display: block;
+    background-color: currentColor;
+  }
+
+  &__back-details {
+    font-size: 1.2rem;
+    border: 0.7px solid $color-black;
+    padding: 0.5rem;
+    overflow: auto;
+    height: 100%;
+    margin-bottom: 1.5rem;
   }
 
   &__text {
-    position: absolute;
-    top: 2rem;
-    left: 0;
-
     &--done {
       text-decoration: line-through;
     }
-  }
-
-  //BACKSIDE STYLING
-
-  &__details {
-    font-size: 1.2rem;
-    line-height: normal;
-    border: 1px solid $color-black;
-    padding: 0.5rem 0;
-    overflow: auto;
-    height: 100%;
   }
 }

@@ -1,0 +1,13 @@
+.filter-card {
+    border: 1px solid black;
+    margin: .5rem;
+    padding: .5rem;
+    font-size: 1.5rem;
+
+    &__button {
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+        padding: 0 .5rem;
+    }
+}

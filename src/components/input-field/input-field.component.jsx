@@ -87,14 +87,14 @@ const InputField = ({ id, size, actions, value, parent }) => {
         </div>
       </form>
       {/* {size === Sizes.LARGE ? ( */}
-        <Overlay
+        {/* <Overlay
           show={overlayVisible}
           onClick={() => {
             toggleOverlay(false);
             actions[ActionTypes.SUBMIT]({ id: id, parent: parent });
           } }
           opaque={size === Sizes.LARGE ? true : false}
-        />
+        /> */}
       {/* // ) : null} */}
     </>
   );

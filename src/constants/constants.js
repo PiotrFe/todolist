@@ -1,11 +1,13 @@
 export const ActionTypes = {
+  CANCEL: "cancel",
   DONE: "done",
+  EDIT: "edit",
   FOCUS: "focus",
   REMOVE: "remove",
-  EDIT: "edit",
-  UPDATE: "update",
+  SEARCH: "search",
   SUBMIT: "submit",
-  TOGGLE_DETAILS: "toggleDetails"
+  TOGGLE_DETAILS: "toggleDetails",
+  UPDATE: "update"
 };
 
 export const Sizes = {

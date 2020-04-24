@@ -15,10 +15,13 @@ const ToDoItem = ({
   detailsVisible,
   done,
   draft,
-  id,
-  title,
+  dueDate,
   editMode,
+  id,
+  owner,
+  title,
 }) => {
+  const date = new Date(dueDate);
   const icons = (
     <>
       <Icon
@@ -60,49 +63,39 @@ const ToDoItem = ({
         }`}
       >
         <div className="todo-item__icons">{icons}</div>
-        <div className="todo-item__text-group">
-          <div
-            className={`todo-item__text todo-item__text--${
-              done ? "done" : "pending"
-            }`}
-          >
-            {title}
-          </div>
-          {editMode ? (
-            <InputField
-              id={id}
-              value={draft}
-              parent="title"
-              actions={actions}
-              size={Sizes.SMALL}
-            />
-          ) : null}
-        </div>
-      </div>
-      <div
-        className={`todo-item__side todo-item__side--back todo-item__side--back${
-          detailsVisible ? "--visible" : ""
-        }`}
-      >
+
         <div
           className={`todo-item__text todo-item__text--${
             done ? "done" : "pending"
           }`}
         >
-          {title}
+          <div className="todo-item__front-title">{title}</div>
+          <div className="todo-item__front-details">
+            <span>
+              Due date:{" "}
+              {`${date.getDate() + 1}-${
+                date.getMonth() + 1
+              }-${date.getFullYear()}`}
+            </span>
+            <span>Owner: {owner}</span>
+          </div>
         </div>
+      </div>
+
+      <div
+        className={`todo-item__side todo-item__side--back todo-item__side--back${
+          detailsVisible ? "--visible" : ""
+        }`}
+      >
         <div className="todo-item__icons">{icons}</div>
-        <div className="todo-item__text-group">
-          <div className="todo-item__details">{details}</div>
-          {editMode ? (
-            <InputField
-              id={id}
-              value={detailsDraft}
-              parent="details"
-              actions={actions}
-              size={Sizes.SMALL}
-            />
-          ) : null}
+
+        <div
+          className={`todo-item__text todo-item__text--${
+            done ? "done" : "pending"
+          }`}
+        >
+          <div className="todo-item__back-title">{title}</div>
+          <div className="todo-item__back-details">{details}</div>
         </div>
       </div>
     </div>

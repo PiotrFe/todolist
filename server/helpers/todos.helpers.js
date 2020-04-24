@@ -13,9 +13,9 @@ exports.getTodos = (req, res) => {
 exports.addTodo = (req, res) => {
   db.Todo.create(req.body, (err, todo) => {
     if (err) res.send(err);
-    setTimeout(() => {
-        res.json(JSON.stringify(todo))
-    }, 5000);
+    console.log(JSON.stringify(todo));
+    res.json(JSON.stringify(todo));
+
   });
 };
 
