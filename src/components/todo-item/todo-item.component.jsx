@@ -73,7 +73,7 @@ const ToDoItem = ({
           <div className="todo-item__front-details">
             <span>
               Due date:{" "}
-              {`${date.getDate() + 1}-${
+              {`${date.getDate()}-${
                 date.getMonth() + 1
               }-${date.getFullYear()}`}
             </span>

@@ -5,6 +5,7 @@ export const ActionTypes = {
   FOCUS: "focus",
   REMOVE: "remove",
   SEARCH: "search",
+  SORT: "sort",
   SUBMIT: "submit",
   TOGGLE_DETAILS: "toggleDetails",
   UPDATE: "update"
@@ -27,6 +28,18 @@ export const Colors = {
   COLOR_PRIMARY_DARK: "#0f4c75",
   COLOR_PRIMARY_VERY_DARK: "#1b262c"
 };
+
+export const Columns = {
+  TITLE: "title",
+  DUE_DATE: "dueDate",
+  OWNER: "owner"
+}
+
+export const Sorts = {
+  BOTH: "both",
+  ASC: "asc",
+  DESC: "desc"
+}
 
 export const Themes = {
   LIGHT: "theme-light",

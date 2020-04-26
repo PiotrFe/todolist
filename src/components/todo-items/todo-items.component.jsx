@@ -1,21 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import NavTop from "../../components/nav-top/nav-top.component";
-import TodoInput from "../../components/todo-input/todo-input.component";
+import searchResultList from "../../components/searchResultList/searchResultList.component";
 import ToDoItem from "../../components/todo-item/todo-item.component";
 import Overlay from "../../components/overlay/overlay.component";
 import LoadingSpinner from "../../components/loading-spinner/loading-spinner.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
 
-import { ActionTypes, Themes } from "../../constants/constants";
+import { ActionTypes, Themes, Columns } from "../../constants/constants";
+import { IconTypes } from "../icon/icon.types";
 
 import "./todo-items.styles.scss";
 
 const ToDoItems = (props) => {
+  const sortsInitial = [
+    { column: Columns.TITLE, sortIndex: 0, sortDirection: IconTypes.SORT_BOTH },
+    { column: Columns.DUE_DATE, sortIndex: 0, sortDirection: IconTypes.SORT_BOTH  },
+    { column: Columns.OWNER, sortIndex: 0, sortDirection: IconTypes.SORT_BOTH  },
+  ];
+
   const [todoItems, updateToDoItems] = useState([]);
   const [filters, updateFilters] = useState(["office", "skill", "age"]);
+  const [sorts, updateSorts] = useState(sortsInitial);
   const [loading, updateLoading] = useState(false);
+  const [filterMode, updateFilterMode] = useState(true);
   const [editMode, updateEditMode] = useState(false);
   const [editedToDo, setEditedToDo] = useState(null);
 
@@ -87,71 +96,38 @@ const ToDoItems = (props) => {
       });
   };
 
-  const updateHandler = ({ id, parent: field, value }) => {
-    updateToDoItems((prevState) => {
-      return prevState.map((item) => {
-        if (item._id === id) {
-          if (field === "title") {
-            item.title = value;
-            item.draft = value;
-          }
+  const submitUpdateHandler = (toDo) => {
+    console.log("IN SUBMIT UPDATE HANDLER");
+    console.log(JSON.stringify(toDo));
 
-          if (field === "details") {
-            item.details = value;
-            item.detailsDraft = value;
-          }
-        }
-        return item;
-      });
-    });
-  };
+    updateLoading(true);
 
-  const submitUpdateHandler = ({ id, parent: field }) => {
-    const todo = todoItems.find((item) => item._id === id);
-
-    if (field === "title") {
-      todo.title = todo.draft;
-      todo.editMode = false;
-    }
-    if (field === "details") {
-      todo.details = todo.detailsDraft;
-      todo.editMode = false;
-    }
-
-    fetch(`http://localhost:9000/api/todos/${id}`, {
+    fetch(`http://localhost:9000/api/todos/${toDo._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(todo),
+      body: JSON.stringify(toDo),
     })
       .then((res) => res.json())
-      .then((todo) => {
+      .then((toDo) => {
         updateToDoItems((prevState) => {
           return prevState.map((item) => {
-            // item.title = "rerendered";
-            if (item._id === todo._id) {
-              item = todo;
+            if (item._id === toDo._id) {
+              item = toDo;
             }
             return item;
           });
         });
+        updateLoading(false);
+        toggleEditMode();
       });
   };
 
-  const editHandler = (id) => {
+  const editModeHandler = (id) => {
     const editedToDo = todoItems.find((item) => item._id === id);
     setEditedToDo(editedToDo);
     toggleEditMode();
-  };
-
-  const submitEditedHandler = (toDo) => {
-    // fetch(`http://localhost:9000/api/todos/${}`);
-
-    // updateToDoItems((prevState) =>
-    //   prevState.map((item) => (item.id === toDo.id ? toDo : item))
-    // );
-    // setEditedToDo(null);
   };
 
   const toggleDetailsHandler = (id) => {
@@ -174,11 +150,35 @@ const ToDoItems = (props) => {
     updateFilters(updatedFilters);
   };
 
+  const handleSort = (column) => {
+    console.log(column);
+    updateSorts((prevState) =>
+      prevState.map((item) => {
+        if (item.column === column) {
+          switch (item.sortDirection) {
+            case IconTypes.SORT_BOTH:
+              item.sortDirection = IconTypes.SORT_ASC;
+              break;
+            case IconTypes.SORT_ASC:
+              item.sortDirection = IconTypes.SORT_DESC;
+              break;
+            case IconTypes.SORT_DESC:
+              item.sortDirection = IconTypes.SORT_BOTH;
+              break;
+          }
+        }
+        return item;
+      })
+    );
+  };
+
   return (
     <>
       <NavTop
+        sorts={sorts}
         actions={{
           [ActionTypes.EDIT]: toggleEditMode,
+          [ActionTypes.SORT]: handleSort
         }}
       />
       <FilterBar
@@ -188,6 +188,7 @@ const ToDoItems = (props) => {
           [ActionTypes.SEARCH]: addFilter,
         }}
       />
+      {filterMode ? <searchResultList /> : null}
 
       <div className="todo-items">
         {todoItems.map(
@@ -206,11 +207,10 @@ const ToDoItems = (props) => {
             <ToDoItem
               actions={{
                 [ActionTypes.DONE]: doneHandler,
-                [ActionTypes.EDIT]: editHandler,
+                [ActionTypes.EDIT]: editModeHandler,
                 [ActionTypes.REMOVE]: removeHandler,
                 [ActionTypes.SUBMIT]: submitUpdateHandler,
                 [ActionTypes.TOGGLE_DETAILS]: toggleDetailsHandler,
-                [ActionTypes.UPDATE]: updateHandler,
               }}
               details={details}
               detailsDraft={detailsDraft}
@@ -241,8 +241,8 @@ const ToDoItems = (props) => {
           <ToDoModal
             actions={{
               [ActionTypes.CANCEL]: toggleEditMode,
-              [ActionTypes.EDIT]: submitEditedHandler,
-              [ActionTypes.SUBMIT]: submitHandler
+              [ActionTypes.EDIT]: submitUpdateHandler,
+              [ActionTypes.SUBMIT]: submitHandler,
             }}
             content={editedToDo}
           />

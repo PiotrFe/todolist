@@ -9,29 +9,32 @@ import { ActionTypes, Themes } from "../../constants/constants";
 import { parseDate } from "../utils/utils";
 
 const ToDoModal = ({ actions, content = null }) => {
-  console.log(JSON.stringify(content));
   const today = new Date();
   const MAX_LENGTH = 250;
-  const {title: toDoTitle, dueDate: toDoDueDate, owner: toDoOwner, details: toDoDetails} = content;
+  const {_id = null, title: toDoTitle = "", dueDate: toDoDueDate = "", owner: toDoOwner = "", details: toDoDetails = ""} = content || {};
 
   const [title, updateTitle] = useState(toDoTitle);
-  const [dueDate, updateDueDate] = useState( toDoDueDate ? parseDate(toDoDueDate) : parseDate(new Date()));
+  const [dueDate, updateDueDate] = useState( toDoDueDate ? toDoDueDate : new Date());
   const [owner, updateOwner] = useState(toDoOwner);
   const [details, updateDetails] = useState(toDoDetails);
   const [detailsLength, updateDetailsLength] = useState(toDoDetails ? toDoDetails.length : 0);
 
   const handleToDo = () => {
-    const toDo = {
-      title: title,
-      details: details,
+    let toDo = {
+      title,
+      details,
       draft: "",
       detailsDraft: "",
-      owner: owner,
-      dueDate: Date.parse(dueDate),
+      owner,
+      dueDate,
       done: false,
       editMode: false,
       detailsVisible: false,
     };
+
+    if (_id) {
+      toDo = Object.assign(toDo, {_id});
+    }
 
     content ? actions[ActionTypes.EDIT](toDo) : actions[ActionTypes.SUBMIT](toDo);
     
@@ -67,7 +70,7 @@ const ToDoModal = ({ actions, content = null }) => {
               type="date"
               id="modal-duedate"
               className="modal-input modal-input--duedate"
-              value={dueDate}
+              value={parseDate(dueDate)}
               onChange={(e) => updateDueDate(e.target.value)}
             />
           </div>
@@ -108,7 +111,6 @@ const ToDoModal = ({ actions, content = null }) => {
               onClick={(e) => {
                 e.preventDefault();
                 handleToDo();
-     
               }}
             >
               Save
