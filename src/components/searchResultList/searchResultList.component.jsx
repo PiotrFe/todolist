@@ -2,8 +2,11 @@ import React from "react";
 
 import "./searchResultList.styles.scss";
 
-const searchResultList = () => {
-  const results = [{ header: "owner", records: ["piotr", "maria", "tara"] }];
+const SearchResultList = () => {
+  const results = [
+      { header: "owner", records: ["piotr", "maria", "tara"] },
+      { header: "title", records: ["Go skiing", "Go shopping", "Do nothing"] }
+    ];
 
   return (
     <div className="search-results">
@@ -20,6 +23,7 @@ const searchResultList = () => {
       ))}
     </div>
   );
-};
 
-export default searchResultList;
+}
+
+export default SearchResultList;

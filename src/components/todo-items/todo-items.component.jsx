@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import NavTop from "../../components/nav-top/nav-top.component";
-import searchResultList from "../../components/searchResultList/searchResultList.component";
+import SearchResultList from "../../components/searchResultList/searchResultList.component";
 import ToDoItem from "../../components/todo-item/todo-item.component";
 import Overlay from "../../components/overlay/overlay.component";
 import LoadingSpinner from "../../components/loading-spinner/loading-spinner.component";
@@ -16,8 +16,12 @@ import "./todo-items.styles.scss";
 const ToDoItems = (props) => {
   const sortsInitial = [
     { column: Columns.TITLE, sortIndex: 0, sortDirection: IconTypes.SORT_BOTH },
-    { column: Columns.DUE_DATE, sortIndex: 0, sortDirection: IconTypes.SORT_BOTH  },
-    { column: Columns.OWNER, sortIndex: 0, sortDirection: IconTypes.SORT_BOTH  },
+    {
+      column: Columns.DUE_DATE,
+      sortIndex: 0,
+      sortDirection: IconTypes.SORT_BOTH,
+    },
+    { column: Columns.OWNER, sortIndex: 0, sortDirection: IconTypes.SORT_BOTH },
   ];
 
   const [todoItems, updateToDoItems] = useState([]);
@@ -178,7 +182,7 @@ const ToDoItems = (props) => {
         sorts={sorts}
         actions={{
           [ActionTypes.EDIT]: toggleEditMode,
-          [ActionTypes.SORT]: handleSort
+          [ActionTypes.SORT]: handleSort,
         }}
       />
       <FilterBar
@@ -188,7 +192,7 @@ const ToDoItems = (props) => {
           [ActionTypes.SEARCH]: addFilter,
         }}
       />
-      {filterMode ? <searchResultList /> : null}
+      {filterMode ? <SearchResultList /> : null}
 
       <div className="todo-items">
         {todoItems.map(
