@@ -18,7 +18,7 @@ const FilterBar = ({ items, actions }) => {
       {items.map((item, idx) => (
         <FilterCard key={idx} item={item} idx={idx} actions={actions} />
       ))}
-      <TodoInput onSearch={actions[ActionTypes.SEARCH]} />
+      <TodoInput onSearch={actions[ActionTypes.SEARCH]} onType={actions[ActionTypes.CHANGE]} />
     </div>
   );
 };

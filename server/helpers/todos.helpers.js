@@ -46,16 +46,34 @@ exports.filterTodos = (req, res) => {
     query = db.Todo.find({ $or: filterArray });
   }
 
-  // db.Todo.find({$or: [{title: "piotr"}, {[req.body.header]: {"$regex": req.body.entry, "$options": "i" } }]})
-  // db.Todo.find({ $or: filterArray })
   query
     .exec()
-    .then((todos) => res.json(todos))
+    .then((todos) => {
+      console.log(`Sending following todos: ${JSON.stringify(todos)}`);
+      res.json(todos);
+    })
     .catch((err) => res.send(err));
 };
 
-exports.test = (req, res) => {
-  res.send("Test successfull");
+exports.resultsPreview = (req, res) => {
+  const { word } = req.body;
+  const fieldArray = ["owner", "title", "details"];
+  let filterArray = [];
+  let query;
+
+  for (field of fieldArray) {
+    filterArray.push({ [field]: { $regex: word, $options: "i" } });
+  }
+
+  query = db.Todo.find({ $or: filterArray });
+
+  query
+    .exec()
+    .then((todos) => {
+      console.log(`Sending following todos: ${JSON.stringify(todos)}`);
+      res.json(todos);
+    })
+    .catch((err) => res.send(err));
 };
 
 module.exports = exports;

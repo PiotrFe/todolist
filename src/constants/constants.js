@@ -1,5 +1,6 @@
 export const ActionTypes = {
   CANCEL: "cancel",
+  CHANGE: "change",
   DONE: "done",
   EDIT: "edit",
   FOCUS: "focus",

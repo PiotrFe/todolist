@@ -7,8 +7,10 @@ router.route("/")
   .post(helpers.addTodo);
 
 router.route("/filters")
-  .get(helpers.test)
   .post(helpers.filterTodos);
+
+router.route("/preview")
+  .post(helpers.resultsPreview);
 
 router.route("/:todoId")
   .post(helpers.removeTodo)

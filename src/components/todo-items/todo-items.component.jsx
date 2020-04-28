@@ -185,6 +185,20 @@ const ToDoItems = (props) => {
     updateFilterTags(updatedFilterTags);
   };
 
+  const showFilterPreview = (word) => {
+    console.log(`Looking for word: ${word}`);
+
+    fetch("api/todos/preview", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ word }),
+    })
+    .then((res) => res.json())
+    .then(todos => console.log(`Received preview: ${JSON.stringify(todos)}`));
+  };
+
   // HANDLING SORTING
 
   const handleSort = (column) => {
@@ -221,8 +235,9 @@ const ToDoItems = (props) => {
       <FilterBar
         items={filterTags}
         actions={{
+          [ActionTypes.CHANGE]: showFilterPreview,
           [ActionTypes.REMOVE]: removeFilterCard,
-          [ActionTypes.SEARCH]: addFilterTag,
+          [ActionTypes.SEARCH]: addFilterTag
         }}
       />
       {filterMode ? (
