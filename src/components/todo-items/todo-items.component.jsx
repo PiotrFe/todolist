@@ -25,20 +25,41 @@ const ToDoItems = (props) => {
   ];
 
   const [todoItems, updateToDoItems] = useState([]);
-  const [filters, updateFilters] = useState(["office", "skill", "age"]);
   const [sorts, updateSorts] = useState(sortsInitial);
   const [loading, updateLoading] = useState(false);
   const [filterMode, updateFilterMode] = useState(true);
+  const [filters, updateFilters] = useState([]);
+  const [filterTags, updateFilterTags] = useState(["office"]);
   const [editMode, updateEditMode] = useState(false);
   const [editedToDo, setEditedToDo] = useState(null);
 
+  const isMountedRef = useRef(null);
   const inputRef = useRef(null);
 
+  // EFFECTS
+
   useEffect(() => {
-    fetch("http://localhost:9000/api/todos")
-      .then((todos) => todos.json())
-      .then((data) => updateToDoItems(data));
-  }, []);
+    fetch("/api/todos/filters", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ filters }),
+    })
+      .then((res) => res.json())
+      .then((todos) => {
+        console.log(`Received from server: ${JSON.stringify(todos)}`);
+        updateToDoItems(todos);
+        updateLoading(false);
+        console.log(JSON.stringify(todos));
+      })
+      .catch((err) => {
+        console.log(err);
+        updateLoading(false);
+      });
+  }, [filters]);
+
+  // METHODS
 
   const toggleEditMode = () => {
     updateEditMode(!editMode);
@@ -47,7 +68,7 @@ const ToDoItems = (props) => {
   const submitHandler = (newToDoObj) => {
     updateLoading(true);
 
-    fetch("http://localhost:9000/api/todos", {
+    fetch("/api/todos", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -63,7 +84,7 @@ const ToDoItems = (props) => {
   };
 
   const removeHandler = (id) => {
-    fetch(`http://localhost:9000/api/todos/${id}`, {
+    fetch(`/api/todos/${id}`, {
       method: "POST",
     })
       .then((res) => res.json())
@@ -80,7 +101,7 @@ const ToDoItems = (props) => {
     const todo = todoItems.find((item) => item._id === id);
     todo.done = !todo.done;
 
-    fetch(`http://localhost:9000/api/todos/${id}`, {
+    fetch(`/api/todos/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -101,12 +122,9 @@ const ToDoItems = (props) => {
   };
 
   const submitUpdateHandler = (toDo) => {
-    console.log("IN SUBMIT UPDATE HANDLER");
-    console.log(JSON.stringify(toDo));
-
     updateLoading(true);
 
-    fetch(`http://localhost:9000/api/todos/${toDo._id}`, {
+    fetch(`/api/todos/${toDo._id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -145,14 +163,29 @@ const ToDoItems = (props) => {
     });
   };
 
-  const addFilter = (text) => {
-    updateFilters((prevState) => [...prevState, text]);
+  // HANDLING FILTERS
+
+  const addFilterTag = (text) => {
+    updateFilterTags((prevState) => [...prevState, text]);
   };
 
-  const removeFilter = (idx) => {
-    const updatedFilters = filters.filter((item, itemIdx) => idx !== itemIdx);
-    updateFilters(updatedFilters);
+  const applyFilter = (filter) => {
+    addFilterTag(filter.entry);
+    updateLoading(true);
+    updateFilters((prevState) => {
+      return [...prevState, filter];
+    });
+    updateLoading(false);
   };
+
+  const removeFilterCard = (idx) => {
+    const updatedFilterTags = filterTags.filter(
+      (item, itemIdx) => idx !== itemIdx
+    );
+    updateFilterTags(updatedFilterTags);
+  };
+
+  // HANDLING SORTING
 
   const handleSort = (column) => {
     console.log(column);
@@ -186,13 +219,19 @@ const ToDoItems = (props) => {
         }}
       />
       <FilterBar
-        items={filters}
+        items={filterTags}
         actions={{
-          [ActionTypes.REMOVE]: removeFilter,
-          [ActionTypes.SEARCH]: addFilter,
+          [ActionTypes.REMOVE]: removeFilterCard,
+          [ActionTypes.SEARCH]: addFilterTag,
         }}
       />
-      {filterMode ? <SearchResultList /> : null}
+      {filterMode ? (
+        <SearchResultList
+          actions={{
+            [ActionTypes.SEARCH]: applyFilter,
+          }}
+        />
+      ) : null}
 
       <div className="todo-items">
         {todoItems.map(
