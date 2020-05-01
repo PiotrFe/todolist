@@ -30,6 +30,9 @@ const ToDoItems = (props) => {
   const [filterMode, updateFilterMode] = useState(true);
   const [filters, updateFilters] = useState([]);
   const [filterTags, updateFilterTags] = useState(["office"]);
+  const [filterPreview, updateFilterPreview] = useState();
+  const [filterWord, updateFilterWord] = useState("");
+  const [filterBarContent, updateFilterBarContent] = useState("");
   const [editMode, updateEditMode] = useState(false);
   const [editedToDo, setEditedToDo] = useState(null);
 
@@ -175,6 +178,10 @@ const ToDoItems = (props) => {
     updateFilters((prevState) => {
       return [...prevState, filter];
     });
+    updateFilterPreview();
+    updateFilterMode(false);
+    updateFilterWord("");
+    updateFilterBarContent("");
     updateLoading(false);
   };
 
@@ -186,8 +193,6 @@ const ToDoItems = (props) => {
   };
 
   const showFilterPreview = (word) => {
-    console.log(`Looking for word: ${word}`);
-
     fetch("api/todos/preview", {
       method: "POST",
       headers: {
@@ -196,8 +201,16 @@ const ToDoItems = (props) => {
       body: JSON.stringify({ word }),
     })
     .then((res) => res.json())
-    .then(todos => console.log(`Received preview: ${JSON.stringify(todos)}`));
+    .then(todos => {
+      updateFilterMode(true);
+      updateFilterWord(word);
+      updateFilterPreview(todos);
+    } );
   };
+
+  const updateFilterBar = content => {
+    updateFilterBarContent(content);
+  }
 
   // HANDLING SORTING
 
@@ -233,15 +246,19 @@ const ToDoItems = (props) => {
         }}
       />
       <FilterBar
-        items={filterTags}
+        tags={filterTags}
+        content={filterBarContent}
         actions={{
-          [ActionTypes.CHANGE]: showFilterPreview,
+          [ActionTypes.CHANGE]: updateFilterBar,
+          [ActionTypes.SUBMIT]: showFilterPreview,
           [ActionTypes.REMOVE]: removeFilterCard,
           [ActionTypes.SEARCH]: addFilterTag
         }}
       />
       {filterMode ? (
         <SearchResultList
+          word={filterWord}
+          content={filterPreview}
           actions={{
             [ActionTypes.SEARCH]: applyFilter,
           }}

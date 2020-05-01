@@ -65,12 +65,12 @@ exports.resultsPreview = (req, res) => {
     filterArray.push({ [field]: { $regex: word, $options: "i" } });
   }
 
-  query = db.Todo.find({ $or: filterArray });
+  query = db.Todo.find({ $or: filterArray }).select({"name": 1, "owner": 1, "details": 1, "_id": 0});
 
   query
     .exec()
     .then((todos) => {
-      console.log(`Sending following todos: ${JSON.stringify(todos)}`);
+      console.log(`Sending following TODOS: ${JSON.stringify(todos)}`);
       res.json(todos);
     })
     .catch((err) => res.send(err));

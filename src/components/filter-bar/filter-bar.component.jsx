@@ -7,18 +7,17 @@ import FilterCard from "../../components/filter-card/filter-card.component";
 
 import { ActionTypes } from "../../constants/constants";
 
-const FilterBar = ({ items, actions }) => {
+const FilterBar = ({ content, tags, actions }) => {
 
   return (
     <div className="filter-bar" onClick={() => {
         document.getElementById("filter-search-field").focus();
-        console.log("Bar also clicked")
 
     } }>
-      {items.map((item, idx) => (
+      {tags.map((item, idx) => (
         <FilterCard key={idx} item={item} idx={idx} actions={actions} />
       ))}
-      <TodoInput onSearch={actions[ActionTypes.SEARCH]} onType={actions[ActionTypes.CHANGE]} />
+      <TodoInput onSearch={actions[ActionTypes.SEARCH]} onChange={actions[ActionTypes.CHANGE]} onSubmit={actions[ActionTypes.SUBMIT]} content={content} />
     </div>
   );
 };

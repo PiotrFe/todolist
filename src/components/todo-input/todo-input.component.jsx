@@ -10,24 +10,21 @@ import { ActionTypes, Sizes, Themes } from "../../constants/constants";
 import "./todo-input.styles.scss";
 import { useState } from "react";
 
-const TodoInput = ({ onSearch, onType }) => {
-  const [inputValue, updateInputValue] = useState("");
-
+const TodoInput = ({ content = "", onChange, onSearch, onSubmit }) => {
   useEffect(() => {
-    if (inputValue.length >= 3) {
-      onType(inputValue);
+    if (content.length >= 3) {
+      onSubmit(content);
     }
 
-  }, [inputValue]);
+  }, [content]);
 
   return (
     <form
       className="search-form"
       onSubmit={(e) => {
-        const fieldValue = e.target.elements.filter.value;
+        // const fieldValue = e.target.elements.filter.value;
         e.preventDefault();
-        onSearch(fieldValue);
-        e.target.elements.filter.value = "";
+        // onSearch(content);
       }}
     >
       <input
@@ -35,8 +32,8 @@ const TodoInput = ({ onSearch, onType }) => {
         className="search-field"
         id="filter-search-field"
         name="filter"
-        value={inputValue}
-        onChange={(e) => updateInputValue(e.target.value)}
+        value={content}
+        onChange={(e) => onChange(e.target.value)}
       />
     </form>
   );
