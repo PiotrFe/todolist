@@ -39,11 +39,8 @@ exports.filterTodos = (req, res) => {
   if (filters.length === 0) {
     query = db.Todo.find({});
   } else {
-    filterArray = filters.map((item) => {
-      key = Object.keys(item)[0];
-      entry = item[key];
-      
-      return { [key]: { $regex: entry, $options: "i" } };
+    filterArray = filters.map(({ header, entry }) => {
+      return { [header]: { $regex: entry, $options: "i" } };
     });
     query = db.Todo.find({ $or: filterArray });
   }
@@ -66,7 +63,12 @@ exports.resultsPreview = (req, res) => {
     filterArray.push({ [field]: { $regex: word, $options: "i" } });
   }
 
-  query = db.Todo.find({ $or: filterArray }).select({"name": 1, "owner": 1, "details": 1, "_id": 0});
+  query = db.Todo.find({ $or: filterArray }).select({
+    name: 1,
+    owner: 1,
+    details: 1,
+    _id: 0,
+  });
 
   query
     .exec()

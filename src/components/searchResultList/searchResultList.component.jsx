@@ -24,18 +24,24 @@ const SearchResultList = ({ content = [], word, actions }) => {
   });
   // resulting format: {owner: ["peter", "peter kowalski"], details: ["peter did smth"]}
 
-  const formattedResults = {}
+  const formattedResults = {};
   let htmlNode;
-  
+
   Object.keys(results).forEach((key) => {
-    Object.assign(formattedResults, {[key]: []});
+    Object.assign(formattedResults, { [key]: [] });
 
     results[key].forEach((entry) => {
-      formattedResults[key].push(entry.replace(new RegExp(word, "g"), `<span>${word}</span>`));
-    }); 
-  });      
-  
-  console.log(`RESULTS TO RENDER: ${JSON.stringify(formattedResults)}`);
+      formattedResults[key].push({
+        text: entry,
+        formattedText: entry.replace(
+          new RegExp(word, "g"),
+          `<span>${word}</span>`
+        ),
+      });
+    });
+  });
+
+   // resulting format: {owner: [{text: "peter", formattedText: "<span>peter</span>"}]}
 
   return (
     <div className="search-results">
@@ -49,16 +55,16 @@ const SearchResultList = ({ content = [], word, actions }) => {
                 key={idx}
                 className="search-results__record"
                 onClick={() => {
-                  actions[ActionTypes.SEARCH]({ header: key, entry });
+                  actions[ActionTypes.SEARCH]({ header: key, entry: entry.text });
                 }}
               >
                 {" "}
-                <div 
+                <div
                   className="search-results__record"
                   dangerouslySetInnerHTML={{
-                    __html: entry
-                    }}>
-                </div>
+                    __html: entry.formattedText
+                  }}
+                ></div>
               </div>
             ))}
           </ul>

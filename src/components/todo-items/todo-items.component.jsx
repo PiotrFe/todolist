@@ -29,7 +29,6 @@ const ToDoItems = (props) => {
   const [loading, updateLoading] = useState(false);
   const [filterMode, updateFilterMode] = useState(true);
   const [filters, updateFilters] = useState([]);
-  const [filterTags, updateFilterTags] = useState(["office"]);
   const [filterPreview, updateFilterPreview] = useState();
   const [filterWord, updateFilterWord] = useState("");
   const [filterBarContent, updateFilterBarContent] = useState("");
@@ -59,11 +58,9 @@ const ToDoItems = (props) => {
       });
   }, [filters]);
 
-  // METHODS
+  // TO-DO METHODS
 
-  const toggleEditMode = () => {
-    updateEditMode(!editMode);
-  };
+
 
   const submitHandler = (newToDoObj) => {
     updateLoading(true);
@@ -146,6 +143,10 @@ const ToDoItems = (props) => {
       });
   };
 
+  const toggleEditMode = () => {
+    updateEditMode(!editMode);
+  };
+
   const editModeHandler = (id) => {
     const editedToDo = todoItems.find((item) => item._id === id);
     setEditedToDo(editedToDo);
@@ -165,15 +166,14 @@ const ToDoItems = (props) => {
 
   // HANDLING FILTERS
 
-  const addFilterTag = (text) => {
-    updateFilterTags((prevState) => [...prevState, text]);
-  };
+  const updateFilterBar = content => {
+    updateFilterBarContent(content);
+  }
 
-  const applyFilter = ({header, entry}) => {
-    addFilterTag(`${header} - ${entry}`);
+  const applyFilter = (item) => {
     updateLoading(true);
     updateFilters((prevState) => {
-      return [...prevState, {[header]: entry}];
+      return [...prevState, item];
     });
     updateFilterPreview();
     updateFilterMode(false);
@@ -182,12 +182,13 @@ const ToDoItems = (props) => {
     updateLoading(false);
   };
 
-  const removeFilterCard = (idx) => {
-    const updatedFilterTags = filterTags.filter(
-      (item, itemIdx) => idx !== itemIdx
-    );
-    updateFilterTags(updatedFilterTags);
-  };
+  const removeFilter = ({header: itemHeader, entry: itemEntry}) => {
+    updateLoading(true);
+    updateFilters((prevState) => {
+      return prevState.filter(({header: filterHeader, entry: filterEntry}) => itemHeader !== filterHeader || itemEntry !== filterEntry);
+    });
+    updateLoading(false);
+  }
 
   const showFilterPreview = (word) => {
     fetch("api/todos/preview", {
@@ -204,10 +205,6 @@ const ToDoItems = (props) => {
       updateFilterPreview(todos);
     } );
   };
-
-  const updateFilterBar = content => {
-    updateFilterBarContent(content);
-  }
 
   // HANDLING SORTING
 
@@ -242,13 +239,12 @@ const ToDoItems = (props) => {
         }}
       />
       <FilterBar
-        tags={filterTags}
+        tags={filters}
         content={filterBarContent}
         actions={{
           [ActionTypes.CHANGE]: updateFilterBar,
           [ActionTypes.SUBMIT]: showFilterPreview,
-          [ActionTypes.REMOVE]: removeFilterCard,
-          [ActionTypes.SEARCH]: addFilterTag
+          [ActionTypes.REMOVE]: removeFilter
         }}
       />
       {filterMode ? (

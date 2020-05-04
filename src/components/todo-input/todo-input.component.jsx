@@ -10,7 +10,7 @@ import { ActionTypes, Sizes, Themes } from "../../constants/constants";
 import "./todo-input.styles.scss";
 import { useState } from "react";
 
-const TodoInput = ({ content = "", onChange, onSearch, onSubmit }) => {
+const TodoInput = ({ content = "", onChange, onSubmit }) => {
   useEffect(() => {
     if (content.length >= 3) {
       onSubmit(content);
