@@ -51,13 +51,10 @@ const ToDoItems = (props) => {
     })
       .then((res) => res.json())
       .then((todos) => {
-        console.log(`Received from server: ${JSON.stringify(todos)}`);
         updateToDoItems(todos);
         updateLoading(false);
-        console.log(JSON.stringify(todos));
       })
       .catch((err) => {
-        console.log(err);
         updateLoading(false);
       });
   }, [filters]);
@@ -172,11 +169,11 @@ const ToDoItems = (props) => {
     updateFilterTags((prevState) => [...prevState, text]);
   };
 
-  const applyFilter = (filter) => {
-    addFilterTag(filter.entry);
+  const applyFilter = ({header, entry}) => {
+    addFilterTag(`${header} - ${entry}`);
     updateLoading(true);
     updateFilters((prevState) => {
-      return [...prevState, filter];
+      return [...prevState, {[header]: entry}];
     });
     updateFilterPreview();
     updateFilterMode(false);
@@ -215,7 +212,6 @@ const ToDoItems = (props) => {
   // HANDLING SORTING
 
   const handleSort = (column) => {
-    console.log(column);
     updateSorts((prevState) =>
       prevState.map((item) => {
         if (item.column === column) {

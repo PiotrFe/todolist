@@ -13,7 +13,6 @@ exports.getTodos = (req, res) => {
 exports.addTodo = (req, res) => {
   db.Todo.create(req.body, (err, todo) => {
     if (err) res.send(err);
-    console.log(JSON.stringify(todo));
     res.json(JSON.stringify(todo));
   });
 };
@@ -35,13 +34,16 @@ exports.updateTodo = (req, res) => {
 
 exports.filterTodos = (req, res) => {
   const { filters } = req.body;
-  let query, filterArray;
+  let query, key, entry, filterArray;
 
   if (filters.length === 0) {
     query = db.Todo.find({});
   } else {
     filterArray = filters.map((item) => {
-      return { [item.header]: { $regex: item.entry, $options: "i" } };
+      key = Object.keys(item)[0];
+      entry = item[key];
+      
+      return { [key]: { $regex: entry, $options: "i" } };
     });
     query = db.Todo.find({ $or: filterArray });
   }
@@ -49,7 +51,6 @@ exports.filterTodos = (req, res) => {
   query
     .exec()
     .then((todos) => {
-      console.log(`Sending following todos: ${JSON.stringify(todos)}`);
       res.json(todos);
     })
     .catch((err) => res.send(err));
@@ -70,7 +71,6 @@ exports.resultsPreview = (req, res) => {
   query
     .exec()
     .then((todos) => {
-      console.log(`Sending following TODOS: ${JSON.stringify(todos)}`);
       res.json(todos);
     })
     .catch((err) => res.send(err));

@@ -11,8 +11,6 @@ const FilterCard = ({ item, idx, actions }) => {
       {item}
       <button className="filter-card__button" onClick={e => {
         e.stopPropagation();
-        console.log("clicked button");
-        console.log("event phase " + e.eventPhase );
         actions[ActionTypes.REMOVE](idx)
 
       } }>x</button>
