@@ -55,7 +55,7 @@ const SearchResultList = ({ content = [], word, actions }) => {
                 key={idx}
                 className="search-results__record"
                 onClick={() => {
-                  actions[ActionTypes.SEARCH]({ header: key, entry: entry.text });
+                  actions[ActionTypes.SEARCH]({ [key]: entry.text });
                 }}
               >
                 {" "}

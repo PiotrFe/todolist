@@ -21,10 +21,9 @@ const TodoInput = ({ content = "", onChange, onSubmit }) => {
   return (
     <form
       className="search-form"
+      autoComplete="off"
       onSubmit={(e) => {
-        // const fieldValue = e.target.elements.filter.value;
         e.preventDefault();
-        // onSearch(content);
       }}
     >
       <input

@@ -1,8 +1,7 @@
-import Icon from "./icon.component"
-
 export const IconTypes = {
     ADD: "add",
     BACKSPACE: "backspace",
+    COLOR: "color",
     DONE: "done",
     EDIT: "edit",
     HOME: "home",
@@ -14,8 +13,6 @@ export const IconTypes = {
     SUBMIT: "submit",
     TOGGLE_DETAILS: "toggle-details",
     UPDATE: "update"
-
-
 }
 
 export const IconClasses = {
@@ -23,6 +20,7 @@ export const IconClasses = {
     [IconTypes.BACKSPACE]: "fas fa-backspace",
     [IconTypes.DONE]: "fas fa-check",
     [IconTypes.EDIT]: "fas fa-pen",
+    [IconTypes.COLOR]: "fas fa-tint",
     [IconTypes.HOME]: "fas fa-home",
     [IconTypes.REMOVE]: "fas fa-trash",
     [IconTypes.SEARCH]: "fas fa-search",

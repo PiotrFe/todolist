@@ -34,13 +34,14 @@ exports.updateTodo = (req, res) => {
 
 exports.filterTodos = (req, res) => {
   const { filters } = req.body;
-  let query, key, entry, filterArray;
+  let query, key, filterArray;
 
   if (filters.length === 0) {
     query = db.Todo.find({});
   } else {
-    filterArray = filters.map(({ header, entry }) => {
-      return { [header]: { $regex: entry, $options: "i" } };
+    filterArray = filters.map((filter) => {
+      key = Object.keys(filter)[0];
+      return { [key]: { $regex: filter[key], $options: "i" } };
     });
     query = db.Todo.find({ $or: filterArray });
   }
@@ -54,13 +55,28 @@ exports.filterTodos = (req, res) => {
 };
 
 exports.resultsPreview = (req, res) => {
-  const { word } = req.body;
+  const { filters, keyword } = req.body;
+  console.log(`filters: ${JSON.stringify(filters)}`);
+  console.log(`word: ${keyword}`);
   const fieldArray = ["owner", "title", "details"];
   let filterArray = [];
-  let query;
+  let query, key;
+  let freqCounter = {};
 
   for (field of fieldArray) {
-    filterArray.push({ [field]: { $regex: word, $options: "i" } });
+    freqCounter[field] = 0;
+  }
+
+  filters.forEach((item) => {
+    key = Object.keys(item)[0];
+    if (item[key] === keyword) freqCounter[key]++;
+  });
+
+  for (field of fieldArray) {
+    if (freqCounter[field] === 0)
+      filterArray.push({
+        [field]: { $regex: new RegExp(`\w*${keyword}\w*`, "i") },
+      });
   }
 
   query = db.Todo.find({ $or: filterArray }).select({

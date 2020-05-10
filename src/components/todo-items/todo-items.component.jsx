@@ -58,9 +58,12 @@ const ToDoItems = (props) => {
       });
   }, [filters]);
 
+  useEffect(() => {
+    filterBarContent.length < 3 ? updateFilterMode(false) : updateFilterMode(true);
+
+  }, [filterBarContent])
+
   // TO-DO METHODS
-
-
 
   const submitHandler = (newToDoObj) => {
     updateLoading(true);
@@ -182,21 +185,23 @@ const ToDoItems = (props) => {
     updateLoading(false);
   };
 
-  const removeFilter = ({header: itemHeader, entry: itemEntry}) => {
+  const removeFilter = (filter) => {
+    const [keyToRemove, valueToRemove] = Object.entries(filter)[0];
     updateLoading(true);
     updateFilters((prevState) => {
-      return prevState.filter(({header: filterHeader, entry: filterEntry}) => itemHeader !== filterHeader || itemEntry !== filterEntry);
+      return prevState.filter((item) => Object.keys(item)[0] !== keyToRemove || Object.values(item)[0] !== valueToRemove);
     });
     updateLoading(false);
   }
 
   const showFilterPreview = (word) => {
+
     fetch("api/todos/preview", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ word }),
+      body: JSON.stringify({ filters: filters, keyword: word }),
     })
     .then((res) => res.json())
     .then(todos => {

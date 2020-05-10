@@ -9,7 +9,8 @@ const todoSchema = new mongoose.Schema({
     dueDate: Date,
     done: Boolean,
     editMode: Boolean,
-    detailsVisible: Boolean
+    detailsVisible: Boolean,
+    category: String
 });
 
 const Todo = mongoose.model("Todo", todoSchema);

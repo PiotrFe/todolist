@@ -23,6 +23,12 @@ export const Components = {
   INPUT_FIELD: "input-field"
 };
 
+export const ToDoCategories = {
+  RED: "red",
+  YELLOW: "yellow",
+  GREEN: "green"
+}
+
 export const Colors = {
   COLOR_PRIMARY_LIGHT: "#bbe1fa",
   COLOR_PRIMARY_MEDIUM: "#3282b8",
