@@ -1,8 +1,39 @@
-.todo-item-small {
-    height: 5rem;
-    width: 35rem;
-    margin: 2rem 0 5rem 2rem;
-    border: 1px solid black;
+@import "../../constants/constants";
 
-    display: flex;
+.todo-item-small {
+  height: 5rem;
+  width: 35rem;
+  margin: 2rem 0 0 2rem;
+  border: 1px solid black;
+  font-size: 1.2rem;
+  box-shadow: 0 1rem 3rem rgba($color-black, 0.15);
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  &__title {
+    flex: 0 0 30%;
+
+    border: 1px solid black;
+    padding: 0 0.5rem;
+  }
+
+  &__duedate {
+    flex: 0 0 30%;
+
+    border: 1px solid black;
+    padding: 0 0.5rem;
+    background-color: $color-blue-dark;
+    color: $color-grey-light-1;
+  }
+
+  &__owner {
+    flex: 0 0 30%;
+
+    border: 1px solid black;
+    padding: 0 0.5rem;
+    background-color: $color-grey-dark-1;
+    color: $color-grey-light-1;
+  }
 }

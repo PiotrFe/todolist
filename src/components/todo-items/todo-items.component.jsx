@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 
-
 import NavTop from "../../components/nav-top/nav-top.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
 import ToDoItem from "../../components/todo-item/todo-item.component";
@@ -62,9 +61,10 @@ const ToDoItems = (props) => {
   }, [filters]);
 
   useEffect(() => {
-    filterBarContent.length < 3 ? updateFilterMode(false) : updateFilterMode(true);
-
-  }, [filterBarContent])
+    filterBarContent.length < 3
+      ? updateFilterMode(false)
+      : updateFilterMode(true);
+  }, [filterBarContent]);
 
   // TO-DO METHODS
 
@@ -149,29 +149,29 @@ const ToDoItems = (props) => {
       });
   };
 
-  const changeColorHandler = ({id, color}) => {
+  const changeColorHandler = ({ id, color }) => {
     updateLoading(true);
 
     fetch(`api/todos/${id}`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "text/plain"
+        "Content-Type": "text/plain",
       },
-      body: color 
+      body: color,
     })
-    .then(res => res.json())
-    .then((todo) => {
-      updateToDoItems(prevState => {
-        return prevState.map((item) => {
-          if (item._id === id) {
-            item.color = color;
-          }
-          return item;
+      .then((res) => res.json())
+      .then((todo) => {
+        updateToDoItems((prevState) => {
+          return prevState.map((item) => {
+            if (item._id === id) {
+              item.color = color;
+            }
+            return item;
+          });
+        });
+        updateLoading(false);
       });
-    });
-    updateLoading(false);
-  });
-  }
+  };
 
   const toggleEditMode = () => {
     updateEditMode(!editMode);
@@ -196,9 +196,9 @@ const ToDoItems = (props) => {
 
   // HANDLING FILTERS
 
-  const updateFilterBar = content => {
+  const updateFilterBar = (content) => {
     updateFilterBarContent(content);
-  }
+  };
 
   const applyFilter = (item) => {
     updateLoading(true);
@@ -216,13 +216,16 @@ const ToDoItems = (props) => {
     const [keyToRemove, valueToRemove] = Object.entries(filter)[0];
     updateLoading(true);
     updateFilters((prevState) => {
-      return prevState.filter((item) => Object.keys(item)[0] !== keyToRemove || Object.values(item)[0] !== valueToRemove);
+      return prevState.filter(
+        (item) =>
+          Object.keys(item)[0] !== keyToRemove ||
+          Object.values(item)[0] !== valueToRemove
+      );
     });
     updateLoading(false);
-  }
+  };
 
   const showFilterPreview = (word) => {
-
     fetch("api/todos/preview", {
       method: "POST",
       headers: {
@@ -230,21 +233,20 @@ const ToDoItems = (props) => {
       },
       body: JSON.stringify({ filters: filters, keyword: word }),
     })
-    .then((res) => res.json())
-    .then(todos => {
-      updateFilterMode(true);
-      updateFilterWord(word);
-      updateFilterPreview(todos);
-    } );
+      .then((res) => res.json())
+      .then((todos) => {
+        updateFilterMode(true);
+        updateFilterWord(word);
+        updateFilterPreview(todos);
+      });
   };
 
   // HANDLING DRAG & DROP
 
   const toggleDrag = (isEnabled) => {
     console.log(`Received in function: ${isEnabled}`);
-    toggleDragMode(isEnabled)
-    
-  }
+    toggleDragMode(isEnabled);
+  };
 
   // HANDLING SORTING
 
@@ -276,7 +278,7 @@ const ToDoItems = (props) => {
         actions={{
           [ActionTypes.DRAG]: toggleDrag,
           [ActionTypes.EDIT]: toggleEditMode,
-          [ActionTypes.SORT]: handleSort
+          [ActionTypes.SORT]: handleSort,
         }}
         dragModeOn={dragModeOn}
       />
@@ -286,7 +288,7 @@ const ToDoItems = (props) => {
         actions={{
           [ActionTypes.CHANGE]: updateFilterBar,
           [ActionTypes.SUBMIT]: showFilterPreview,
-          [ActionTypes.REMOVE]: removeFilter
+          [ActionTypes.REMOVE]: removeFilter,
         }}
       />
       {filterMode ? (
@@ -298,9 +300,6 @@ const ToDoItems = (props) => {
           }}
         />
       ) : null}
-
-      {!dragModeOn ? null :  
-
       <div className="todo-items">
         {todoItems.map(
           ({
@@ -314,51 +313,50 @@ const ToDoItems = (props) => {
             done,
             editMode,
             detailsVisible,
-            color
-          }) => (
-            <>
-            <ToDoItem
-              actions={{
-                [ActionTypes.CHANGE]: changeColorHandler,
-                [ActionTypes.DONE]: doneHandler,
-                [ActionTypes.EDIT]: editModeHandler,
-                [ActionTypes.REMOVE]: removeHandler,
-                [ActionTypes.SUBMIT]: submitUpdateHandler,
-                [ActionTypes.TOGGLE_DETAILS]: toggleDetailsHandler,
-              }}
-              color={color}
-              details={details}
-              detailsDraft={detailsDraft}
-              detailsVisible={detailsVisible}
-              done={done}
-              dueDate={dueDate}
-              draft={draft}
-              editMode={editMode}
-              id={_id}
-              key={_id}
-              owner={owner}
-              title={title}
-            />
-            <ToDoItemSmall 
-            id={_id}
-            dueDate={dueDate}
-            owner={owner}
-            title={title}/>
-            </>
-          )
+            color,
+          }) => {
+            return dragModeOn ? (
+              <ToDoItem
+                actions={{
+                  [ActionTypes.CHANGE]: changeColorHandler,
+                  [ActionTypes.DONE]: doneHandler,
+                  [ActionTypes.EDIT]: editModeHandler,
+                  [ActionTypes.REMOVE]: removeHandler,
+                  [ActionTypes.SUBMIT]: submitUpdateHandler,
+                  [ActionTypes.TOGGLE_DETAILS]: toggleDetailsHandler,
+                }}
+                color={color}
+                details={details}
+                detailsDraft={detailsDraft}
+                detailsVisible={detailsVisible}
+                done={done}
+                dueDate={dueDate}
+                draft={draft}
+                editMode={editMode}
+                id={_id}
+                key={_id}
+                owner={owner}
+                title={title}
+              />
+            ) : (
+              <ToDoItemSmall
+                color={color}
+                id={_id}
+                dueDate={dueDate}
+                owner={owner}
+                title={title}
+              />
+            );
+          }
         )}
       </div>
-
-}
-
-
+      }
       {loading ? (
         <>
           <Overlay show={loading} onClick={null} opaque={true} />
           <LoadingSpinner />
         </>
       ) : null}
-
       {editMode ? (
         <>
           <Overlay show={true} onClick={null} opaque={true} />
