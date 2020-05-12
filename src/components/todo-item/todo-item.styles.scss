@@ -141,6 +141,7 @@
 
       font-size: 1.2rem;
       border: 0.7px solid $color-black;
+      background-color: $color-white;
       padding: 0.5rem;
       overflow: auto;
       height: 90%;
@@ -184,3 +185,24 @@
   }
 }
 
+.color-picker-enter {
+  width: 0;
+  height: 0;
+}
+
+.color-picker-enter.color-picker-enter-active {
+  width: 5rem;
+  height: 100%;
+  transition: width 0.2s ease-in, height 0.4s ease-in 0.2s;
+}
+
+.color-picker-leave {
+  width: 5rem;
+  height: 100%;
+}
+
+.color-picker-leave.color-picker-leave-active {
+  width: 0;
+  height: 0;
+  transition: height 0.4s ease-in, width 0.2s ease-in 0.4s;
+}

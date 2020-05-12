@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { CSSTransitionGroup } from "react-transition-group";
 
 import Icon from "../icon/icon.component";
 import ColorPicker from "../color-picker/color-picker.component";
@@ -21,9 +22,17 @@ const ToDoItem = ({
   id,
   owner,
   title,
+  color
 }) => {
 
-  const [colorPickerVisible, toggleColorPicker] = useState(true);
+  const [colorPickerVisible, toggleColorPicker] = useState(false);
+  // const [color, updateColorSchmeme] = useState("#F18701");
+
+  // const applyColorScheme = (color) => {
+  //   if (color !== null) updateColorSchmeme(color);
+  //   toggleColorPicker(false);
+
+  // }
 
   const date = new Date(dueDate);
   const formattedDate = `${date.getDate()}-${
@@ -84,7 +93,7 @@ const ToDoItem = ({
               done ? "done" : "pending"
             }`}
           >
-            <div className="todo-item__title--front">{title}</div>
+            <div className="todo-item__title--front" style={{backgroundImage: `linear-gradient(to right, ${color}, transparent`}}>{title}</div>
             <div className="todo-item__details--front">
               <div className="todo-item__duedate todo-item__duedate--front">
                 Due date: <span>{formattedDate}</span>
@@ -101,6 +110,7 @@ const ToDoItem = ({
           className={`todo-item__side todo-item__side--back todo-item__side--back${
             detailsVisible ? "--visible" : ""
           }`}
+          style={{backgroundImage: `linear-gradient(to right, ${color}, ${color})`}}
         >
           <div className="todo-item__icons todo-item__icons--back">{icons}</div>
 
@@ -116,9 +126,13 @@ const ToDoItem = ({
           </div>
         </div>
       </div>
-      {colorPickerVisible ? <ColorPicker /> : null}
-        
-
+      <CSSTransitionGroup
+        transitionName="color-picker"
+        transitionEnterTimeout={600}
+        transitionLeaveTimeout={600}
+      >
+        {colorPickerVisible ? <ColorPicker id={id} applyColor={actions[ActionTypes.CHANGE]} showColorPicker={toggleColorPicker} /> : null}
+      </CSSTransitionGroup>
     </div>
   );
 };

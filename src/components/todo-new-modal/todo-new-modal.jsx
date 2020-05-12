@@ -30,6 +30,7 @@ const ToDoModal = ({ actions, content = null }) => {
       done: false,
       editMode: false,
       detailsVisible: false,
+      color: ""
     };
 
     if (_id) {

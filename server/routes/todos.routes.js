@@ -14,6 +14,7 @@ router.route("/preview")
 
 router.route("/:todoId")
   .post(helpers.removeTodo)
-  .put(helpers.updateTodo);
+  .put(helpers.updateTodo)
+  .patch(helpers.updateColor)
 
 module.exports = router;

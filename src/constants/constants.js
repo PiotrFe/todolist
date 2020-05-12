@@ -2,6 +2,7 @@ export const ActionTypes = {
   CANCEL: "cancel",
   CHANGE: "change",
   DONE: "done",
+  DRAG: "drag",
   EDIT: "edit",
   FOCUS: "focus",
   REMOVE: "remove",

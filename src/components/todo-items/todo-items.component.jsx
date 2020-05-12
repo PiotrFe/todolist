@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
+
 import NavTop from "../../components/nav-top/nav-top.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
 import ToDoItem from "../../components/todo-item/todo-item.component";
@@ -7,6 +8,7 @@ import Overlay from "../../components/overlay/overlay.component";
 import LoadingSpinner from "../../components/loading-spinner/loading-spinner.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
+import ToDoItemSmall from "../../components/todo-item-small/todo-item-small.component";
 
 import { ActionTypes, Themes, Columns } from "../../constants/constants";
 import { IconTypes } from "../icon/icon.types";
@@ -34,6 +36,7 @@ const ToDoItems = (props) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
   const [editMode, updateEditMode] = useState(false);
   const [editedToDo, setEditedToDo] = useState(null);
+  const [dragModeOn, toggleDragMode] = useState(false);
 
   const isMountedRef = useRef(null);
   const inputRef = useRef(null);
@@ -146,6 +149,30 @@ const ToDoItems = (props) => {
       });
   };
 
+  const changeColorHandler = ({id, color}) => {
+    updateLoading(true);
+
+    fetch(`api/todos/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "text/plain"
+      },
+      body: color 
+    })
+    .then(res => res.json())
+    .then((todo) => {
+      updateToDoItems(prevState => {
+        return prevState.map((item) => {
+          if (item._id === id) {
+            item.color = color;
+          }
+          return item;
+      });
+    });
+    updateLoading(false);
+  });
+  }
+
   const toggleEditMode = () => {
     updateEditMode(!editMode);
   };
@@ -211,6 +238,14 @@ const ToDoItems = (props) => {
     } );
   };
 
+  // HANDLING DRAG & DROP
+
+  const toggleDrag = (isEnabled) => {
+    console.log(`Received in function: ${isEnabled}`);
+    toggleDragMode(isEnabled)
+    
+  }
+
   // HANDLING SORTING
 
   const handleSort = (column) => {
@@ -239,9 +274,11 @@ const ToDoItems = (props) => {
       <NavTop
         sorts={sorts}
         actions={{
+          [ActionTypes.DRAG]: toggleDrag,
           [ActionTypes.EDIT]: toggleEditMode,
-          [ActionTypes.SORT]: handleSort,
+          [ActionTypes.SORT]: handleSort
         }}
+        dragModeOn={dragModeOn}
       />
       <FilterBar
         tags={filters}
@@ -262,6 +299,8 @@ const ToDoItems = (props) => {
         />
       ) : null}
 
+      {!dragModeOn ? null :  
+
       <div className="todo-items">
         {todoItems.map(
           ({
@@ -275,15 +314,19 @@ const ToDoItems = (props) => {
             done,
             editMode,
             detailsVisible,
+            color
           }) => (
+            <>
             <ToDoItem
               actions={{
+                [ActionTypes.CHANGE]: changeColorHandler,
                 [ActionTypes.DONE]: doneHandler,
                 [ActionTypes.EDIT]: editModeHandler,
                 [ActionTypes.REMOVE]: removeHandler,
                 [ActionTypes.SUBMIT]: submitUpdateHandler,
                 [ActionTypes.TOGGLE_DETAILS]: toggleDetailsHandler,
               }}
+              color={color}
               details={details}
               detailsDraft={detailsDraft}
               detailsVisible={detailsVisible}
@@ -296,9 +339,18 @@ const ToDoItems = (props) => {
               owner={owner}
               title={title}
             />
+            <ToDoItemSmall 
+            id={_id}
+            dueDate={dueDate}
+            owner={owner}
+            title={title}/>
+            </>
           )
         )}
       </div>
+
+}
+
 
       {loading ? (
         <>

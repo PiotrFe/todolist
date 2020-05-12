@@ -3,11 +3,12 @@ import React from "react";
 import "./nav-top.styles.scss";
 
 import Icon from "../icon/icon.component";
+import Slider from "../slider/slider.component";
 
 import { IconTypes } from "../icon/icon.types";
 import { Sizes, Components, ActionTypes } from "../../constants/constants";
 
-const NavTop = ({sorts, actions}) => {
+const NavTop = ({sorts, actions, dragModeOn}) => {
 
   const [sortTitle, sortDueDate, sortOwner ] = sorts;
 
@@ -48,6 +49,9 @@ const NavTop = ({sorts, actions}) => {
 
 
     <div className="header-top__action-icons">
+
+      <Slider toggle={actions[ActionTypes.DRAG]} dragModeOn={dragModeOn}/>
+      
       <Icon
         id={null}
         type={IconTypes.ADD}

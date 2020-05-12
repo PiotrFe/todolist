@@ -1,7 +1,11 @@
+@import "../../constants/constants";
+
 .color-picker {
     height: 100%;
     width: 5rem;
-    border: 1px solid black;
+    // border: 1px solid black;
+    margin-left: 1rem;
+    background-color: #fff;
 
     &__options {
         list-style: none;
@@ -16,24 +20,8 @@
     &__option {
         width: 80%;
         height: 2rem;
-        border: 1px solid black;
+        // border: 1px solid black;
         margin: .2rem;
-
-        &--1 {
-            background-color: #3D348B;
-        }
-        &--2 {
-            background-color: #7678ED;
-        }
-        &--3 {
-            background-color: #F7B801;
-        }
-        &--4 {
-            background-color: #F18701;
-        }
-        &--5 {
-            background-color: #F35B04;
-        }
     
         &:hover {
             cursor: pointer;
