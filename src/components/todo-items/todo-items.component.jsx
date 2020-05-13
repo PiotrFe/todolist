@@ -8,6 +8,7 @@ import LoadingSpinner from "../../components/loading-spinner/loading-spinner.com
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
 import ToDoItemSmall from "../../components/todo-item-small/todo-item-small.component";
+import DropArea from "../../components/drop-area/drop-area.component";
 
 import { ActionTypes, Themes, Columns } from "../../constants/constants";
 import { IconTypes } from "../icon/icon.types";
@@ -244,8 +245,54 @@ const ToDoItems = (props) => {
   // HANDLING DRAG & DROP
 
   const toggleDrag = (isEnabled) => {
-    console.log(`Received in function: ${isEnabled}`);
     toggleDragMode(isEnabled);
+  };
+
+  const handleDragStart = (e, id) => {
+    e.dataTransfer.setData("text/plain", id);
+  };
+
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.target.classList.remove("drop-area--drag-over");
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.target.classList.add("drop-area--drag-over");
+  };
+
+  const handleDrop = (e, dropAreaIndex) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const toDoID = e.dataTransfer.getData("text/plain");
+    const currentIndex = todoItems.findIndex((item) => item._id === toDoID);
+
+    e.target.classList.remove("drop-area--drag-over");
+
+    if (currentIndex + 1 !== dropAreaIndex && currentIndex !== dropAreaIndex) reorderOnDrop(currentIndex, dropAreaIndex);
+  };
+
+  const reorderOnDrop = (currentIndex, newIndex) => {
+    
+    console.log(`item index found: ${currentIndex}`);
+
+    updateToDoItems((prevState) => {
+      const newState = [...prevState];
+      const toDo = newState[currentIndex];
+      newState.splice(currentIndex, 1);
+      newState.splice(newIndex - 1, 0, toDo);
+
+      return newState;
+    });
   };
 
   // HANDLING SORTING
@@ -302,20 +349,23 @@ const ToDoItems = (props) => {
       ) : null}
       <div className="todo-items">
         {todoItems.map(
-          ({
-            _id,
-            title,
-            details,
-            draft,
-            detailsDraft,
-            dueDate,
-            owner,
-            done,
-            editMode,
-            detailsVisible,
-            color,
-          }) => {
-            return dragModeOn ? (
+          (
+            {
+              _id,
+              title,
+              details,
+              draft,
+              detailsDraft,
+              dueDate,
+              owner,
+              done,
+              editMode,
+              detailsVisible,
+              color,
+            },
+            idx
+          ) => {
+            return !dragModeOn ? (
               <ToDoItem
                 actions={{
                   [ActionTypes.CHANGE]: changeColorHandler,
@@ -339,16 +389,44 @@ const ToDoItems = (props) => {
                 title={title}
               />
             ) : (
-              <ToDoItemSmall
-                color={color}
-                id={_id}
-                dueDate={dueDate}
-                owner={owner}
-                title={title}
-              />
+              <>
+                <DropArea
+                  actions={{
+                    handleDragEnter,
+                    handleDragLeave,
+                    handleDragOver,
+                    handleDrop,
+                  }}
+                  idx={idx}
+                />
+                <ToDoItemSmall
+                  actions={{
+                    handleDragStart: handleDragStart,
+                  }}
+                  color={color}
+                  id={_id}
+                  key={_id}
+                  dueDate={dueDate}
+                  owner={owner}
+                  title={title}
+                />
+              </>
             );
           }
         )}
+        {dragModeOn ? 
+        <DropArea
+          actions={{
+            handleDragEnter,
+            handleDragLeave,
+            handleDragOver,
+            handleDrop,
+          }}
+          idx={todoItems.length}
+        />
+        : 
+        null
+      }
       </div>
       }
       {loading ? (

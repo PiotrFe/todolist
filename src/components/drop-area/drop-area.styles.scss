@@ -1,0 +1,11 @@
+.drop-area {
+    height: .3rem;
+    width: 55rem;
+    // background-color: orangered;
+
+    transition: all .2s;
+
+    &--drag-over {
+        height: 3.5rem;
+    }
+}
