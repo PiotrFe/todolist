@@ -1,3 +1,5 @@
+@import "../../constants/constants";
+
 .todo-area {
     display: flex;
     flex-direction: column;
@@ -10,5 +12,10 @@
 .todo-items {
     display: flex;
     flex-direction: column;
+}
 
+.droppable {
+    &--is-dragging-over {
+        background-color: $color-blue-dark;
+    }
 }

@@ -6,10 +6,15 @@
   border: 1px solid black;
   font-size: 1.2rem;
   box-shadow: 0 1rem 3rem rgba($color-black, 0.15);
+  background-color: $color-white;
 
   display: flex;
   justify-content: space-around;
   align-items: center;
+
+  &--isdragging {
+    background-color: $color-blue-light-1;
+  }
 
   &__title {
     flex: 0 0 30%;

@@ -61,7 +61,7 @@ const NavTop = ({sorts, actions, dragModeOn}) => {
       />
       <Icon
         id={null}
-        type={IconTypes.SEARCH}
+        type={IconTypes.DOWNLOAD}
         parent={null}
         onClick={null}
         size={Sizes.SMALL}

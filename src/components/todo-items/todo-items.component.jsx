@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import NavTop from "../../components/nav-top/nav-top.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
@@ -8,7 +9,7 @@ import LoadingSpinner from "../../components/loading-spinner/loading-spinner.com
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
 import ToDoItemSmall from "../../components/todo-item-small/todo-item-small.component";
-import DropArea from "../../components/drop-area/drop-area.component";
+import ConditionalWrapper from "../utils/ConditionalWrapper.util";
 
 import { ActionTypes, Themes, Columns } from "../../constants/constants";
 import { IconTypes } from "../icon/icon.types";
@@ -248,51 +249,24 @@ const ToDoItems = (props) => {
     toggleDragMode(isEnabled);
   };
 
-  const handleDragStart = (e, id) => {
-    e.dataTransfer.setData("text/plain", id);
-  };
+  const handleDragEnd = (result) => {
+    const {destination, source } = result;
 
-  const handleDragEnter = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
+    if (!destination) return;
 
-  const handleDragLeave = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    e.target.classList.remove("drop-area--drag-over");
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    e.target.classList.add("drop-area--drag-over");
-  };
-
-  const handleDrop = (e, dropAreaIndex) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const toDoID = e.dataTransfer.getData("text/plain");
-    const currentIndex = todoItems.findIndex((item) => item._id === toDoID);
-
-    e.target.classList.remove("drop-area--drag-over");
-
-    if (currentIndex + 1 !== dropAreaIndex && currentIndex !== dropAreaIndex) reorderOnDrop(currentIndex, dropAreaIndex);
-  };
-
-  const reorderOnDrop = (currentIndex, newIndex) => {
-    
-    console.log(`item index found: ${currentIndex}`);
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) return;
 
     updateToDoItems((prevState) => {
       const newState = [...prevState];
-      const toDo = newState[currentIndex];
-      newState.splice(currentIndex, 1);
-      newState.splice(newIndex - 1, 0, toDo);
+      const toDo = newState.splice(source.index, 1)[0];
+      newState.splice(destination.index, 0, toDo);
 
       return newState;
     });
+
   };
 
   // HANDLING SORTING
@@ -347,87 +321,88 @@ const ToDoItems = (props) => {
           }}
         />
       ) : null}
-      <div className="todo-items">
-        {todoItems.map(
-          (
-            {
-              _id,
-              title,
-              details,
-              draft,
-              detailsDraft,
-              dueDate,
-              owner,
-              done,
-              editMode,
-              detailsVisible,
-              color,
-            },
-            idx
-          ) => {
-            return !dragModeOn ? (
-              <ToDoItem
-                actions={{
-                  [ActionTypes.CHANGE]: changeColorHandler,
-                  [ActionTypes.DONE]: doneHandler,
-                  [ActionTypes.EDIT]: editModeHandler,
-                  [ActionTypes.REMOVE]: removeHandler,
-                  [ActionTypes.SUBMIT]: submitUpdateHandler,
-                  [ActionTypes.TOGGLE_DETAILS]: toggleDetailsHandler,
-                }}
-                color={color}
-                details={details}
-                detailsDraft={detailsDraft}
-                detailsVisible={detailsVisible}
-                done={done}
-                dueDate={dueDate}
-                draft={draft}
-                editMode={editMode}
-                id={_id}
-                key={_id}
-                owner={owner}
-                title={title}
-              />
-            ) : (
-              <>
-                <DropArea
-                  actions={{
-                    handleDragEnter,
-                    handleDragLeave,
-                    handleDragOver,
-                    handleDrop,
-                  }}
-                  idx={idx}
-                />
-                <ToDoItemSmall
-                  actions={{
-                    handleDragStart: handleDragStart,
-                  }}
-                  color={color}
-                  id={_id}
-                  key={_id}
-                  dueDate={dueDate}
-                  owner={owner}
-                  title={title}
-                />
-              </>
-            );
-          }
+      <ConditionalWrapper
+        condition={dragModeOn}
+        wrapper={(children) => (
+          <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
+            {children}
+          </DragDropContext>
         )}
-        {dragModeOn ? 
-        <DropArea
-          actions={{
-            handleDragEnter,
-            handleDragLeave,
-            handleDragOver,
-            handleDrop,
-          }}
-          idx={todoItems.length}
-        />
-        : 
-        null
-      }
-      </div>
+      >
+        <ConditionalWrapper
+          condition={dragModeOn}
+          wrapper={(children) => (
+            <Droppable droppableId={`RANDOM_ID`}>
+              {(provided, snapshot) => (
+                <div 
+                    className={`droppable ${snapshot.isDraggingOver ? `droppable--is-dragging-over` : ""}`}
+                    ref={provided.innerRef} 
+                    {...provided.droppableProps}
+                    >
+                  {children}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          )}
+        >
+          <div className="todo-items">
+            {todoItems.map(
+              (
+                {
+                  _id,
+                  title,
+                  details,
+                  draft,
+                  detailsDraft,
+                  dueDate,
+                  owner,
+                  done,
+                  editMode,
+                  detailsVisible,
+                  color,
+                },
+                idx
+              ) => {
+                return !dragModeOn ? (
+                  <ToDoItem
+                    actions={{
+                      [ActionTypes.CHANGE]: changeColorHandler,
+                      [ActionTypes.DONE]: doneHandler,
+                      [ActionTypes.EDIT]: editModeHandler,
+                      [ActionTypes.REMOVE]: removeHandler,
+                      [ActionTypes.SUBMIT]: submitUpdateHandler,
+                      [ActionTypes.TOGGLE_DETAILS]: toggleDetailsHandler,
+                    }}
+                    color={color}
+                    details={details}
+                    detailsDraft={detailsDraft}
+                    detailsVisible={detailsVisible}
+                    done={done}
+                    dueDate={dueDate}
+                    draft={draft}
+                    editMode={editMode}
+                    id={_id}
+                    key={_id}
+                    owner={owner}
+                    title={title}
+                  />
+                ) : (
+                  <ToDoItemSmall
+                    color={color}
+                    id={_id}
+                    key={_id}
+                    idx={idx}
+                    dueDate={dueDate}
+                    owner={owner}
+                    title={title}
+                  />
+                );
+              }
+            )}
+          </div>
+        </ConditionalWrapper>
+      </ConditionalWrapper>
       }
       {loading ? (
         <>
