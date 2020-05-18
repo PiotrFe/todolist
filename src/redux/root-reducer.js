@@ -1,9 +1,7 @@
-const initialState = {
-    articles: []
-};
+import { combineReducers } from "redux";
 
-function rootReducer(state = initialState, action) {
-    return state;
-}
+import todoItemsReducer from "./todo-items/todo-items.reducer";
 
-export default rootReducer;
+export default combineReducers({
+  todoItems: todoItemsReducer,
+});

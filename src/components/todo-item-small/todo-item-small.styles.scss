@@ -26,18 +26,12 @@
   &__duedate {
     flex: 0 0 30%;
 
-    border: 1px solid black;
-    padding: 0 0.5rem;
-    background-color: $color-blue-dark;
-    color: $color-grey-light-1;
+    @extend %duedate-format;
   }
 
   &__owner {
     flex: 0 0 30%;
 
-    border: 1px solid black;
-    padding: 0 0.5rem;
-    background-color: $color-grey-dark-1;
-    color: $color-grey-light-1;
+    @extend %owner-format;
   }
 }

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { connect } from "react-redux";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import NavTop from "../../components/nav-top/nav-top.component";
@@ -9,7 +10,15 @@ import LoadingSpinner from "../../components/loading-spinner/loading-spinner.com
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
 import ToDoItemSmall from "../../components/todo-item-small/todo-item-small.component";
+import ToDoItemEditable from "../../components/todo-item-editable/todo-item-editable.component";
 import ConditionalWrapper from "../utils/ConditionalWrapper.util";
+
+import {
+  addToDo,
+  fetchToDosBegin,
+  fetchToDosSuccess,
+  fetchToDosFailure,
+} from "../../redux/todo-items/todo-items.actions";
 
 import { ActionTypes, Themes, Columns } from "../../constants/constants";
 import { IconTypes } from "../icon/icon.types";
@@ -17,6 +26,11 @@ import { IconTypes } from "../icon/icon.types";
 import "./todo-items.styles.scss";
 
 const ToDoItems = (props) => {
+  console.log(`props: ${JSON.stringify(props)}`);
+
+  const {error, loading, todoItems, dispatch} = props;
+
+  // const {fetchToDosSuccess} = props;
   const sortsInitial = [
     { column: Columns.TITLE, sortIndex: 0, sortDirection: IconTypes.SORT_BOTH },
     {
@@ -27,9 +41,9 @@ const ToDoItems = (props) => {
     { column: Columns.OWNER, sortIndex: 0, sortDirection: IconTypes.SORT_BOTH },
   ];
 
-  const [todoItems, updateToDoItems] = useState([]);
+  // const [todoItems, updateToDoItems] = useState([]);
   const [sorts, updateSorts] = useState(sortsInitial);
-  const [loading, updateLoading] = useState(false);
+  // const [loading, updateLoading] = useState(false);
   const [filterMode, updateFilterMode] = useState(true);
   const [filters, updateFilters] = useState([]);
   const [filterPreview, updateFilterPreview] = useState();
@@ -45,6 +59,8 @@ const ToDoItems = (props) => {
   // EFFECTS
 
   useEffect(() => {
+    fetchToDosBegin();
+
     fetch("/api/todos/filters", {
       method: "POST",
       headers: {
@@ -54,11 +70,14 @@ const ToDoItems = (props) => {
     })
       .then((res) => res.json())
       .then((todos) => {
-        updateToDoItems(todos);
-        updateLoading(false);
+        dispatch(fetchToDosSuccess(todos));
+        // fetchToDosSuccess(todos);
+        // updateToDoItems(todos);
+        // updateLoading(false);
       })
       .catch((err) => {
-        updateLoading(false);
+        // dispatch(fetchToDosFailure(err));
+        // updateLoading(false);
       });
   }, [filters]);
 
@@ -70,8 +89,8 @@ const ToDoItems = (props) => {
 
   // TO-DO METHODS
 
-  const submitHandler = (newToDoObj) => {
-    updateLoading(true);
+  const addToDo = (newToDoObj) => {
+    // updateLoading(true);
 
     fetch("/api/todos", {
       method: "POST",
@@ -82,8 +101,8 @@ const ToDoItems = (props) => {
     })
       .then((res) => res.json())
       .then((todo) => {
-        updateToDoItems((prevState) => [...prevState, JSON.parse(todo)]);
-        updateLoading(false);
+        // updateToDoItems((prevState) => [...prevState, JSON.parse(todo)]);
+        // updateLoading(false);
         toggleEditMode();
       });
   };
@@ -94,11 +113,11 @@ const ToDoItems = (props) => {
     })
       .then((res) => res.json())
       .then((idObj) => {
-        updateToDoItems((prevState) => {
-          return prevState.filter((item) => {
-            return item._id !== idObj._id;
-          });
-        });
+        // updateToDoItems((prevState) => {
+        //   return prevState.filter((item) => {
+        //     return item._id !== idObj._id;
+        //   });
+        // });
       });
   };
 
@@ -115,19 +134,19 @@ const ToDoItems = (props) => {
     })
       .then((res) => res.json())
       .then((todo) => {
-        updateToDoItems((prevState) => {
-          return prevState.map((item) => {
-            if (item._id === todo._id) {
-              item = todo;
-            }
-            return item;
-          });
-        });
+        // updateToDoItems((prevState) => {
+        //   return prevState.map((item) => {
+        //     if (item._id === todo._id) {
+        //       item = todo;
+        //     }
+        //     return item;
+        //   });
+        // });
       });
   };
 
   const submitUpdateHandler = (toDo) => {
-    updateLoading(true);
+    // updateLoading(true);
 
     fetch(`/api/todos/${toDo._id}`, {
       method: "PUT",
@@ -138,21 +157,21 @@ const ToDoItems = (props) => {
     })
       .then((res) => res.json())
       .then((toDo) => {
-        updateToDoItems((prevState) => {
-          return prevState.map((item) => {
-            if (item._id === toDo._id) {
-              item = toDo;
-            }
-            return item;
-          });
-        });
-        updateLoading(false);
+        // updateToDoItems((prevState) => {
+        //   return prevState.map((item) => {
+        //     if (item._id === toDo._id) {
+        //       item = toDo;
+        //     }
+        //     return item;
+        //   });
+        // });
+        // updateLoading(false);
         toggleEditMode();
       });
   };
 
   const changeColorHandler = ({ id, color }) => {
-    updateLoading(true);
+    // updateLoading(true);
 
     fetch(`api/todos/${id}`, {
       method: "PATCH",
@@ -163,15 +182,15 @@ const ToDoItems = (props) => {
     })
       .then((res) => res.json())
       .then((todo) => {
-        updateToDoItems((prevState) => {
-          return prevState.map((item) => {
-            if (item._id === id) {
-              item.color = color;
-            }
-            return item;
-          });
-        });
-        updateLoading(false);
+        // updateToDoItems((prevState) => {
+        //   return prevState.map((item) => {
+        //     if (item._id === id) {
+        //       item.color = color;
+        //     }
+        //     return item;
+        //   });
+        // });
+        // updateLoading(false);
       });
   };
 
@@ -186,14 +205,14 @@ const ToDoItems = (props) => {
   };
 
   const toggleDetailsHandler = (id) => {
-    updateToDoItems((prevState) => {
-      return prevState.map((item) => {
-        if (item._id === id) {
-          item.detailsVisible = !item.detailsVisible;
-        }
-        return item;
-      });
-    });
+    // updateToDoItems((prevState) => {
+    //   return prevState.map((item) => {
+    //     if (item._id === id) {
+    //       item.detailsVisible = !item.detailsVisible;
+    //     }
+    //     return item;
+    //   });
+    // });
   };
 
   // HANDLING FILTERS
@@ -203,7 +222,7 @@ const ToDoItems = (props) => {
   };
 
   const applyFilter = (item) => {
-    updateLoading(true);
+    // updateLoading(true);
     updateFilters((prevState) => {
       return [...prevState, item];
     });
@@ -211,12 +230,12 @@ const ToDoItems = (props) => {
     updateFilterMode(false);
     updateFilterWord("");
     updateFilterBarContent("");
-    updateLoading(false);
+    // updateLoading(false);
   };
 
   const removeFilter = (filter) => {
     const [keyToRemove, valueToRemove] = Object.entries(filter)[0];
-    updateLoading(true);
+    // updateLoading(true);
     updateFilters((prevState) => {
       return prevState.filter(
         (item) =>
@@ -224,7 +243,7 @@ const ToDoItems = (props) => {
           Object.values(item)[0] !== valueToRemove
       );
     });
-    updateLoading(false);
+    // updateLoading(false);
   };
 
   const showFilterPreview = (word) => {
@@ -250,23 +269,23 @@ const ToDoItems = (props) => {
   };
 
   const handleDragEnd = (result) => {
-    const {destination, source } = result;
+    const { destination, source } = result;
 
     if (!destination) return;
 
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
-    ) return;
+    )
+      return;
 
-    updateToDoItems((prevState) => {
-      const newState = [...prevState];
-      const toDo = newState.splice(source.index, 1)[0];
-      newState.splice(destination.index, 0, toDo);
+    // updateToDoItems((prevState) => {
+    //   const newState = [...prevState];
+    //   const toDo = newState.splice(source.index, 1)[0];
+    //   newState.splice(destination.index, 0, toDo);
 
-      return newState;
-    });
-
+    //   return newState;
+    // });
   };
 
   // HANDLING SORTING
@@ -334,11 +353,13 @@ const ToDoItems = (props) => {
           wrapper={(children) => (
             <Droppable droppableId={`RANDOM_ID`}>
               {(provided, snapshot) => (
-                <div 
-                    className={`droppable ${snapshot.isDraggingOver ? `droppable--is-dragging-over` : ""}`}
-                    ref={provided.innerRef} 
-                    {...provided.droppableProps}
-                    >
+                <div
+                  className={`droppable ${
+                    snapshot.isDraggingOver ? `droppable--is-dragging-over` : ""
+                  }`}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
                   {children}
                   {provided.placeholder}
                 </div>
@@ -417,7 +438,7 @@ const ToDoItems = (props) => {
             actions={{
               [ActionTypes.CANCEL]: toggleEditMode,
               [ActionTypes.EDIT]: submitUpdateHandler,
-              [ActionTypes.SUBMIT]: submitHandler,
+              [ActionTypes.SUBMIT]: addToDo,
             }}
             content={editedToDo}
           />
@@ -427,4 +448,29 @@ const ToDoItems = (props) => {
   );
 };
 
-export default ToDoItems;
+const mapStateToProps = (state) => {
+  const { todoItems, loading, error } = state.todoItems;
+  
+  return {
+    todoItems,
+    loading,
+    error,
+  };
+};
+
+// const mapDispatchToProps = (dispatch) =>({
+//     fetchToDosSuccess: todos => {
+//       const data = fetchToDosSuccess(todos);
+//       console.log(`this is the data we're getting: ${JSON.stringify(data)}`);
+//       debugger;
+//       dispatch(data);
+      
+//       // dispatch(fetchToDosSuccess(todos);
+//     } 
+//   });
+
+// const mapDispatchToProps = dispatch => ({
+//   fetchToDosSuccess: todos => dispatch(fetchToDosSuccess(todos))
+// })
+
+export default connect(mapStateToProps)(ToDoItems);

@@ -1,0 +1,23 @@
+.todo-editable {
+    height: 30rem;
+    width: 25rem;
+
+    border: 1px solid black;
+
+    
+
+
+
+}
+
+.todo-form {
+    &__group {
+        margin: 1rem;
+    }
+
+    &__label {
+        margin-right: .5rem;
+    }
+
+}
+

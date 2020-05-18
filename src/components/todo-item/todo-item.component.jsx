@@ -3,6 +3,7 @@ import { CSSTransitionGroup } from "react-transition-group";
 
 import Icon from "../icon/icon.component";
 import ColorPicker from "../color-picker/color-picker.component";
+import ToDoItemEditable from "../../components/todo-item-editable/todo-item-editable.component";
 import { IconTypes } from "../icon/icon.types";
 import { Sizes, Components, ActionTypes } from "../../constants/constants";
 
@@ -13,12 +14,9 @@ import "./todo-item.styles.scss";
 const ToDoItem = ({
   actions,
   details,
-  detailsDraft,
   detailsVisible,
   done,
-  draft,
   dueDate,
-  editMode,
   id,
   owner,
   title,
@@ -26,13 +24,7 @@ const ToDoItem = ({
 }) => {
 
   const [colorPickerVisible, toggleColorPicker] = useState(false);
-  // const [color, updateColorSchmeme] = useState("#F18701");
-
-  // const applyColorScheme = (color) => {
-  //   if (color !== null) updateColorSchmeme(color);
-  //   toggleColorPicker(false);
-
-  // }
+  const [editMode, toggleEditMode] = useState(false);
 
   const date = new Date(dueDate);
   const formattedDate = `${date.getDate()}-${
@@ -57,7 +49,7 @@ const ToDoItem = ({
       <Icon
         id={id}
         type={IconTypes.EDIT}
-        onClick={actions[ActionTypes.EDIT]}
+        onClick={(e) => {toggleEditMode(!editMode)}}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
@@ -79,6 +71,7 @@ const ToDoItem = ({
   );
 
   return (
+
     <div className="todo-container">
       <div className="todo-item">
         <div
@@ -133,7 +126,23 @@ const ToDoItem = ({
       >
         {colorPickerVisible ? <ColorPicker id={id} applyColor={actions[ActionTypes.CHANGE]} showColorPicker={toggleColorPicker} /> : null}
       </CSSTransitionGroup>
+
+      {editMode ? 
+      (<ToDoItemEditable
+        color={color}
+        details={details}
+        detailsVisible={detailsVisible}
+        done={done}
+        dueDate={dueDate}
+        editMode={editMode}
+        id={id}
+        key={id}
+        owner={owner}
+        title={title}
+      />)
+    : null}
     </div>
+
   );
 };
 
