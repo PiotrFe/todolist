@@ -6,64 +6,69 @@ import ColorPicker from "../color-picker/color-picker.component";
 import ToDoItemEditable from "../../components/todo-item-editable/todo-item-editable.component";
 import { IconTypes } from "../icon/icon.types";
 import { Sizes, Components, ActionTypes } from "../../constants/constants";
-
 import InputField from "../input-field/input-field.component";
+
+import {toggleDetails} from "../../redux/todo-item/todo-item.actions";
+
 
 import "./todo-item.styles.scss";
 
 const ToDoItem = ({
   actions,
   details,
-  detailsVisible,
   done,
   dueDate,
   id,
   owner,
   title,
-  color
+  color,
 }) => {
-
   const [colorPickerVisible, toggleColorPicker] = useState(false);
   const [editMode, toggleEditMode] = useState(false);
+  const [detailsVisible, toggleDetailsVisible] = useState(false);
+
+  const {ADD, CHANGE, CHANGE_COLOR, DONE, DRAG, EDIT, REMOVE, SORT, SUBMIT, UPDATE} = ActionTypes;
 
   const date = new Date(dueDate);
   const formattedDate = `${date.getDate()}-${
     date.getMonth() + 1
   }-${date.getFullYear()}`;
+
   const icons = (
     <>
       <Icon
         id={id}
         type={IconTypes.COLOR}
-        onClick={() => toggleColorPicker(!colorPickerVisible)}
+        handleClick={() => toggleColorPicker(!colorPickerVisible)}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
         id={id}
         type={IconTypes.REMOVE}
-        onClick={actions[ActionTypes.REMOVE]}
+        handleClick={actions[REMOVE]}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
         id={id}
         type={IconTypes.EDIT}
-        onClick={(e) => {toggleEditMode(!editMode)}}
+        editMode={editMode}
+        handleClick={toggleEditMode}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
         id={id}
         type={IconTypes.DONE}
-        onClick={actions[ActionTypes.DONE]}
+        handleClick={actions[DONE]}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
         id={id}
         type={IconTypes.TOGGLE_DETAILS}
-        onClick={actions[ActionTypes.TOGGLE_DETAILS]}
+        handleClick={() => toggleDetailsVisible(!detailsVisible)}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
@@ -71,7 +76,6 @@ const ToDoItem = ({
   );
 
   return (
-
     <div className="todo-container">
       <div className="todo-item">
         <div
@@ -86,7 +90,14 @@ const ToDoItem = ({
               done ? "done" : "pending"
             }`}
           >
-            <div className="todo-item__title--front" style={{backgroundImage: `linear-gradient(to right, ${color}, transparent`}}>{title}</div>
+            <div
+              className="todo-item__title--front"
+              style={{
+                backgroundImage: `linear-gradient(to right, ${color}, transparent`,
+              }}
+            >
+              {title}
+            </div>
             <div className="todo-item__details--front">
               <div className="todo-item__duedate todo-item__duedate--front">
                 Due date: <span>{formattedDate}</span>
@@ -103,7 +114,9 @@ const ToDoItem = ({
           className={`todo-item__side todo-item__side--back todo-item__side--back${
             detailsVisible ? "--visible" : ""
           }`}
-          style={{backgroundImage: `linear-gradient(to right, ${color}, ${color})`}}
+          style={{
+            backgroundImage: `linear-gradient(to right, ${color}, ${color})`,
+          }}
         >
           <div className="todo-item__icons todo-item__icons--back">{icons}</div>
 
@@ -124,25 +137,30 @@ const ToDoItem = ({
         transitionEnterTimeout={600}
         transitionLeaveTimeout={600}
       >
-        {colorPickerVisible ? <ColorPicker id={id} applyColor={actions[ActionTypes.CHANGE]} showColorPicker={toggleColorPicker} /> : null}
+        {colorPickerVisible ? (
+          <ColorPicker
+            id={id}
+            applyColor={actions[CHANGE_COLOR]}
+            showColorPicker={toggleColorPicker}
+          />
+        ) : null}
       </CSSTransitionGroup>
 
-      {editMode ? 
-      (<ToDoItemEditable
-        color={color}
-        details={details}
-        detailsVisible={detailsVisible}
-        done={done}
-        dueDate={dueDate}
-        editMode={editMode}
-        id={id}
-        key={id}
-        owner={owner}
-        title={title}
-      />)
-    : null}
+      {editMode ? (
+        <ToDoItemEditable
+          color={color}
+          details={details}
+          detailsVisible={detailsVisible}
+          done={done}
+          dueDate={dueDate}
+          editMode={editMode}
+          id={id}
+          key={id}
+          owner={owner}
+          title={title}
+        />
+      ) : null}
     </div>
-
   );
 };
 

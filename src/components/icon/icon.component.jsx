@@ -5,12 +5,10 @@ import { Components } from "../../constants/constants";
 
 import "./icon.styles.scss";
 
-const Icon = ({type, onClick, id, parent, size}) => (
+const Icon = ({type, id, parent, size, handleClick, editMode}) => (
   <i
     className={`icon icon--${size} ${parent}__icon ${IconClasses[type]}`}
-    onClick={() => {
-      onClick(id);
-    } }
+    onClick={() => handleClick(id)}
   ></i>
 );
 

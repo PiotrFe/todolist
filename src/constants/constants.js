@@ -1,6 +1,8 @@
 export const ActionTypes = {
+  ADD: "add",
   CANCEL: "cancel",
   CHANGE: "change",
+  CHANGE_COLOR: "change_color",
   DONE: "done",
   DRAG: "drag",
   EDIT: "edit",

@@ -45,6 +45,27 @@ exports.updateColor = (req, res) => {
     .catch((err) => res.send(err));
 };
 
+exports.updateTodoField = (req, res) => {
+
+  const {id, field, value} = req.body;
+
+  console.log(`id: ${id}, field: ${field}, value: ${value}`);
+
+  db.Todo.findOneAndUpdate(
+    { _id: id },
+    { [field]: value },
+    {
+      new: true,
+      useFindAndModify: false,
+    }
+  )
+    .then((updatedTodo) => {
+      const {_id, [field]: value} = updatedTodo;
+      res.send({_id, [field]: value});
+    })
+    .catch((err) => res.send(err));
+};
+
 exports.filterTodos = (req, res) => {
   const { filters } = req.body;
   let query, key, filterArray;

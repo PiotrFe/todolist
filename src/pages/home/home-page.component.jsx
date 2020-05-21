@@ -1,16 +1,15 @@
 import React from "react";
 
-import "./home-page.styles.scss";
-
-
+import ToDoItemsContainer from "../../components/todo-items-container/todo-items-container.component";
 import ToDoItems from "../../components/todo-items/todo-items.component";
-import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
+
+import "./home-page.styles.scss";
 
 
 const HomePage = () => (
   <div className="homepage">
     <div className="homepage__content">
-      <ToDoItems />
+      <ToDoItemsContainer />
     </div>
   </div>
 );
