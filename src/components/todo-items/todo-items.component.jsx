@@ -20,27 +20,13 @@ const ToDoList = ({todoItems, actions, dragModeOn}) => {
 
   const [editedToDo, setEditedToDo] = useState(null);
 
-  // HANDLING DRAG & DROP
-
-  const handleDragEnd = (result) => {
-    const { destination, source } = result;
-
-    if (!destination) return;
-
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    )
-      return;
-  };
-
 
   return (
     <>
       <ConditionalWrapper
         condition={dragModeOn}
         wrapper={(children) => (
-          <DragDropContext onDragEnd={(result) => handleDragEnd(result)}>
+          <DragDropContext onDragEnd={(result) => actions[DRAG](result)}>
             {children}
           </DragDropContext>
         )}

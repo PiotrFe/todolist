@@ -38,3 +38,8 @@ $color-custom-5: #F35B04;
     background-color: $color-grey-dark-1;
     color: $color-grey-light-1;
 }
+
+%non-selectable {
+    color: currentColor;
+    background-color: transparent;
+}

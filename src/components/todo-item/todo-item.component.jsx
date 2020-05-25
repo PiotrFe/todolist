@@ -53,8 +53,7 @@ const ToDoItem = ({
       <Icon
         id={id}
         type={IconTypes.EDIT}
-        editMode={editMode}
-        handleClick={toggleEditMode}
+        handleClick={() => toggleEditMode(!editMode)}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />

@@ -3,6 +3,7 @@ import { ToDosActiontypes } from "./todo-container.types";
 const {
   ADD_TODO,
   ASYNC_ACTION_BEGIN,
+  DROP_TODO,
   FETCH_TODOS_SUCCESS,
   FETCH_TODOS_FAILURE,
   REMOVE_TODO,
@@ -12,6 +13,8 @@ const {
 export const addToDo = (item) => ({ type: ADD_TODO, payload: item });
 
 export const asyncActionBegin = () => ({ type: ASYNC_ACTION_BEGIN });
+
+export const dropToDo = (idxFrom, idxTo) => ({type: DROP_TODO, payload: {idxFrom, idxTo}});
 
 export const fetchToDosSuccess = (items) => ({
   type: FETCH_TODOS_SUCCESS,
@@ -25,4 +28,4 @@ export const fetchToDosFailure = (error) => ({
 
 export const removeTodo = (id) => ({ type: REMOVE_TODO, payload: id });
 
-export const updateTodo = (todoEntry) => ({ type: UPDATE_TODO, payload: todoEntry});
+export const updateTodo = ({_id, field, value}) => ({ type: UPDATE_TODO, payload: {_id, field, value}});

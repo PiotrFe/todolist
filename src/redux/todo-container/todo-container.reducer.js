@@ -3,6 +3,7 @@ import { ToDosActiontypes } from "./todo-container.types";
 const {
   ADD_TODO,
   ASYNC_ACTION_BEGIN,
+  DROP_TODO,
   FETCH_TODOS_SUCCESS,
   FETCH_TODOS_FAILURE,
   REMOVE_TODO,
@@ -15,9 +16,21 @@ const INITIAL_STATE = {
   error: null,
 };
 
-const updateItem = (item, entry) => {
-  const [field, value] = entry;
+const updateItem = (item, field, value) => {
   return {...item, ...{[field]: value}};
+}
+
+const reorderItem = (todoItems, {idxFrom, idxTo}) => {
+
+  const reorderedArray = [...todoItems];
+  const item = reorderedArray.splice(idxFrom, 1)[0];
+  console.log(`ITEM: ${JSON.stringify(item)}`);
+  console.log(`FROM: ${idxFrom}`);
+  console.log(`TO: ${idxTo}`);
+  reorderedArray.splice(idxTo, 0, item);
+
+  return reorderedArray;
+
 }
 
 const todoContainerReducer = (state = INITIAL_STATE, action) => {
@@ -33,6 +46,11 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         todoItems: [...state.todoItems, action.payload],
       };
+    case DROP_TODO: 
+      return {
+        ...state,
+        todoItems: reorderItem(state.todoItems, action.payload)
+      }
     case FETCH_TODOS_SUCCESS:
       return {
         ...state,
@@ -60,8 +78,8 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         todoItems: state.todoItems.map(item => {
           if (item._id === action.payload._id) {
-            const entry = Object.entries(action.payload)[1];
-            item = updateItem(item, entry)
+            const {field, value} = action.payload;
+            item = updateItem(item, field, value)
           }
           return item;
         })

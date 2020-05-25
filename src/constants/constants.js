@@ -15,6 +15,19 @@ export const ActionTypes = {
   UPDATE: "update"
 };
 
+export const ToDoFields = {
+  TITLE: "title",
+  DETAILS: "details",
+  DRAFT: "draft",
+  DETAILS_DRAFT: "detailsDraft",
+  OWNER: "owner",
+  DUE_DATE: "dueDate",
+  DONE: "done",
+  EDIT_MODE: "editMode",
+  DETAILS_VISIBLE: "detailsVisible",
+  COLOR: "color"
+}
+
 export const Sizes = {
   LARGE: "large",
   MEDIUM: "medium",

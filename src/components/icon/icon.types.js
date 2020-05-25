@@ -27,7 +27,7 @@ export const IconClasses = {
     [IconTypes.REMOVE]: "fas fa-trash",
     [IconTypes.SEARCH]: "fas fa-search",
     [IconTypes.SORT_BOTH]: "fas fa-sort",
-    [IconTypes.SORT_ASC]: "fas fa-sort-down",
-    [IconTypes.SORT_DESC]: "fas fa-sort-up",
+    [IconTypes.SORT_DESC]: "fas fa-sort-down",
+    [IconTypes.SORT_ASC]: "fas fa-sort-up",
     [IconTypes.TOGGLE_DETAILS]: "fas fa-sync-alt"
 }

@@ -46,8 +46,7 @@ exports.updateColor = (req, res) => {
 };
 
 exports.updateTodoField = (req, res) => {
-
-  const {id, field, value} = req.body;
+  const { id, field, value } = req.body;
 
   console.log(`id: ${id}, field: ${field}, value: ${value}`);
 
@@ -60,15 +59,24 @@ exports.updateTodoField = (req, res) => {
     }
   )
     .then((updatedTodo) => {
-      const {_id, [field]: value} = updatedTodo;
-      res.send({_id, [field]: value});
+      const { _id, [field]: value } = updatedTodo;
+      res.send({ _id, field, value });
     })
     .catch((err) => res.send(err));
 };
 
 exports.filterTodos = (req, res) => {
-  const { filters } = req.body;
+  const { filters, sorts } = req.body;
+
   let query, key, filterArray;
+
+  let sortObj = sorts.reduce((acc, {field, sortDirection}) => {
+    if (sortDirection === 1) {
+      return Object.assign(acc, { [field]: 1 });
+    } else if (sortDirection === -1) {
+      return Object.assign(acc, { [field]: -1 });
+    } else return acc;
+  }, {});
 
   if (filters.length === 0) {
     query = db.Todo.find({});
@@ -81,6 +89,8 @@ exports.filterTodos = (req, res) => {
   }
 
   query
+    .sort(sortObj)
+    .collation({locale: "en"})
     .exec()
     .then((todos) => {
       res.json(todos);

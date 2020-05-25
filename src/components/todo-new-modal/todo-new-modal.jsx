@@ -11,13 +11,13 @@ import { parseDate } from "../utils/utils";
 const ToDoModal = ({ actions, content = null }) => {
   const today = new Date();
   const MAX_LENGTH = 250;
-  const {_id = null, title: toDoTitle = "", dueDate: toDoDueDate = "", owner: toDoOwner = "", details: toDoDetails = ""} = content || {};
+  // const {_id = null, title: toDoTitle = "", dueDate: toDoDueDate = "", owner: toDoOwner = "", details: toDoDetails = ""} = content || {};
 
-  const [title, updateTitle] = useState(toDoTitle);
-  const [dueDate, updateDueDate] = useState( toDoDueDate ? toDoDueDate : new Date());
-  const [owner, updateOwner] = useState(toDoOwner);
-  const [details, updateDetails] = useState(toDoDetails);
-  const [detailsLength, updateDetailsLength] = useState(toDoDetails ? toDoDetails.length : 0);
+  const [title, updateTitle] = useState("");
+  const [dueDate, updateDueDate] = useState(new Date());
+  const [owner, updateOwner] = useState("");
+  const [details, updateDetails] = useState("");
+  const [detailsLength, updateDetailsLength] = useState(0);
 
   const handleToDo = () => {
     let toDo = {
@@ -33,11 +33,7 @@ const ToDoModal = ({ actions, content = null }) => {
       color: ""
     };
 
-    if (_id) {
-      toDo = Object.assign(toDo, {_id});
-    }
-
-    content ? actions[ActionTypes.EDIT](toDo) : actions[ActionTypes.SUBMIT](toDo);
+   actions[ActionTypes.SUBMIT](toDo);
     
   };
 
