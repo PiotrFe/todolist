@@ -18,10 +18,14 @@ import {
   fetchToDosFailure,
   removeTodo,
   updateTodo,
+  removeFilter,
+  updateSorts,
 } from "../../redux/todo-container/todo-container.actions";
 
 import {
   selectToDos,
+  selectFilters,
+  selectSorts,
   selectLoading,
   selectError,
   selectToDosCount,
@@ -29,8 +33,10 @@ import {
   selectToDosPendingCount,
 } from "../../redux/todo-container/todo-container.selectors";
 
-import { ActionTypes, Themes, ToDoFields } from "../../constants/constants";
+import { ActionTypes, ToDoFields } from "../../constants/constants";
 import { IconTypes } from "../icon/icon.types";
+
+import { makeAPICall } from "./todo-items-container.utils";
 
 import "./todo-items-container.styles.scss";
 
@@ -38,45 +44,31 @@ const ToDoItemsContainer = ({
   error,
   loading,
   todoItems,
+  filters,
+  sorts,
   addToDo,
   asyncActionBegin,
   dropToDo,
   fetchToDosSuccess,
   fetchToDosFailure,
+  removeFilter,
   removeTodo,
+  updateSorts,
   updateTodo,
 }) => {
   const {
     ADD,
-    CHANGE,
     CHANGE_COLOR,
     DONE,
     DRAG,
     EDIT,
     REMOVE,
     SORT,
-    SUBMIT,
     UPDATE,
   } = ActionTypes;
 
-  const sortsInitial = [
-    { field: ToDoFields.TITLE, sortDirection: 0 },
-    { field: ToDoFields.DUE_DATE, sortDirection: 1 },
-    { field: ToDoFields.OWNER, sortDirection: 0 },
-    { field: ToDoFields.COLOR, sortDirection: 0 },
-  ];
-
-  const [sorts, updateSorts] = useState(sortsInitial);
-  const [filterMode, updateFilterMode] = useState(true);
-  const [filters, updateFilters] = useState([]);
-  const [filterPreview, updateFilterPreview] = useState();
-  const [filterWord, updateFilterWord] = useState("");
-  const [filterBarContent, updateFilterBarContent] = useState("");
   const [editMode, updateEditMode] = useState(false);
   const [dragModeOn, toggleDragMode] = useState(false);
-
-  const isMountedRef = useRef(null);
-  const inputRef = useRef(null);
 
   // EFFECTS
 
@@ -99,42 +91,31 @@ const ToDoItemsContainer = ({
       });
   }, [filters, sorts]);
 
-  useEffect(() => {
-    filterBarContent.length < 3
-      ? updateFilterMode(false)
-      : updateFilterMode(true);
-  }, [filterBarContent]);
-
   // TO-DO METHODS
 
-  const handleToDoAdd = (newToDoObj) => {
+  const handleToDoAdd = async (newToDoObj) => {
     asyncActionBegin();
 
-    fetch("/api/todos", {
+    const todo = await makeAPICall({
+      URL: "/api/todos",
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
       body: JSON.stringify(newToDoObj),
-    })
-      .then((res) => res.json())
-      .then((todo) => {
-        addToDo(JSON.parse(todo));
-        toggleEditMode();
-      });
+    });
+
+    addToDo(JSON.parse(todo));
+    toggleEditMode();
+
   };
 
-  const handleToDoRemove = (id) => {
+  const handleToDoRemove = async (id) => {
     asyncActionBegin();
 
-    fetch(`/api/todos/${id}`, {
+    const { _id } = await makeAPICall({
+      URL: `/api/todos/${id}`,
       method: "POST",
-    })
-      .then((res) => res.json())
-      .then((idObj) => {
-        const { _id } = idObj;
-        removeTodo(_id);
-      });
+    });
+
+    removeTodo(_id);
   };
 
   const handleToDoDone = (id) => {
@@ -167,76 +148,6 @@ const ToDoItemsContainer = ({
     updateEditMode(!editMode);
   };
 
-  // HANDLING FILTERS
-  const updateFilterBar = (content) => {
-    updateFilterBarContent(content);
-  };
-
-  const applyFilter = (item) => {
-    // updateLoading(true);
-    updateFilters((prevState) => {
-      return [...prevState, item];
-    });
-    updateFilterPreview();
-    updateFilterMode(false);
-    updateFilterWord("");
-    updateFilterBarContent("");
-    // updateLoading(false);
-  };
-
-  const removeFilter = (filter) => {
-    const [keyToRemove, valueToRemove] = Object.entries(filter)[0];
-    // updateLoading(true);
-    updateFilters((prevState) => {
-      return prevState.filter(
-        (item) =>
-          Object.keys(item)[0] !== keyToRemove ||
-          Object.values(item)[0] !== valueToRemove
-      );
-    });
-    // updateLoading(false);
-  };
-
-  const showFilterPreview = (word) => {
-    fetch("api/todos/preview", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ filters: filters, keyword: word }),
-    })
-      .then((res) => res.json())
-      .then((todos) => {
-        updateFilterMode(true);
-        updateFilterWord(word);
-        updateFilterPreview(todos);
-      });
-  };
-
-  // HANDLING SORT
-  const handleSort = (field) => {
-    updateSorts((prevState) =>
-      prevState.map((item) => {
-        if (item.field === field) {
-          switch (item.sortDirection) {
-            case 0:
-              item.sortDirection = 1;
-              break;
-            case 1:
-              item.sortDirection = -1;
-              break;
-            case -1:
-              item.sortDirection = 0;
-              break;
-          }
-        } else {
-          item.sortDirection = 0;
-        }
-        return item;
-      })
-    );
-  };
-
   // HANDLING DRAG
   const toggleDrag = (isEnabled) => {
     toggleDragMode(isEnabled);
@@ -263,28 +174,15 @@ const ToDoItemsContainer = ({
         actions={{
           [DRAG]: toggleDrag,
           [EDIT]: toggleEditMode,
-          [SORT]: handleSort,
+          [SORT]: updateSorts,
         }}
         dragModeOn={dragModeOn}
       />
       <FilterBar
-        tags={filters}
-        content={filterBarContent}
         actions={{
-          [CHANGE]: updateFilterBar,
-          [SUBMIT]: showFilterPreview,
           [REMOVE]: removeFilter,
         }}
       />
-      {filterMode ? (
-        <SearchResultList
-          word={filterWord}
-          content={filterPreview}
-          actions={{
-            [ActionTypes.SEARCH]: applyFilter,
-          }}
-        />
-      ) : null}
       <ToDoItems
         todoItems={todoItems}
         actions={{
@@ -319,20 +217,13 @@ const ToDoItemsContainer = ({
   );
 };
 
-// const mapStateToProps = (state) => {
-//   const { todoItems, loading, error } = state.todoContainer;
-
-//   return {
-//     todoItems,
-//     loading,
-//     error,
-//   };
-// };
 
 const mapStateToProps = createStructuredSelector({
   todoItems: selectToDos,
+  filters: selectFilters,
+  sorts: selectSorts,
   loading: selectLoading,
-  error: selectError
+  error: selectError,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -341,7 +232,9 @@ const mapDispatchToProps = (dispatch) => ({
   dropToDo: (idxFrom, idxTo) => dispatch(dropToDo(idxFrom, idxTo)),
   fetchToDosSuccess: (todos) => dispatch(fetchToDosSuccess(todos)),
   fetchToDosFailure: (err) => dispatch(fetchToDosFailure(err)),
+  // removeFilter: (filter) => dispatch(removeFilter(filter)),
   removeTodo: (id) => dispatch(removeTodo(id)),
+  updateSorts: (field) => dispatch(updateSorts(field)),
   updateTodo: ({ _id, field, value }) =>
     dispatch(updateTodo({ _id, field, value })),
 });

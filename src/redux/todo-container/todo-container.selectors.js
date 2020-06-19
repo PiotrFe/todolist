@@ -7,6 +7,11 @@ export const selectToDos = createSelector(
     container => container.todoItems
 )
 
+export const selectFilters = createSelector(
+    [selectToDoContainer],
+    container => container.filters
+)
+
 export const selectLoading = createSelector(
     [selectToDoContainer],
     container => container.loading
@@ -30,5 +35,10 @@ export const selectToDosDoneCount = createSelector(
 export const selectToDosPendingCount = createSelector(
     [selectToDos],
     todos => todos.reduce((acc, todoItem) => todoItem.done ? acc : acc = acc + 1, 0)
+)
+
+export const selectSorts = createSelector(
+    [selectToDoContainer],
+    container => container.sorts
 )
 

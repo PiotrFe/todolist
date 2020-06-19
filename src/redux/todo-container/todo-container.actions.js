@@ -2,11 +2,14 @@ import { ToDosActiontypes } from "./todo-container.types";
 
 const {
   ADD_TODO,
+  ADD_FILTER,
   ASYNC_ACTION_BEGIN,
   DROP_TODO,
   FETCH_TODOS_SUCCESS,
   FETCH_TODOS_FAILURE,
+  REMOVE_FILTER,
   REMOVE_TODO,
+  UPDATE_SORTS,
   UPDATE_TODO,
 } = ToDosActiontypes;
 
@@ -29,3 +32,9 @@ export const fetchToDosFailure = (error) => ({
 export const removeTodo = (id) => ({ type: REMOVE_TODO, payload: id });
 
 export const updateTodo = ({_id, field, value}) => ({ type: UPDATE_TODO, payload: {_id, field, value}});
+
+export const applyFilter = (item) => ({type: ADD_FILTER, payload: item});
+
+export const removeFilter = (item) => ({type: REMOVE_FILTER, payload: item});
+
+export const updateSorts = (field) => ({ type: UPDATE_SORTS, payload: field})

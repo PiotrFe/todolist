@@ -3,13 +3,13 @@ import React from "react";
 import "./searchResultList.styles.scss";
 import { ActionTypes } from "../../constants/constants";
 
-const SearchResultList = ({ content = [], word, actions }) => {
+const SearchResultList = ({ preview = [], word, search }) => {
   // incoming format: [{key: value}], e.g. [{owner: "peter"},{owner: "peter kowalski"}, {details: "peter did smth"}];
   const regex = new RegExp(`\w*${word}\w*`, "ig");
   let results = {};
   let entry, matches;
 
-  content.forEach((item) => {
+  preview.forEach((item) => {
     for (let key in item) {
       entry = item[key];
 
@@ -55,7 +55,7 @@ const SearchResultList = ({ content = [], word, actions }) => {
                 key={idx}
                 className="search-results__record"
                 onClick={() => {
-                  actions[ActionTypes.SEARCH]({ [key]: entry.text });
+                  search({ [key]: entry.text });
                 }}
               >
                 {" "}
