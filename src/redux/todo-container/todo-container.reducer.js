@@ -2,19 +2,20 @@ import { ToDosActiontypes } from "./todo-container.types";
 import { ToDoFields } from "../../constants/constants";
 
 const {
-  ADD_TODO,
+  ADD_TODO_SUCCESS,
+  ADD_TODO_FAILURE,
   ADD_FILTER,
   ASYNC_ACTION_BEGIN,
   DROP_TODO,
   FETCH_TODOS_SUCCESS,
   FETCH_TODOS_FAILURE,
   REMOVE_FILTER,
-  REMOVE_TODO,
+  REMOVE_TODO_SUCCESS,
+  REMOVE_TODO_FAILURE,
   UPDATE_SORTS,
-  UPDATE_TODO,
+  UPDATE_TODO_SUCCESS,
+  UPDATE_TODO_FAILURE,
 } = ToDosActiontypes;
-
-
 
 const INITIAL_STATE = {
   todoItems: [],
@@ -48,11 +49,17 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loading: true,
       };
-    case ADD_TODO:
+    case ADD_TODO_SUCCESS:
       return {
         ...state,
         loading: false,
         todoItems: [...state.todoItems, action.payload],
+      };
+    case ADD_TODO_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
       };
     case ADD_FILTER:
       return {
@@ -84,13 +91,19 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
           (item) => JSON.stringify(item) !== JSON.stringify(action.payload)
         ),
       };
-    case REMOVE_TODO:
+    case REMOVE_TODO_SUCCESS:
       return {
         ...state,
         loading: false,
         todoItems: state.todoItems.filter(
           (item) => item._id !== action.payload
         ),
+      };
+    case REMOVE_TODO_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
       };
     case UPDATE_SORTS:
       return {
@@ -114,7 +127,7 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
           return item;
         }),
       };
-    case UPDATE_TODO: {
+    case UPDATE_TODO_SUCCESS: {
       return {
         ...state,
         loading: false,
@@ -127,6 +140,14 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
         }),
       };
     }
+    case UPDATE_TODO_FAILURE: {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    }
+
     default:
       return state;
   }

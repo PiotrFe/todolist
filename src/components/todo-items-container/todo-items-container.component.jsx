@@ -4,7 +4,6 @@ import { createStructuredSelector } from "reselect";
 
 import NavTop from "../../components/nav-top/nav-top.component";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
-import SearchResultList from "../../components/searchResultList/searchResultList.component";
 import ToDoItems from "../../components/todo-items/todo-items.component";
 import Overlay from "../../components/overlay/overlay.component";
 import LoadingSpinner from "../../components/loading-spinner/loading-spinner.component";
@@ -14,11 +13,9 @@ import {
   asyncActionBegin,
   addToDo,
   dropToDo,
-  fetchToDosSuccess,
-  fetchToDosFailure,
-  removeTodo,
-  updateTodo,
-  removeFilter,
+  fetchToDos,
+  removeToDo,
+  updateToDo,
   updateSorts,
 } from "../../redux/todo-container/todo-container.actions";
 
@@ -28,20 +25,15 @@ import {
   selectSorts,
   selectLoading,
   selectError,
-  selectToDosCount,
-  selectToDosDoneCount,
-  selectToDosPendingCount,
 } from "../../redux/todo-container/todo-container.selectors";
 
-import { ActionTypes, ToDoFields } from "../../constants/constants";
-import { IconTypes } from "../icon/icon.types";
+import { ActionTypes } from "../../constants/constants";
 
 import { makeAPICall } from "./todo-items-container.utils";
 
 import "./todo-items-container.styles.scss";
 
 const ToDoItemsContainer = ({
-  error,
   loading,
   todoItems,
   filters,
@@ -49,12 +41,11 @@ const ToDoItemsContainer = ({
   addToDo,
   asyncActionBegin,
   dropToDo,
-  fetchToDosSuccess,
-  fetchToDosFailure,
+  fetchToDos,
   removeFilter,
-  removeTodo,
+  removeToDo,
   updateSorts,
-  updateTodo,
+  updateToDo,
 }) => {
   const {
     ADD,
@@ -74,48 +65,20 @@ const ToDoItemsContainer = ({
 
   useEffect(() => {
     asyncActionBegin();
-
-    fetch("/api/todos/filters", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ filters, sorts }),
-    })
-      .then((res) => res.json())
-      .then((todos) => {
-        fetchToDosSuccess(todos);
-      })
-      .catch((err) => {
-        fetchToDosFailure(err);
-      });
+    fetchToDos({filters, sorts});
   }, [filters, sorts]);
 
-  // TO-DO METHODS
+  // METHODS
 
-  const handleToDoAdd = async (newToDoObj) => {
+  const handleToDoAdd = (newToDoObj) => {
     asyncActionBegin();
-
-    const todo = await makeAPICall({
-      URL: "/api/todos",
-      method: "POST",
-      body: JSON.stringify(newToDoObj),
-    });
-
-    addToDo(JSON.parse(todo));
+    addToDo(newToDoObj);
     toggleEditMode();
-
   };
 
-  const handleToDoRemove = async (id) => {
+  const handleToDoRemove = (id) => {
     asyncActionBegin();
-
-    const { _id } = await makeAPICall({
-      URL: `/api/todos/${id}`,
-      method: "POST",
-    });
-
-    removeTodo(_id);
+    removeToDo(id);
   };
 
   const handleToDoDone = (id) => {
@@ -129,19 +92,7 @@ const ToDoItemsContainer = ({
 
   const handleToDoUpdate = ({ id, field, value }) => {
     asyncActionBegin();
-    console.log(
-      `Update function received valuues: ID: ${id}, FIELD: ${field}, VALUE: ${value} `
-    );
-
-    fetch(`/api/todos/${id}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id, field, value }),
-    })
-      .then((res) => res.json())
-      .then(({ _id, field, value }) => updateTodo({ _id, field, value }));
+    updateToDo({ id, field, value });
   };
 
   const toggleEditMode = () => {
@@ -217,7 +168,6 @@ const ToDoItemsContainer = ({
   );
 };
 
-
 const mapStateToProps = createStructuredSelector({
   todoItems: selectToDos,
   filters: selectFilters,
@@ -230,13 +180,11 @@ const mapDispatchToProps = (dispatch) => ({
   asyncActionBegin: () => dispatch(asyncActionBegin()),
   addToDo: (todo) => dispatch(addToDo(todo)),
   dropToDo: (idxFrom, idxTo) => dispatch(dropToDo(idxFrom, idxTo)),
-  fetchToDosSuccess: (todos) => dispatch(fetchToDosSuccess(todos)),
-  fetchToDosFailure: (err) => dispatch(fetchToDosFailure(err)),
-  // removeFilter: (filter) => dispatch(removeFilter(filter)),
-  removeTodo: (id) => dispatch(removeTodo(id)),
+  fetchToDos: ({ filters, sorts }) => dispatch(fetchToDos({ filters, sorts })),
+  removeToDo: (id) => dispatch(removeToDo(id)),
   updateSorts: (field) => dispatch(updateSorts(field)),
-  updateTodo: ({ _id, field, value }) =>
-    dispatch(updateTodo({ _id, field, value })),
+  updateToDo: ({ id, field, value }) =>
+    dispatch(updateToDo({ id, field, value })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoItemsContainer);

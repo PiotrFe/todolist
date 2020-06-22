@@ -1,7 +1,6 @@
 import React from "react";
 
 import { IconClasses } from "./icon.types";
-import { Components } from "../../constants/constants";
 
 import "./icon.styles.scss";
 
