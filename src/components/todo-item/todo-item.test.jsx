@@ -5,6 +5,7 @@ import {
   fireEvent,
   getAllByText,
   getAllByTestId,
+  getByTestId,
 } from "@testing-library/react";
 
 import userEvent from "@testing-library/user-event";
@@ -48,7 +49,7 @@ describe("<ToDoItem />", () => {
       getByLabelText,
       rerender,
       debug,
-      container
+      container,
     } = render(<ToDoItem {...props} />);
 
     return {
@@ -60,6 +61,7 @@ describe("<ToDoItem />", () => {
       removeIcon: getAllByTestId("icon_remove")[0],
       doneIcon: getAllByTestId("icon_done")[0],
       editIcon: getAllByTestId("icon_edit")[0],
+      colorIcon: getAllByTestId("icon_color")[0],
     };
   };
 
@@ -91,26 +93,23 @@ describe("<ToDoItem />", () => {
 
     fireEvent.click(removeIcon);
     expect(actions[REMOVE]).toHaveBeenCalledTimes(1);
-    expect(actions[REMOVE].mock.calls.length).toBe(1);
   });
 
   it("clicking edit icon toggles edit mode", () => {
-      const {editIcon, saveButton, titleEditableTextField, debug} = setup();
-      const onChange = jest.fn();
+    const { editIcon, saveButton, titleEditableTextField, debug } = setup();
+    const onChange = jest.fn();
 
-      fireEvent.click(editIcon);
-      expect(screen.getByText("Save")).toBeInTheDocument();
-      
-      userEvent.type(screen.getByLabelText("Title"), "my new todo");
-      expect(screen.getByLabelText("Title")).toHaveValue("my new todo");
+    fireEvent.click(editIcon);
+    expect(screen.getByText("Save")).toBeInTheDocument();
 
+    userEvent.type(screen.getByLabelText("Title"), "my new todo");
+    expect(screen.getByLabelText("Title")).toHaveValue("my new todo");
+  });
 
+  it("clicking color icon toggles color edit more", () => {
+    const { colorIcon, debug } = setup();
 
-    //   userEvent.type(titleEditableTextField, "my new to do");
-    //   expect(titleEditableTextField).toHaveValue("my new to do");
-
-      
-  })
-
-
+    fireEvent.click(colorIcon);
+    expect(screen.getByTestId("color-picker")).toBeInTheDocument();
+  });
 });

@@ -4,7 +4,6 @@ import "./color-picker.styles.scss";
 import {CustomColors} from "./color-picker.types";
 
 const ColorPicker = ({id, applyColor, showColorPicker}) => {
-    console.log(`id number: ${id}`);
 
     const handleClick = color => {
         showColorPicker(false);
@@ -12,9 +11,9 @@ const ColorPicker = ({id, applyColor, showColorPicker}) => {
     }
     
     return (
-        <div className="color-picker" onMouseLeave={() => showColorPicker(false)}>
+        <div className="color-picker" data-testid="color-picker" onMouseLeave={() => showColorPicker(false)}>
             <ul className="color-picker__options">
-                <li className="color-picker__option color-picker__option--1" 
+                <li className="color-picker__option color-picker__option--1" data-testid="color-picker__option" 
                     style={{backgroundColor: CustomColors.COLOR_1}} 
                     onClick={() => handleClick(CustomColors.COLOR_1) }>
                 </li>
