@@ -8,6 +8,7 @@ const Icon = ({type, id, parent, size, handleClick}) => (
   <i
     className={`icon icon--${size} ${parent}__icon ${IconClasses[type]}`}
     onClick={() => handleClick(id)}
+    data-testid={`icon_${type}`}
   ></i>
 );
 
