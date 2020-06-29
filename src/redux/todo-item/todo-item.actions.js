@@ -1,5 +1,5 @@
-import {ToDoActionTypes} from "./todo-item.types";
+import { ToDoActionTypes } from "./todo-item.types";
 
-const {TOGGLE_DETAILS} = ToDoActionTypes;
+const { TOGGLE_DETAILS } = ToDoActionTypes;
 
-export const toggleDetails = () => ({type: TOGGLE_DETAILS});
+export const toggleDetails = () => ({ type: TOGGLE_DETAILS });

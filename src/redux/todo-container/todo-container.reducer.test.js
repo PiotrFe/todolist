@@ -20,31 +20,12 @@ describe("TodoContainer reducer", () => {
   const firstToDo = { _id: 1, title: "first todo" };
   const secondToDo = { _id: 2, title: "second todo" };
 
-  const setup = (stateOverrides) => {
+  const setup = (stateOverrides = {}) => {
     return Object.assign({}, INITIAL_STATE, stateOverrides);
   };
 
   it("returns initial state", () => {
     expect(todoContainerReducer(undefined, {})).toEqual(INITIAL_STATE);
-  });
-
-  it("handles REMOVE_TODO_SUCCESS action", () => {
-    const state = setup({
-      todoItems: [firstToDo, secondToDo],
-      loading: true,
-    });
-
-    const action = {
-      type: ToDosActiontypes.REMOVE_TODO_SUCCESS,
-      payload: firstToDo._id,
-    };
-
-    const expectedState = setup({
-      todoItems: [secondToDo],
-      loading: false,
-    });
-
-    expect(todoContainerReducer(state, action)).toEqual(expectedState);
   });
 
   it("handles FETCH_TODOS_SUCCESS action", () => {
@@ -67,6 +48,40 @@ describe("TodoContainer reducer", () => {
       loading: false,
     });
 
+    expect(todoContainerReducer(state, action)).toEqual(expectedState);
+  });
+
+  it("handles REMOVE_TODO_SUCCESS action", () => {
+    const state = setup({
+      todoItems: [firstToDo, secondToDo],
+      loading: true,
+    });
+
+    const action = {
+      type: ToDosActiontypes.REMOVE_TODO_SUCCESS,
+      payload: firstToDo._id,
+    };
+
+    const expectedState = setup({
+      todoItems: [secondToDo],
+      loading: false,
+    });
+
+    expect(todoContainerReducer(state, action)).toEqual(expectedState);
+  });
+
+  it("handles UPDATE_SORTS action", () => {
+    const state = setup();
+    const field = ToDoFields.DUE_DATE;
+    const action = { type: ToDosActiontypes.UPDATE_SORTS, payload: field };
+    const expectedState = setup({
+      sorts: [
+        { field: ToDoFields.TITLE, sortDirection: 0 },
+        { field: ToDoFields.DUE_DATE, sortDirection: -1 },
+        { field: ToDoFields.OWNER, sortDirection: 0 },
+        { field: ToDoFields.COLOR, sortDirection: 0 },
+      ],
+    });
     expect(todoContainerReducer(state, action)).toEqual(expectedState);
   });
 });

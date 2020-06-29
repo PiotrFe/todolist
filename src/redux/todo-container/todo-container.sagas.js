@@ -49,14 +49,14 @@ export function* addToDo({ payload }) {
 }
 
 export function* removeToDo({ payload: id }) {
-  console.log(id);
   try {
     const res = yield fetch(`/api/todos/${id}`, {
       method: "POST",
     });
 
-    const { _id } = yield res.json();
-    yield put(removeToDoSuccess(_id));
+    // const { _id } = yield res.json();
+    const todo = yield res.json();
+    yield put(removeToDoSuccess(todo._id));
   } catch (error) {
     yield put(removeToDoFailure(error));
   }

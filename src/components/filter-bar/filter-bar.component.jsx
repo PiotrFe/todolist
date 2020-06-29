@@ -9,14 +9,17 @@ import FilterCard from "../../components/filter-card/filter-card.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
 
 import { selectFilters } from "../../redux/todo-container/todo-container.selectors";
+import { selectFilterPreview } from "../../redux/filter-bar/filter-bar.selectors";
 
 import { ActionTypes } from "../../constants/constants";
-import { applyFilter, removeFilter } from "../../redux/todo-container/todo-container.actions";
 
-const FilterBar = ({ actions, filters, applyFilter, removeFilter }) => {
+import { applyFilter, removeFilter } from "../../redux/todo-container/todo-container.actions";
+import { showFilterPreview } from "../../redux/filter-bar/filter-bar.actions";
+
+const FilterBar = ({ actions, filters, filterPreview, applyFilter, removeFilter, showFilterPreview }) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
   const [filterMode, updateFilterMode] = useState(true);
-  const [filterPreview, updateFilterPreview] = useState();
+  // const [filterPreview, updateFilterPreview] = useState();
   const [filterWord, updateFilterWord] = useState("");
 
   const { CHANGE, REMOVE, SEARCH, SUBMIT } = ActionTypes;
@@ -31,25 +34,29 @@ const FilterBar = ({ actions, filters, applyFilter, removeFilter }) => {
     updateFilterBarContent(content);
   };
 
-  const showFilterPreview = (word) => {
-    fetch("api/todos/preview", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ filters: filters, keyword: word }),
-    })
-      .then((res) => res.json())
-      .then((todos) => {
-        updateFilterMode(true);
-        updateFilterWord(word);
-        updateFilterPreview(todos);
-      });
-  };
+  const fetchFilterPreview = word => {
+    showFilterPreview({filters, word})
+  }
+
+  // const showFilterPreview = (word) => {
+  //   fetch("api/todos/preview", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ filters: filters, keyword: word }),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((todos) => {
+  //       updateFilterMode(true);
+  //       updateFilterWord(word);
+  //       updateFilterPreview(todos);
+  //     });
+  // };
 
   const addFilter = (filter) => {
     applyFilter(filter);
-    updateFilterPreview();
+    // updateFilterPreview();
     updateFilterMode(false);
     updateFilterWord("");
     updateFilterBarContent("");
@@ -74,7 +81,7 @@ const FilterBar = ({ actions, filters, applyFilter, removeFilter }) => {
         ))}
         <TodoInput
           onChange={updateFilterBar}
-          onSubmit={showFilterPreview}
+          onSubmit={fetchFilterPreview}
           content={filterBarContent}
         />
       </div>
@@ -90,12 +97,14 @@ const FilterBar = ({ actions, filters, applyFilter, removeFilter }) => {
 };
 
 const mapStateToProps = createStructuredSelector({
-  filters: selectFilters
+  filters: selectFilters,
+  filterPreview: selectFilterPreview
 });
 
 const mapDispatchToProps = dispatch => ({
   applyFilter: filter => dispatch(applyFilter(filter)),
   removeFilter: filter => dispatch(removeFilter(filter)),
+  showFilterPreview: ({filters, word}) => dispatch(showFilterPreview({filters, word}))
 
 });
 
