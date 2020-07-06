@@ -29,11 +29,11 @@ import {
 
 import { ActionTypes } from "../../constants/constants";
 
-import { makeAPICall } from "./todo-items-container.utils";
-
 import "./todo-items-container.styles.scss";
 
 const ToDoItemsContainer = ({
+  todos,
+  title,
   loading,
   todoItems,
   filters,
@@ -63,10 +63,10 @@ const ToDoItemsContainer = ({
 
   // EFFECTS
 
-  useEffect(() => {
-    asyncActionBegin();
-    fetchToDos({filters, sorts});
-  }, [filters, sorts]);
+  // useEffect(() => {
+  //   asyncActionBegin();
+  //   fetchToDos({ filters, sorts });
+  // }, [filters, sorts]);
 
   // METHODS
 
@@ -119,7 +119,8 @@ const ToDoItemsContainer = ({
   };
 
   return (
-    <>
+    <div className="todo-items-container">
+      <div className="todo-items-container__title">{title}</div>
       <NavTop
         sorts={sorts}
         actions={{
@@ -135,7 +136,7 @@ const ToDoItemsContainer = ({
         }}
       />
       <ToDoItems
-        todoItems={todoItems}
+        todoItems={todos}
         actions={{
           [ADD]: handleToDoAdd,
           [CHANGE_COLOR]: handleToDoChangeColor,
@@ -164,7 +165,7 @@ const ToDoItemsContainer = ({
           />
         </>
       ) : null}
-    </>
+    </div>
   );
 };
 

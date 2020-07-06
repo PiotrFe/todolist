@@ -35,28 +35,15 @@ const FilterBar = ({ actions, filters, filterPreview, applyFilter, removeFilter,
   };
 
   const fetchFilterPreview = word => {
-    showFilterPreview({filters, word})
+    updateFilterMode(true);
+    updateFilterWord(word);
+    showFilterPreview({filters, word});
   }
 
-  // const showFilterPreview = (word) => {
-  //   fetch("api/todos/preview", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ filters: filters, keyword: word }),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((todos) => {
-  //       updateFilterMode(true);
-  //       updateFilterWord(word);
-  //       updateFilterPreview(todos);
-  //     });
-  // };
+
 
   const addFilter = (filter) => {
     applyFilter(filter);
-    // updateFilterPreview();
     updateFilterMode(false);
     updateFilterWord("");
     updateFilterBarContent("");

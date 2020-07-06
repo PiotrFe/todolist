@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 import createSagaMiddleware from "redux-saga";
 
 import logger from 'redux-logger'
@@ -8,7 +9,7 @@ import rootSaga from "./root-saga";
 
 const sagaMiddleWare = createSagaMiddleware()
 
-const store = createStore(rootReducer, applyMiddleware(sagaMiddleWare, logger));
+const store = createStore(rootReducer, applyMiddleware(thunk, sagaMiddleWare, logger));
 
 sagaMiddleWare.run(rootSaga);
 

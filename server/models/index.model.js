@@ -6,5 +6,6 @@ mongoose.connect('mongodb://localhost:27017/todos', {useNewUrlParser: true, useU
 mongoose.Promise = Promise;
 
 module.exports.Todo = require("./todos.model");
+module.exports.ToDoList = require("./todolist.model");
 
 

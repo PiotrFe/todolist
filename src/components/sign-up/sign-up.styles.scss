@@ -1,0 +1,22 @@
+.sign-up {
+    width: 45%;
+    height: 80vh;
+    // background-color: orangered;
+    padding: 0 5rem;
+
+    display: flex;
+    flex-direction: column;
+    // justify-content: space-between;
+
+    &__header {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    &__para {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+
+}

@@ -51,7 +51,7 @@ const ToDoList = ({todoItems, actions, dragModeOn}) => {
           )}
         >
           <div className="todo-items">
-            {todoItems.map(
+            {!todoItems ? null : todoItems.map(
               (
                 {
                   _id,

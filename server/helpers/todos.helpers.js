@@ -1,7 +1,8 @@
 const db = require("../models/index.model");
 
 exports.getTodos = (req, res) => {
-  db.Todo.find()
+  db.ToDoList.find()
+    .populate("todos")
     .then((todos) => {
       res.json(todos);
     })
@@ -100,8 +101,6 @@ exports.filterTodos = (req, res) => {
 
 exports.resultsPreview = (req, res) => {
   const { filters, keyword } = req.body;
-  console.log(`filters: ${JSON.stringify(filters)}`);
-  console.log(`word: ${keyword}`);
   const fieldArray = ["owner", "title", "details"];
   let filterArray = [];
   let query, key;

@@ -1,0 +1,24 @@
+.sign-in {
+  width: 40%;
+  height: 80vh;
+  padding: 0 5rem;
+
+  display: flex;
+  flex-direction: column;
+  
+  &__button-group {
+      display: flex;
+      justify-content: space-between;
+  }
+
+
+}
+.sign-in-header {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.sign-in-para {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}

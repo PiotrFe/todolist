@@ -1,7 +1,8 @@
 @import "../../constants/constants";
 
 .header-top {
-  height: 6rem;
+  // position: fixed;
+  height: 4rem;
   background-color: greenyellow;
 
   display: flex;
@@ -10,21 +11,21 @@
 
   &__items {
     display: flex;
-    margin-left: 2rem;
+    margin-left: 1rem;
   }
 
   &__action-icons {
-    margin-right: 2rem;
+    margin-right: 1rem;
   }
 
   &__item-box {
-    font-size: 1.7rem;
+    font-size: 1.2rem;
 
     display: flex;
     align-items: center;
 
     &:not(:first-child) {
-      margin-left: 2rem;
+      margin-left: 1rem;
     }
   }
 

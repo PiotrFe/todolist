@@ -14,21 +14,60 @@ import { ToDosActiontypes } from "./todo-container.types";
 
 import { selectSorts } from "./todo-container.selectors";
 
-export function* fetchCollection({ payload: { filters, sorts } }) {
-  try {
-    const res = yield fetch("/api/todos/filters", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ filters, sorts }),
-    });
 
-    const todos = yield res.json();
-    yield put(fetchToDosSuccess(todos));
-  } catch (error) {
-    yield put(fetchToDosFailure(error));
-  }
+const items = [
+      {
+        _id: "5ebef0bcbaab894e2863e9b9",
+        title: "Czwarty to-do",
+        details: "More to do, even more to do!",
+        draft: "",
+        detailsDraft: "",
+        owner: "Mario",
+        dueDate: "2020-08-21T00:00:00.000Z",
+        done: true,
+        editMode: false,
+        detailsVisible: false,
+        color: "#F35B04",
+        __v: 0.0,
+      },
+
+
+      {
+        _id: "5ef101ee5e3ba74aa075748e",
+        title: "okokoko",
+        details: "",
+        draft: "",
+        detailsDraft: "",
+        owner: "ookokk",
+        dueDate: "2020-06-22T19:09:29.590Z",
+        done: false,
+        editMode: false,
+        detailsVisible: false,
+        color: "#F7B801",
+        __v: 0.0,
+      }
+    ]
+
+// export function* fetchCollection({ payload: { filters, sorts } }) {
+//   try {
+//     const res = yield fetch("/api/todos/filters", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({ filters, sorts }),
+//     });
+
+//     const todos = yield res.json();
+//     yield put(fetchToDosSuccess(todos));
+//   } catch (error) {
+//     yield put(fetchToDosFailure(error));
+//   }
+// }
+
+export function* fetchCollection({ payload: {filters, sorts} }) {
+  yield put(fetchToDosSuccess(items));
+
 }
 
 export function* addToDo({ payload }) {

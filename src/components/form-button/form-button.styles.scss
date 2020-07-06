@@ -1,0 +1,24 @@
+@import "../../constants/constants";
+
+.form-button {
+    height: 3rem;
+    width: 9rem;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+
+    &:hover {
+        background-color: white;
+        color: black;
+    }
+
+    &--google {
+        background-color: $color-blue-light-2;
+        width: 14rem;
+
+        &:hover {
+            background-color: $color-blue-light-1;
+            color: black
+        }
+    }
+}
