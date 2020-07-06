@@ -1,26 +1,17 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 
 import ToDoItemsContainer from "../todo-items-container/todo-items-container.component";
 
-import {
-  fetchListsStart,
-  fetchLists,
-  fetchListsSuccess,
-  fetchListsFailure,
-} from "../../redux/todo-lists-container/todo-lists-container.actions";
+import { selectToDoLists } from "../../redux/todo-lists-container/todo-lists-container.selectors";
+
+import { fetchLists } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import "./todo-lists-container.styles.scss";
 
-const ToDoListsContainer = ({
-  fetchListsStart,
-  fetchLists,
-  fetchListsSuccess,
-  fetchListsFailure,
-  todoLists,
-}) => {
+const ToDoListsContainer = ({ fetchLists, todoLists }) => {
   useEffect(() => {
-    fetchListsStart();
     fetchLists();
   }, []);
 
@@ -33,17 +24,12 @@ const ToDoListsContainer = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    todoLists: state.todoListsContainer.todoLists,
-  };
-};
+const mapStateToProps = createStructuredSelector({
+  todoLists: selectToDoLists,
+});
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchListsStart: () => dispatch(fetchListsStart()),
   fetchLists: () => dispatch(fetchLists()),
-  fetchListsSuccess: (todos) => dispatch(fetchListsSuccess(todos)),
-  fetchListsFailure: (error) => dispatch(fetchListsFailure(error)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoListsContainer);
