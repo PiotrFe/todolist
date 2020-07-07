@@ -11,17 +11,42 @@ exports.getTodos = (req, res) => {
     });
 };
 
-exports.addTodo = (req, res) => {
-  db.Todo.create(req.body, (err, todo) => {
-    if (err) res.send(err);
-    res.json(JSON.stringify(todo));
-  });
+exports.addTodo = async (req, res) => {
+  try {
+    const newToDo = await db.Todo.create(req.body.todo);
+    const list = await db.ToDoList.findById(req.body.listID);
+    newToDo.lists = [list._id];
+    list.todos = [...list.todos, newToDo.id];
+    const savedToDo = await newToDo.save();
+    const savedList = await list.save();
+
+    return res.json({ listID: savedList._id, todo: savedToDo });
+  } catch (err) {
+    return res.send(err);
+  }
 };
 
-exports.removeTodo = (req, res) => {
-  db.Todo.deleteOne({ _id: req.params.todoId })
-    .then(() => res.json({ _id: req.params.todoId }))
-    .catch((err) => res.send(err));
+exports.removeTodo = async (req, res) => {
+  const listID = req.body.listID;
+  const todoID = req.body.todoID;
+  let updatedTodo;
+
+  try {
+    const list = await db.ToDoList.findById(listID);
+    const todo = await db.Todo.findById(todoID);
+    list.todos = list.todos.filter((id) => id != todoID);
+    todo.lists = todo.lists.filter((id) => id != listID);
+    if (todo.lists.length === 0) {
+      updatedTodo = await db.Todo.findByIdAndDelete(todoID);
+    } else {
+      updatedTodo = await todo.save();
+    }
+    const savedList = await list.save();
+
+    return res.json({ listID: savedList._id, todoID: todoID });
+  } catch (err) {
+    return res.send(err);
+  }
 };
 
 exports.updateTodo = (req, res) => {
@@ -71,7 +96,7 @@ exports.filterTodos = (req, res) => {
 
   let query, key, filterArray;
 
-  let sortObj = sorts.reduce((acc, {field, sortDirection}) => {
+  let sortObj = sorts.reduce((acc, { field, sortDirection }) => {
     if (sortDirection === 1) {
       return Object.assign(acc, { [field]: 1 });
     } else if (sortDirection === -1) {
@@ -91,7 +116,7 @@ exports.filterTodos = (req, res) => {
 
   query
     .sort(sortObj)
-    .collation({locale: "en"})
+    .collation({ locale: "en" })
     .exec()
     .then((todos) => {
       res.json(todos);

@@ -8,7 +8,7 @@ import { useState } from "react";
 import { ActionTypes, Themes } from "../../constants/constants";
 import { parseDate } from "../utils/utils";
 
-const ToDoModal = ({ actions, content = null }) => {
+const ToDoModal = ({id, actions, content = null }) => {
   const today = new Date();
   const MAX_LENGTH = 250;
   // const {_id = null, title: toDoTitle = "", dueDate: toDoDueDate = "", owner: toDoOwner = "", details: toDoDetails = ""} = content || {};
@@ -20,7 +20,7 @@ const ToDoModal = ({ actions, content = null }) => {
   const [detailsLength, updateDetailsLength] = useState(0);
 
   const handleToDo = () => {
-    let toDo = {
+    let todo = {
       title,
       details,
       draft: "",
@@ -33,7 +33,7 @@ const ToDoModal = ({ actions, content = null }) => {
       color: ""
     };
 
-   actions[ActionTypes.SUBMIT](toDo);
+   actions[ActionTypes.SUBMIT]({listID: id, todo});
     
   };
 

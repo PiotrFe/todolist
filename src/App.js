@@ -59,18 +59,6 @@ function App() {
       </div>
       <div className="app-split app-split__right-side">
       <ToDoListsContainer />
-        {/* <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route exact path="/user" component={UserPage} />
-          <Route exact path="/templates" component={TemplatesPage} />
-          <Route
-            exact
-            path="/signin"
-            render={() =>
-              currentUser ? <Redirect to="/" /> : <SignInAndSignUp />
-            }
-          />
-        </Switch> */}
       </div>
     </div>
   );

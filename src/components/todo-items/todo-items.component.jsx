@@ -14,12 +14,11 @@ import { IconTypes } from "../icon/icon.types";
 
 import "./todo-items.styles.scss";
 
-const ToDoList = ({todoItems, actions, dragModeOn}) => {
+const ToDoList = ({listID, todoItems, actions, dragModeOn}) => {
 
   const {ADD, CHANGE, CHANGE_COLOR, DONE, DRAG, EDIT, REMOVE, SORT, SUBMIT, UPDATE} = ActionTypes;
 
   const [editedToDo, setEditedToDo] = useState(null);
-
 
   return (
     <>
@@ -86,6 +85,7 @@ const ToDoList = ({todoItems, actions, dragModeOn}) => {
                     editMode={editMode}
                     id={_id}
                     key={_id}
+                    listID={listID}
                     owner={owner}
                     title={title}
                   />
@@ -105,9 +105,7 @@ const ToDoList = ({todoItems, actions, dragModeOn}) => {
           </div>
         </ConditionalWrapper>
       </ConditionalWrapper>
-      }
-
-    </>
+      </>
   );
 };
 

@@ -1,33 +1,78 @@
 import { put, takeEvery, all, call, takeLatest } from "redux-saga/effects";
 
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
-import { fetchListsSuccess, fetchListsFailure } from "./todo-lists-container.actions";
-
+import {
+  fetchListsSuccess,
+  fetchListsFailure,
+  addToDoSuccess,
+  addToDoFailure,
+  removeToDoSuccess,
+  removeToDoFailure,
+} from "./todo-lists-container.actions";
 
 export function* fetchLists() {
-    try {
-        const data = yield fetch("/api/todos", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-  
-        const todoLists = yield data.json();
+  try {
+    const data = yield fetch("/api/todos", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-        yield put(fetchListsSuccess(todoLists));
-        
-      } catch (error) {
-        yield put(fetchListsFailure(error));
-      }
+    const todoLists = yield data.json();
+
+    yield put(fetchListsSuccess(todoLists));
+  } catch (error) {
+    yield put(fetchListsFailure(error));
+  }
 }
 
-export function* onFetchListsStart() {
-    yield takeLatest(ToDoListsActionTypes.FETCH_LISTS_START, fetchLists);
+export function* addToDo({ payload: { listID, todo } }) {
+  try {
+    const res = yield fetch("/api/todos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ listID, todo }),
+    });
+
+    const json = yield res.json();
+    yield put(addToDoSuccess({ listID: json.listID, todo: json.todo }));
+  } catch (error) {
+    yield put(addToDoFailure(error));
+  }
+}
+
+export function* removeToDo({ payload: { listID, todoID } }) {
+  try {
+    const res = yield fetch(`/api/todos/${listID}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ listID, todoID }),
+    });
+
+    const json = yield res.json();
+    yield put(removeToDoSuccess({ listID: json.listID, todoID: json.todoID }));
+  } catch (error) {
+    yield put(removeToDoFailure(error));
+  }
+}
+
+export function* onFetchLists() {
+  yield takeLatest(ToDoListsActionTypes.FETCH_LISTS_START, fetchLists);
+}
+
+export function* onToDoAdd() {
+  yield takeLatest(ToDoListsActionTypes.ADD_TODO_START, addToDo);
+}
+
+export function* onToDoRemove() {
+  yield takeLatest(ToDoListsActionTypes.REMOVE_TODO_START, removeToDo);
 }
 
 export function* todoListsContainerSaga() {
-    yield all([
-        onFetchListsStart()
-    ])
+  yield all([call(onFetchLists), call(onToDoAdd), call(onToDoRemove)]);
 }

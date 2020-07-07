@@ -12,7 +12,7 @@ router.route("/filters")
 router.route("/preview")
   .post(helpers.resultsPreview);
 
-router.route("/:todoId")
+router.route("/:listId")
   .post(helpers.removeTodo)
   .put(helpers.updateTodo)
   .patch(helpers.updateTodoField)

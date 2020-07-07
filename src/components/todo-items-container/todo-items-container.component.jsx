@@ -11,16 +11,14 @@ import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 
 import {
   asyncActionBegin,
-  addToDo,
   dropToDo,
-  fetchToDos,
-  removeToDo,
   updateToDo,
   updateSorts,
 } from "../../redux/todo-container/todo-container.actions";
 
+import { addToDo, removeToDo } from "../../redux/todo-lists-container/todo-lists-container.actions";
+
 import {
-  selectToDos,
   selectFilters,
   selectSorts,
   selectLoading,
@@ -32,54 +30,26 @@ import { ActionTypes } from "../../constants/constants";
 import "./todo-items-container.styles.scss";
 
 const ToDoItemsContainer = ({
-  todos,
-  title,
-  loading,
+  id,
   todoItems,
+  title,
   filters,
   sorts,
-  addToDo,
   asyncActionBegin,
   dropToDo,
-  fetchToDos,
   removeFilter,
-  removeToDo,
   updateSorts,
   updateToDo,
+  loading,
+  addToDo,
+  removeToDo
 }) => {
-  const {
-    ADD,
-    CHANGE_COLOR,
-    DONE,
-    DRAG,
-    EDIT,
-    REMOVE,
-    SORT,
-    UPDATE,
-  } = ActionTypes;
+  const { CHANGE_COLOR, DONE, DRAG, EDIT, REMOVE, SORT, UPDATE } = ActionTypes;
 
   const [editMode, updateEditMode] = useState(false);
   const [dragModeOn, toggleDragMode] = useState(false);
 
-  // EFFECTS
-
-  // useEffect(() => {
-  //   asyncActionBegin();
-  //   fetchToDos({ filters, sorts });
-  // }, [filters, sorts]);
-
   // METHODS
-
-  const handleToDoAdd = (newToDoObj) => {
-    asyncActionBegin();
-    addToDo(newToDoObj);
-    toggleEditMode();
-  };
-
-  const handleToDoRemove = (id) => {
-    asyncActionBegin();
-    removeToDo(id);
-  };
 
   const handleToDoDone = (id) => {
     const todo = todoItems.find((item) => item._id === id);
@@ -136,13 +106,13 @@ const ToDoItemsContainer = ({
         }}
       />
       <ToDoItems
-        todoItems={todos}
+        listID={id}
+        todoItems={todoItems}
         actions={{
-          [ADD]: handleToDoAdd,
           [CHANGE_COLOR]: handleToDoChangeColor,
           [DONE]: handleToDoDone,
           [DRAG]: handleDragEnd,
-          [REMOVE]: handleToDoRemove,
+          [REMOVE]: removeToDo,
           [UPDATE]: handleToDoUpdate,
         }}
         dragModeOn={dragModeOn}
@@ -157,10 +127,14 @@ const ToDoItemsContainer = ({
         <>
           <Overlay show={true} onClick={null} opaque={true} />
           <ToDoModal
+            id={id}
             actions={{
               [ActionTypes.CANCEL]: toggleEditMode,
               [ActionTypes.EDIT]: handleToDoUpdate,
-              [ActionTypes.SUBMIT]: handleToDoAdd,
+              [ActionTypes.SUBMIT]: ({listID: id, todo}) => {
+                toggleEditMode(!editMode);
+                addToDo({listID: id, todo})
+              } 
             }}
           />
         </>
@@ -170,7 +144,6 @@ const ToDoItemsContainer = ({
 };
 
 const mapStateToProps = createStructuredSelector({
-  todoItems: selectToDos,
   filters: selectFilters,
   sorts: selectSorts,
   loading: selectLoading,
@@ -179,13 +152,13 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   asyncActionBegin: () => dispatch(asyncActionBegin()),
-  addToDo: (todo) => dispatch(addToDo(todo)),
   dropToDo: (idxFrom, idxTo) => dispatch(dropToDo(idxFrom, idxTo)),
-  fetchToDos: ({ filters, sorts }) => dispatch(fetchToDos({ filters, sorts })),
-  removeToDo: (id) => dispatch(removeToDo(id)),
   updateSorts: (field) => dispatch(updateSorts(field)),
   updateToDo: ({ id, field, value }) =>
     dispatch(updateToDo({ id, field, value })),
+
+  addToDo: ({ listID, todo }) => dispatch(addToDo({ listID, todo })),
+  removeToDo: ({ listID, todoID }) => dispatch(removeToDo({ listID, todoID })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoItemsContainer);

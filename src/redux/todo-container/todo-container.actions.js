@@ -20,17 +20,17 @@ const {
   UPDATE_TODO_FAILURE
 } = ToDosActiontypes;
 
-export const addToDo = (item) => ({ type: ADD_TODO_START, payload: item });
+export const addToDo = ({listID, item}) => ({ type: ADD_TODO_START, payload: {listID, item} });
 
-export const addToDoSuccess = (item) => ({
-  type: ADD_TODO_SUCCESS,
-  payload: item,
-});
+// export const addToDoSuccess = (item) => ({
+//   type: ADD_TODO_SUCCESS,
+//   payload: item,
+// });
 
-export const addToDoFailure = (error) => ({
-  type: ADD_TODO_FAILURE,
-  payload: error,
-});
+// export const addToDoFailure = (error) => ({
+//   type: ADD_TODO_FAILURE,
+//   payload: error,
+// });
 
 export const asyncActionBegin = () => ({ type: ASYNC_ACTION_BEGIN });
 
@@ -39,32 +39,32 @@ export const dropToDo = (idxFrom, idxTo) => ({
   payload: { idxFrom, idxTo },
 });
 
-export const fetchToDos = ({ filters, sorts }) => ({
-  type: FETCH_TODOS_START,
-  payload: { filters, sorts },
-});
+// export const fetchToDos = ({ filters, sorts }) => ({
+//   type: FETCH_TODOS_START,
+//   payload: { filters, sorts },
+// });
 
-export const fetchToDosSuccess = (items) => ({
-  type: FETCH_TODOS_SUCCESS,
-  payload: items,
-});
+// export const fetchToDosSuccess = (items) => ({
+//   type: FETCH_TODOS_SUCCESS,
+//   payload: items,
+// });
 
-export const fetchToDosFailure = (error) => ({
-  type: FETCH_TODOS_FAILURE,
-  payload: { error },
-});
+// export const fetchToDosFailure = (error) => ({
+//   type: FETCH_TODOS_FAILURE,
+//   payload: { error },
+// });
 
-export const removeToDo = (id) => ({ type: REMOVE_TODO_START, payload: id });
+// export const removeToDo = (id) => ({ type: REMOVE_TODO_START, payload: id });
 
-export const removeToDoSuccess = (id) => ({
-  type: REMOVE_TODO_SUCCESS,
-  payload: id,
-});
+// export const removeToDoSuccess = (id) => ({
+//   type: REMOVE_TODO_SUCCESS,
+//   payload: id,
+// });
 
-export const removeToDoFailure = (error) => ({
-  type: REMOVE_TODO_FAILURE,
-  payload: error,
-});
+// export const removeToDoFailure = (error) => ({
+//   type: REMOVE_TODO_FAILURE,
+//   payload: error,
+// });
 
 export const updateToDo = ({ id, field, value }) => ({
   type: UPDATE_TODO_START,

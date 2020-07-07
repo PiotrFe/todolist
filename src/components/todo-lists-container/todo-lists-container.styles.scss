@@ -1,8 +1,9 @@
 .todo-list-container {
     display: flex;
     flex-direction: row;
+    height: 90vh;
 }
 
 .list {
-    flex-basis: 33%;
+    flex-basis: 50%;
 }

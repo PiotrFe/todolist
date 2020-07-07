@@ -2,8 +2,6 @@ import { ToDosActiontypes } from "./todo-container.types";
 import { ToDoFields } from "../../constants/constants";
 
 const {
-  ADD_TODO_SUCCESS,
-  ADD_TODO_FAILURE,
   ADD_FILTER,
   ASYNC_ACTION_BEGIN,
   DROP_TODO,
@@ -49,18 +47,18 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loading: true,
       };
-    case ADD_TODO_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        todoItems: [...state.todoItems, action.payload],
-      };
-    case ADD_TODO_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.error,
-      };
+    // case ADD_TODO_SUCCESS:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     todoItems: [...state.todoItems, action.payload],
+    //   };
+    // case ADD_TODO_FAILURE:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     error: action.payload.error,
+    //   };
     case ADD_FILTER:
       return {
         ...state,

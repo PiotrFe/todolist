@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { CSSTransitionGroup } from "react-transition-group";
 
 import Icon from "../icon/icon.component";
@@ -8,8 +9,8 @@ import { IconTypes } from "../icon/icon.types";
 import { Sizes, Components, ActionTypes } from "../../constants/constants";
 import InputField from "../input-field/input-field.component";
 
-import {toggleDetails} from "../../redux/todo-item/todo-item.actions";
-
+import { toggleDetails } from "../../redux/todo-item/todo-item.actions";
+import { removeToDo } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import "./todo-item.styles.scss";
 
@@ -19,15 +20,28 @@ const ToDoItem = ({
   done,
   dueDate,
   id,
+  listID,
   owner,
   title,
   color,
+  removeToDo,
 }) => {
   const [colorPickerVisible, toggleColorPicker] = useState(false);
   const [editMode, toggleEditMode] = useState(false);
   const [detailsVisible, toggleDetailsVisible] = useState(false);
 
-  const {ADD, CHANGE, CHANGE_COLOR, DONE, DRAG, EDIT, REMOVE, SORT, SUBMIT, UPDATE} = ActionTypes;
+  const {
+    ADD,
+    CHANGE,
+    CHANGE_COLOR,
+    DONE,
+    DRAG,
+    EDIT,
+    REMOVE,
+    SORT,
+    SUBMIT,
+    UPDATE,
+  } = ActionTypes;
 
   const date = new Date(dueDate);
   const formattedDate = `${date.getDate()}-${
@@ -46,7 +60,7 @@ const ToDoItem = ({
       <Icon
         id={id}
         type={IconTypes.REMOVE}
-        handleClick={actions[REMOVE]}
+        handleClick={() => removeToDo({listID, todoID: id})}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
@@ -163,4 +177,8 @@ const ToDoItem = ({
   );
 };
 
-export default ToDoItem;
+const mapDispatchToProps = (dispatch) => ({
+  removeToDo: ({ todoID, listID }) => dispatch(removeToDo({ todoID, listID })),
+});
+
+export default connect(null, mapDispatchToProps)(ToDoItem);

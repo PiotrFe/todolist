@@ -4,6 +4,12 @@ const {
   FETCH_LISTS_START,
   FETCH_LISTS_SUCCESS,
   FETCH_LISTS_FAILURE,
+  ADD_TODO_START,
+  ADD_TODO_SUCCESS,
+  ADD_TODO_FAILURE,
+  REMOVE_TODO_START,
+  REMOVE_TODO_SUCCESS,
+  REMOVE_TODO_FAILURE,
 } = ToDoListsActionTypes;
 
 export const fetchLists = () => ({
@@ -17,5 +23,35 @@ export const fetchListsSuccess = (lists) => ({
 
 export const fetchListsFailure = (error) => ({
   type: FETCH_LISTS_FAILURE,
+  payload: error,
+});
+
+export const addToDo = ({ listID, todo }) => ({
+  type: ADD_TODO_START,
+  payload: { listID, todo },
+});
+
+export const addToDoSuccess = ({ listID, todo }) => ({
+  type: ADD_TODO_SUCCESS,
+  payload: ({ listID, todo }),
+});
+
+export const addToDoFailure = (error) => ({
+  type: ADD_TODO_FAILURE,
+  payload: error,
+});
+
+export const removeToDo = ({ listID, todoID }) => ({
+  type: REMOVE_TODO_START,
+  payload: { listID, todoID },
+});
+
+export const removeToDoSuccess = ({ listID, todoID }) => ({
+  type: REMOVE_TODO_SUCCESS,
+  payload: { listID, todoID },
+});
+
+export const removeToDoFailure = (error) => ({
+  type: REMOVE_TODO_FAILURE,
   payload: error,
 });
