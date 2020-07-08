@@ -51,19 +51,19 @@ const ToDoItemsContainer = ({
 
   // METHODS
 
-  const handleToDoDone = (id) => {
-    const todo = todoItems.find((item) => item._id === id);
-    handleToDoUpdate({ id: todo._id, field: "done", value: !todo.done });
-  };
+  // const handleToDoDone = (id) => {
+  //   const todo = todoItems.find((item) => item._id === id);
+  //   handleToDoUpdate({ id: todo._id, field: "done", value: !todo.done });
+  // };
 
-  const handleToDoChangeColor = ({ id, color }) => {
-    handleToDoUpdate({ id, field: "color", value: color });
-  };
+  // const handleToDoChangeColor = ({ id, color }) => {
+  //   handleToDoUpdate({ id, field: "color", value: color });
+  // };
 
-  const handleToDoUpdate = ({ id, field, value }) => {
-    asyncActionBegin();
-    updateToDo({ id, field, value });
-  };
+  // const handleToDoUpdate = ({ id, field, value }) => {
+  //   asyncActionBegin();
+  //   updateToDo({ id, field, value });
+  // };
 
   const toggleEditMode = () => {
     updateEditMode(!editMode);
@@ -109,11 +109,7 @@ const ToDoItemsContainer = ({
         listID={id}
         todoItems={todoItems}
         actions={{
-          [CHANGE_COLOR]: handleToDoChangeColor,
-          [DONE]: handleToDoDone,
           [DRAG]: handleDragEnd,
-          [REMOVE]: removeToDo,
-          [UPDATE]: handleToDoUpdate,
         }}
         dragModeOn={dragModeOn}
       />
@@ -130,7 +126,6 @@ const ToDoItemsContainer = ({
             id={id}
             actions={{
               [ActionTypes.CANCEL]: toggleEditMode,
-              [ActionTypes.EDIT]: handleToDoUpdate,
               [ActionTypes.SUBMIT]: ({listID: id, todo}) => {
                 toggleEditMode(!editMode);
                 addToDo({listID: id, todo})

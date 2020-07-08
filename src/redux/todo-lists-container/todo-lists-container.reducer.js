@@ -10,6 +10,8 @@ const {
   REMOVE_TODO_START,
   REMOVE_TODO_SUCCESS,
   REMOVE_TODO_FAILURE,
+  UPDATE_TODO_SUCCESS,
+  UPDATE_TODO_FAILURE,
 } = ToDoListsActionTypes;
 
 const INITIAL_STATE = {
@@ -17,7 +19,6 @@ const INITIAL_STATE = {
   loading: false,
   error: null,
 };
-
 
 const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -89,6 +90,34 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         error: action.payload.error,
       };
+
+    case UPDATE_TODO_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        todoLists: state.todoLists.map((list) => {
+          return {
+            ...list,
+            todos: list.todos.map((item) => {
+              if (item._id != action.payload.todoID) return item 
+              else {
+                return {
+                  ...item,
+                  [action.payload.field]: action.payload.value,
+                } 
+              }
+            }),
+          };
+        }),
+      };
+
+    case UPDATE_TODO_FAILURE: {
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    }
 
     default:
       return state;

@@ -13,7 +13,7 @@ exports.getTodos = (req, res) => {
 
 exports.addTodo = async (req, res) => {
   try {
-    const newToDo = await db.Todo.create(req.body.todo);
+    const newToDo = await db.ToDo.create(req.body.todo);
     const list = await db.ToDoList.findById(req.body.listID);
     newToDo.lists = [list._id];
     list.todos = [...list.todos, newToDo.id];
@@ -33,11 +33,11 @@ exports.removeTodo = async (req, res) => {
 
   try {
     const list = await db.ToDoList.findById(listID);
-    const todo = await db.Todo.findById(todoID);
+    const todo = await db.ToDo.findById(todoID);
     list.todos = list.todos.filter((id) => id != todoID);
     todo.lists = todo.lists.filter((id) => id != listID);
     if (todo.lists.length === 0) {
-      updatedTodo = await db.Todo.findByIdAndDelete(todoID);
+      updatedTodo = await db.ToDo.findByIdAndDelete(todoID);
     } else {
       updatedTodo = await todo.save();
     }
@@ -50,7 +50,7 @@ exports.removeTodo = async (req, res) => {
 };
 
 exports.updateTodo = (req, res) => {
-  db.Todo.findOneAndUpdate({ _id: req.params.todoId }, req.body, {
+  db.ToDo.findOneAndUpdate({ _id: req.params.todoId }, req.body, {
     new: true,
     useFindAndModify: false,
   })
@@ -58,26 +58,13 @@ exports.updateTodo = (req, res) => {
     .catch((err) => res.send(err));
 };
 
-exports.updateColor = (req, res) => {
-  db.Todo.findOneAndUpdate(
-    { _id: req.params.todoId },
-    { color: req.body },
-    {
-      new: true,
-      useFindAndModify: false,
-    }
-  )
-    .then((updatedTodo) => res.json(updatedTodo))
-    .catch((err) => res.send(err));
-};
-
 exports.updateTodoField = (req, res) => {
-  const { id, field, value } = req.body;
+  const { todoID, field, value } = req.body;
 
-  console.log(`id: ${id}, field: ${field}, value: ${value}`);
+  console.log(req.body);
 
-  db.Todo.findOneAndUpdate(
-    { _id: id },
+  db.ToDo.findOneAndUpdate(
+    { _id: todoID },
     { [field]: value },
     {
       new: true,
@@ -85,8 +72,7 @@ exports.updateTodoField = (req, res) => {
     }
   )
     .then((updatedTodo) => {
-      const { _id, [field]: value } = updatedTodo;
-      res.send({ _id, field, value });
+      res.send({ todoID, field, value });
     })
     .catch((err) => res.send(err));
 };
@@ -105,13 +91,13 @@ exports.filterTodos = (req, res) => {
   }, {});
 
   if (filters.length === 0) {
-    query = db.Todo.find({});
+    query = db.ToDo.find({});
   } else {
     filterArray = filters.map((filter) => {
       key = Object.keys(filter)[0];
       return { [key]: { $regex: filter[key], $options: "i" } };
     });
-    query = db.Todo.find({ $or: filterArray });
+    query = db.ToDo.find({ $or: filterArray });
   }
 
   query
@@ -147,7 +133,7 @@ exports.resultsPreview = (req, res) => {
       });
   }
 
-  query = db.Todo.find({ $or: filterArray }).select({
+  query = db.ToDo.find({ $or: filterArray }).select({
     name: 1,
     owner: 1,
     details: 1,

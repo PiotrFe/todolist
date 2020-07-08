@@ -16,6 +16,6 @@ const todoSchema = new Schema({
     lists: [Schema.Types.ObjectId]
 });
 
-const Todo = mongoose.model("Todo", todoSchema);
+const ToDo = mongoose.model("ToDo", todoSchema);
 
-module.exports = Todo;
+module.exports = ToDo;

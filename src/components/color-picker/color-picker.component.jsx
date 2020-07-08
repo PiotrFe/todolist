@@ -3,11 +3,11 @@ import "./color-picker.styles.scss";
 
 import {CustomColors} from "./color-picker.types";
 
-const ColorPicker = ({id, applyColor, showColorPicker}) => {
+const ColorPicker = ({applyColor, showColorPicker}) => {
 
     const handleClick = color => {
         showColorPicker(false);
-        applyColor({id, color});
+        applyColor({color});
     }
     
     return (

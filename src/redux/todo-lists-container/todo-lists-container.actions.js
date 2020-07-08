@@ -10,6 +10,9 @@ const {
   REMOVE_TODO_START,
   REMOVE_TODO_SUCCESS,
   REMOVE_TODO_FAILURE,
+  UPDATE_TODO_START,
+  UPDATE_TODO_SUCCESS,
+  UPDATE_TODO_FAILURE,
 } = ToDoListsActionTypes;
 
 export const fetchLists = () => ({
@@ -53,5 +56,21 @@ export const removeToDoSuccess = ({ listID, todoID }) => ({
 
 export const removeToDoFailure = (error) => ({
   type: REMOVE_TODO_FAILURE,
+  payload: error,
+});
+
+
+export const updateToDo = ({ todoID, field, value }) => ({
+  type: UPDATE_TODO_START,
+  payload: { todoID, field, value },
+});
+
+export const updateToDoSuccess = ({ todoID, field, value }) => ({
+  type: UPDATE_TODO_SUCCESS,
+  payload: { todoID, field, value },
+});
+
+export const updateToDoFailure = (error) => ({
+  type: UPDATE_TODO_FAILURE,
   payload: error,
 });

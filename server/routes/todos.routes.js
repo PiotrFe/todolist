@@ -15,6 +15,8 @@ router.route("/preview")
 router.route("/:listId")
   .post(helpers.removeTodo)
   .put(helpers.updateTodo)
+
+  router.route("/:todoID")
   .patch(helpers.updateTodoField)
 
 module.exports = router;

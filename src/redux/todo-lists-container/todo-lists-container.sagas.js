@@ -8,6 +8,8 @@ import {
   addToDoFailure,
   removeToDoSuccess,
   removeToDoFailure,
+  updateToDoSuccess,
+  updateToDoFailure,
 } from "./todo-lists-container.actions";
 
 export function* fetchLists() {
@@ -61,6 +63,29 @@ export function* removeToDo({ payload: { listID, todoID } }) {
   }
 }
 
+export function* updateToDo({ payload: { todoID, field, value } }) {
+  try {
+    const res = yield fetch(`/api/todos/${todoID}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ todoID, field, value }),
+    });
+
+    const json = yield res.json();
+    yield put(
+      updateToDoSuccess({
+        todoID: json.todoID,
+        field: json.field,
+        value: json.value,
+      })
+    );
+  } catch (error) {
+    yield put(updateToDoFailure(error));
+  }
+}
+
 export function* onFetchLists() {
   yield takeLatest(ToDoListsActionTypes.FETCH_LISTS_START, fetchLists);
 }
@@ -73,6 +98,15 @@ export function* onToDoRemove() {
   yield takeLatest(ToDoListsActionTypes.REMOVE_TODO_START, removeToDo);
 }
 
+export function* onToDoUpdate() {
+  yield takeLatest(ToDoListsActionTypes.UPDATE_TODO_START, updateToDo);
+}
+
 export function* todoListsContainerSaga() {
-  yield all([call(onFetchLists), call(onToDoAdd), call(onToDoRemove)]);
+  yield all([
+    call(onFetchLists),
+    call(onToDoAdd),
+    call(onToDoRemove),
+    call(onToDoUpdate),
+  ]);
 }

@@ -47,18 +47,6 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loading: true,
       };
-    // case ADD_TODO_SUCCESS:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     todoItems: [...state.todoItems, action.payload],
-    //   };
-    // case ADD_TODO_FAILURE:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     error: action.payload.error,
-    //   };
     case ADD_FILTER:
       return {
         ...state,
@@ -89,20 +77,20 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
           (item) => JSON.stringify(item) !== JSON.stringify(action.payload)
         ),
       };
-    case REMOVE_TODO_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        todoItems: state.todoItems.filter(
-          (item) => item._id !== action.payload
-        ),
-      };
-    case REMOVE_TODO_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.error,
-      };
+    // case REMOVE_TODO_SUCCESS:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     todoItems: state.todoItems.filter(
+    //       (item) => item._id !== action.payload
+    //     ),
+    //   };
+    // case REMOVE_TODO_FAILURE:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     error: action.payload.error,
+    //   };
     case UPDATE_SORTS:
       return {
         ...state,
@@ -125,26 +113,7 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
           return item;
         }),
       };
-    case UPDATE_TODO_SUCCESS: {
-      return {
-        ...state,
-        loading: false,
-        todoItems: state.todoItems.map((item) => {
-          if (item._id === action.payload._id) {
-            const { field, value } = action.payload;
-            item = updateItem(item, field, value);
-          }
-          return item;
-        }),
-      };
-    }
-    case UPDATE_TODO_FAILURE: {
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    }
+
 
     default:
       return state;
