@@ -94,8 +94,6 @@ const ToDoItem = ({
     </>
   );
 
- 
-
   return (
     <div className="todo-container">
       <div className="todo-item">

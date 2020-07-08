@@ -2,6 +2,7 @@ import { put, takeEvery, all, call, takeLatest } from "redux-saga/effects";
 
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
 import {
+  asyncActionStart,
   fetchListsSuccess,
   fetchListsFailure,
   addToDoSuccess,
@@ -13,6 +14,7 @@ import {
 } from "./todo-lists-container.actions";
 
 export function* fetchLists() {
+  yield put(asyncActionStart());
   try {
     const data = yield fetch("/api/todos", {
       method: "GET",
@@ -30,6 +32,7 @@ export function* fetchLists() {
 }
 
 export function* addToDo({ payload: { listID, todo } }) {
+  yield put(asyncActionStart());
   try {
     const res = yield fetch("/api/todos", {
       method: "POST",
@@ -47,6 +50,7 @@ export function* addToDo({ payload: { listID, todo } }) {
 }
 
 export function* removeToDo({ payload: { listID, todoID } }) {
+  yield put(asyncActionStart());
   try {
     const res = yield fetch(`/api/todos/${listID}`, {
       method: "POST",
@@ -64,6 +68,7 @@ export function* removeToDo({ payload: { listID, todoID } }) {
 }
 
 export function* updateToDo({ payload: { todoID, field, value } }) {
+  yield put(asyncActionStart());
   try {
     const res = yield fetch(`/api/todos/${todoID}`, {
       method: "PATCH",

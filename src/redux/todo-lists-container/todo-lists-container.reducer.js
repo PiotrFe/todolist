@@ -1,13 +1,11 @@
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
 
 const {
-  FETCH_LISTS_START,
+  ASYNC_ACTION_START,
   FETCH_LISTS_SUCCESS,
   FETCH_LISTS_FAILURE,
-  ADD_TODO_START,
   ADD_TODO_SUCCESS,
   ADD_TODO_FAILURE,
-  REMOVE_TODO_START,
   REMOVE_TODO_SUCCESS,
   REMOVE_TODO_FAILURE,
   UPDATE_TODO_SUCCESS,
@@ -22,11 +20,11 @@ const INITIAL_STATE = {
 
 const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case FETCH_LISTS_START:
+    case ASYNC_ACTION_START: 
       return {
         ...state,
-        loading: true,
-      };
+        loading: true
+      }
     case FETCH_LISTS_SUCCESS:
       return {
         ...state,
@@ -39,11 +37,6 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         error: action.payload,
-      };
-    case ADD_TODO_START:
-      return {
-        ...state,
-        loading: true,
       };
     case ADD_TODO_SUCCESS:
       return {
@@ -63,11 +56,6 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         error: action.payload.error,
-      };
-    case REMOVE_TODO_START:
-      return {
-        ...state,
-        loading: true,
       };
     case REMOVE_TODO_SUCCESS:
       return {
@@ -90,7 +78,6 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         error: action.payload.error,
       };
-
     case UPDATE_TODO_SUCCESS:
       return {
         ...state,
@@ -99,12 +86,12 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
           return {
             ...list,
             todos: list.todos.map((item) => {
-              if (item._id != action.payload.todoID) return item 
+              if (item._id != action.payload.todoID) return item;
               else {
                 return {
                   ...item,
                   [action.payload.field]: action.payload.value,
-                } 
+                };
               }
             }),
           };

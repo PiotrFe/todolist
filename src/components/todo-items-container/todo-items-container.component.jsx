@@ -42,7 +42,6 @@ const ToDoItemsContainer = ({
   updateToDo,
   loading,
   addToDo,
-  removeToDo
 }) => {
   const { CHANGE_COLOR, DONE, DRAG, EDIT, REMOVE, SORT, UPDATE } = ActionTypes;
 
@@ -50,20 +49,6 @@ const ToDoItemsContainer = ({
   const [dragModeOn, toggleDragMode] = useState(false);
 
   // METHODS
-
-  // const handleToDoDone = (id) => {
-  //   const todo = todoItems.find((item) => item._id === id);
-  //   handleToDoUpdate({ id: todo._id, field: "done", value: !todo.done });
-  // };
-
-  // const handleToDoChangeColor = ({ id, color }) => {
-  //   handleToDoUpdate({ id, field: "color", value: color });
-  // };
-
-  // const handleToDoUpdate = ({ id, field, value }) => {
-  //   asyncActionBegin();
-  //   updateToDo({ id, field, value });
-  // };
 
   const toggleEditMode = () => {
     updateEditMode(!editMode);

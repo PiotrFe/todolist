@@ -1,6 +1,7 @@
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
 
 const {
+  ASYNC_ACTION_START,
   FETCH_LISTS_START,
   FETCH_LISTS_SUCCESS,
   FETCH_LISTS_FAILURE,
@@ -14,6 +15,10 @@ const {
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILURE,
 } = ToDoListsActionTypes;
+
+export const asyncActionStart = () => ({
+  type: ASYNC_ACTION_START
+})
 
 export const fetchLists = () => ({
   type: FETCH_LISTS_START,

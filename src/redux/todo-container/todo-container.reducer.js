@@ -57,19 +57,6 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         todoItems: reorderItem(state.todoItems, action.payload),
       };
-    case FETCH_TODOS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        todoItems: action.payload,
-      };
-    case FETCH_TODOS_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        todoItems: [],
-        error: action.payload.error,
-      };
     case REMOVE_FILTER:
       return {
         ...state,
@@ -77,20 +64,6 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
           (item) => JSON.stringify(item) !== JSON.stringify(action.payload)
         ),
       };
-    // case REMOVE_TODO_SUCCESS:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     todoItems: state.todoItems.filter(
-    //       (item) => item._id !== action.payload
-    //     ),
-    //   };
-    // case REMOVE_TODO_FAILURE:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     error: action.payload.error,
-    //   };
     case UPDATE_SORTS:
       return {
         ...state,
