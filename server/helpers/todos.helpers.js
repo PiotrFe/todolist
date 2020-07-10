@@ -110,22 +110,30 @@ exports.filterTodos = (req, res) => {
     .catch((err) => res.send(err));
 };
 
-exports.resultsPreview = (req, res) => {
-  const { filters, keyword } = req.body;
+exports.resultsPreview = async (req, res) => {
+  const { listID, filters, keyword } = req.body;
+  console.log(
+    `listID: ${listID}, filters${filters} - ${Array.isArray(
+      filters
+    )}, keyword: ${keyword}`
+  );
   const fieldArray = ["owner", "title", "details"];
   let filterArray = [];
-  let query, key;
+  let key;
   let freqCounter = {};
 
+  // creating frequency counter for existing filters
   for (field of fieldArray) {
     freqCounter[field] = 0;
   }
 
+  // counting existing filters
   filters.forEach((item) => {
     key = Object.keys(item)[0];
     if (item[key] === keyword) freqCounter[key]++;
   });
 
+  // pushing the keyword to filter array only if filter does not exist
   for (field of fieldArray) {
     if (freqCounter[field] === 0)
       filterArray.push({
@@ -133,19 +141,37 @@ exports.resultsPreview = (req, res) => {
       });
   }
 
-  query = db.ToDo.find({ $or: filterArray }).select({
-    name: 1,
-    owner: 1,
-    details: 1,
-    _id: 0,
-  });
+  // building query
+  const query = db.ToDoList.findById(listID)
+    .populate({
+      path: "todos",
+      match: { $or: filterArray },
+      select: {
+        name: 1,
+        owner: 1,
+        details: 1,
+        _id: 0,
+      },
+    });
 
-  query
-    .exec()
-    .then((todos) => {
-      res.json(todos);
-    })
-    .catch((err) => res.send(err));
+  const queryData = await query.exec();
+  const todoData = queryData ? queryData.todos : [];
+  res.send(todoData);
+
+  // query = db.ToDo.find({ $or: filterArray }).select({
+  //   name: 1,
+  //   owner: 1,
+  //   details: 1,
+  //   _id: 0,
+  // });
+
+  // executing query
+  // query
+  //   .exec()
+  //   .then((todos) => {
+  //     res.json(todos);
+  //   })
+  //   .catch((err) => res.send(err));
 };
 
 module.exports = exports;

@@ -9,6 +9,9 @@ const SearchResultList = ({ preview = [], word, search }) => {
   let results = {};
   let entry, matches;
 
+// console.log(`preview: ${JSON.stringify(preview)}`);
+// debugger;
+
   preview.forEach((item) => {
     for (let key in item) {
       entry = item[key];

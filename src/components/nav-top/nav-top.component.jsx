@@ -8,11 +8,18 @@ import Icon from "../icon/icon.component";
 import Slider from "../slider/slider.component";
 
 import { IconTypes } from "../icon/icon.types";
-import { Sizes, Components, ActionTypes } from "../../constants/constants";
+import { Sizes, Components, ActionTypes, ToDoFields } from "../../constants/constants";
 
-import {selectToDosCount,selectToDosPendingCount, selectToDosDoneCount} from "../../redux/todo-container/todo-container.selectors";
+// import {selectToDosCount,selectToDosPendingCount, selectToDosDoneCount} from "../../redux/todo-container/todo-container.selectors";
 
-const NavTop = ({sorts, actions, dragModeOn, todosCount, todosCountPending, todosCountDone}) => {
+const NavTop = ({listID, actions, dragModeOn, todosCount, todosCountPending, todosCountDone}) => {
+
+  const sorts = [
+    { field: ToDoFields.TITLE, sortDirection: 0 },
+    { field: ToDoFields.DUE_DATE, sortDirection: 1 },
+    { field: ToDoFields.OWNER, sortDirection: 0 },
+    { field: ToDoFields.COLOR, sortDirection: 0 },
+  ];
 
   const [sortTitle, sortDueDate, sortOwner, sortColor ] = sorts;
   const {SORT_BOTH, SORT_ASC, SORT_DESC} = IconTypes;
@@ -101,9 +108,9 @@ const NavTop = ({sorts, actions, dragModeOn, todosCount, todosCountPending, todo
 };
 
 const mapStateToProps = createStructuredSelector({
-  todosCount: selectToDosCount,
-  todosCountPending: selectToDosPendingCount,
-  todosCountDone: selectToDosDoneCount,
+  // todosCount: selectToDosCount,
+  // todosCountPending: selectToDosPendingCount,
+  // todosCountDone: selectToDosDoneCount,
 });
 
 export default connect(mapStateToProps)(NavTop);

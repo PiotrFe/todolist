@@ -13,10 +13,20 @@ import { selectFilterPreview } from "../../redux/filter-bar/filter-bar.selectors
 
 import { ActionTypes } from "../../constants/constants";
 
-import { applyFilter, removeFilter } from "../../redux/todo-container/todo-container.actions";
+import {
+  applyFilter,
+  removeFilter,
+} from "../../redux/todo-container/todo-container.actions";
 import { showFilterPreview } from "../../redux/filter-bar/filter-bar.actions";
 
-const FilterBar = ({ actions, filters, filterPreview, applyFilter, removeFilter, showFilterPreview }) => {
+const FilterBar = ({
+  listID,
+  filters,
+  filterPreview,
+  applyFilter,
+  removeFilter,
+  showFilterPreview,
+}) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
   const [filterMode, updateFilterMode] = useState(true);
   // const [filterPreview, updateFilterPreview] = useState();
@@ -34,13 +44,11 @@ const FilterBar = ({ actions, filters, filterPreview, applyFilter, removeFilter,
     updateFilterBarContent(content);
   };
 
-  const fetchFilterPreview = word => {
+  const fetchFilterPreview = (word) => {
     updateFilterMode(true);
     updateFilterWord(word);
-    showFilterPreview({filters, word});
-  }
-
-
+    showFilterPreview({ listID, filters, word });
+  };
 
   const addFilter = (filter) => {
     applyFilter(filter);
@@ -48,7 +56,6 @@ const FilterBar = ({ actions, filters, filterPreview, applyFilter, removeFilter,
     updateFilterWord("");
     updateFilterBarContent("");
   };
-
 
   return (
     <>
@@ -59,12 +66,7 @@ const FilterBar = ({ actions, filters, filterPreview, applyFilter, removeFilter,
         }}
       >
         {filters.map((item, idx) => (
-          <FilterCard
-            key={idx}
-            item={item}
-            idx={idx}
-            remove={removeFilter}
-          />
+          <FilterCard key={idx} item={item} idx={idx} remove={removeFilter} />
         ))}
         <TodoInput
           onChange={updateFilterBar}
@@ -85,14 +87,14 @@ const FilterBar = ({ actions, filters, filterPreview, applyFilter, removeFilter,
 
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
-  filterPreview: selectFilterPreview
+  filterPreview: selectFilterPreview,
 });
 
-const mapDispatchToProps = dispatch => ({
-  applyFilter: filter => dispatch(applyFilter(filter)),
-  removeFilter: filter => dispatch(removeFilter(filter)),
-  showFilterPreview: ({filters, word}) => dispatch(showFilterPreview({filters, word}))
-
+const mapDispatchToProps = (dispatch) => ({
+  applyFilter: (filter) => dispatch(applyFilter(filter)),
+  removeFilter: (filter) => dispatch(removeFilter(filter)),
+  showFilterPreview: ({ listID, filters, word }) =>
+    dispatch(showFilterPreview({ listID, filters, word })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterBar);

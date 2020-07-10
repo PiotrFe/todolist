@@ -20,9 +20,11 @@ import { addToDo, removeToDo } from "../../redux/todo-lists-container/todo-lists
 
 import {
   selectFilters,
+  selectToDosCount,
   selectSorts,
   selectLoading,
   selectError,
+  selectLists
 } from "../../redux/todo-container/todo-container.selectors";
 
 import { ActionTypes } from "../../constants/constants";
@@ -30,7 +32,7 @@ import { ActionTypes } from "../../constants/constants";
 import "./todo-items-container.styles.scss";
 
 const ToDoItemsContainer = ({
-  id,
+  listID,
   todoItems,
   title,
   filters,
@@ -77,7 +79,8 @@ const ToDoItemsContainer = ({
     <div className="todo-items-container">
       <div className="todo-items-container__title">{title}</div>
       <NavTop
-        sorts={sorts}
+        listID={listID}
+        // sorts={sorts}
         actions={{
           [DRAG]: toggleDrag,
           [EDIT]: toggleEditMode,
@@ -86,12 +89,13 @@ const ToDoItemsContainer = ({
         dragModeOn={dragModeOn}
       />
       <FilterBar
+        listID={listID}
         actions={{
           [REMOVE]: removeFilter,
         }}
       />
       <ToDoItems
-        listID={id}
+        listID={listID}
         todoItems={todoItems}
         actions={{
           [DRAG]: handleDragEnd,
@@ -108,12 +112,12 @@ const ToDoItemsContainer = ({
         <>
           <Overlay show={true} onClick={null} opaque={true} />
           <ToDoModal
-            id={id}
+            listID={listID}
             actions={{
               [ActionTypes.CANCEL]: toggleEditMode,
-              [ActionTypes.SUBMIT]: ({listID: id, todo}) => {
+              [ActionTypes.SUBMIT]: ({listID, todo}) => {
                 toggleEditMode(!editMode);
-                addToDo({listID: id, todo})
+                addToDo({listID, todo})
               } 
             }}
           />
@@ -124,10 +128,12 @@ const ToDoItemsContainer = ({
 };
 
 const mapStateToProps = createStructuredSelector({
-  filters: selectFilters,
-  sorts: selectSorts,
-  loading: selectLoading,
-  error: selectError,
+  // filters: selectFilters,
+  // listCount: selectToDosCount
+  // sorts: selectSorts,
+  // loading: selectLoading,
+  // error: selectError,
+  // lists: selectLists
 });
 
 const mapDispatchToProps = (dispatch) => ({

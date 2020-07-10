@@ -9,7 +9,7 @@ router.route("/")
 router.route("/filters")
   .post(helpers.filterTodos);
 
-router.route("/preview")
+router.route("/preview/:listId")
   .post(helpers.resultsPreview);
 
 router.route("/:listId")

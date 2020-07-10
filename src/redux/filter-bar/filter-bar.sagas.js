@@ -5,14 +5,14 @@ import {
   showFilterPreviewFailure,
 } from "./filter-bar.actions";
 
-export function* fetchPreview({ payload: { filters, word } }) {
+export function* fetchPreview({ payload: { listID, filters, word } }) {
   try {
-    const res = yield fetch("api/todos/preview", {
+    const res = yield fetch(`api/todos/preview/${listID}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ filters: filters, keyword: word }),
+      body: JSON.stringify({ listID, filters, keyword: word }),
     });
 
     const data = yield res.json();
@@ -28,5 +28,5 @@ export function* onShowPreviewStart() {
 }
 
 export function* filterBarSagas() {
-    yield all([call(onShowPreviewStart)])
+  yield all([call(onShowPreviewStart)]);
 }
