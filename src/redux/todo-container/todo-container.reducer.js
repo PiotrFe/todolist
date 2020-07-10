@@ -2,7 +2,6 @@ import { ToDosActiontypes } from "./todo-container.types";
 import { ToDoFields } from "../../constants/constants";
 
 const {
-  ADD_FILTER,
   ASYNC_ACTION_BEGIN,
   DROP_TODO,
   REMOVE_FILTER,
@@ -10,7 +9,7 @@ const {
 } = ToDosActiontypes;
 
 const INITIAL_STATE = {
-  todoItems: [],
+  todos: [],
   filters: [],
   sorts: [
     { field: ToDoFields.TITLE, sortDirection: 0 },
@@ -40,11 +39,6 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: true,
-      };
-    case ADD_FILTER:
-      return {
-        ...state,
-        filters: [...state.filters, action.payload],
       };
     case DROP_TODO:
       return {
@@ -80,7 +74,6 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
           return item;
         }),
       };
-
 
     default:
       return state;

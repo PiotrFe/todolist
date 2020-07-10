@@ -1,6 +1,7 @@
 import { put, takeEvery, all, call, takeLatest } from "redux-saga/effects";
 
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
+
 import {
   asyncActionStart,
   fetchListsSuccess,
@@ -12,6 +13,8 @@ import {
   updateToDoSuccess,
   updateToDoFailure,
 } from "./todo-lists-container.actions";
+
+
 
 export function* fetchLists() {
   yield put(asyncActionStart());
@@ -105,6 +108,10 @@ export function* onToDoRemove() {
 
 export function* onToDoUpdate() {
   yield takeLatest(ToDoListsActionTypes.UPDATE_TODO_START, updateToDo);
+}
+
+export function* onAddFilter() {
+  yield takeLatest
 }
 
 export function* todoListsContainerSaga() {

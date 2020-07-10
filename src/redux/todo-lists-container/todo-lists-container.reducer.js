@@ -1,4 +1,5 @@
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
+import { ToDosActiontypes } from "../todo-container/todo-container.types";
 
 const {
   ASYNC_ACTION_START,
@@ -12,6 +13,12 @@ const {
   UPDATE_TODO_FAILURE,
 } = ToDoListsActionTypes;
 
+const {
+  ADD_FILTER,
+  FETCH_TODOS_SUCCESS,
+  FETCH_TODOS_FAILURE,
+} = ToDosActiontypes;
+
 const INITIAL_STATE = {
   todoLists: [],
   loading: false,
@@ -20,11 +27,11 @@ const INITIAL_STATE = {
 
 const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case ASYNC_ACTION_START: 
+    case ASYNC_ACTION_START:
       return {
         ...state,
-        loading: true
-      }
+        loading: true,
+      };
     case FETCH_LISTS_SUCCESS:
       return {
         ...state,
@@ -105,6 +112,35 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         error: action.payload,
       };
     }
+
+    case ADD_FILTER:
+      return {
+        ...state,
+        todoLists: state.todoLists.map((list) => {
+          if (list._id === action.payload.listID) {
+            list.filters.push(action.payload.filter);
+          }
+          return list;
+        }),
+      };
+
+    case FETCH_TODOS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        todoLists: state.todoLists.map((list) => {
+          if (list._id === action.payload.listID) {
+            list.todos = action.payload.todos
+          }
+          return list;
+        }),
+      };
+
+    case FETCH_TODOS_FAILURE:
+      return {
+        ...state,
+        error: action.payload.error
+      };
 
     default:
       return state;

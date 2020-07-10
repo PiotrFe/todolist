@@ -8,7 +8,7 @@ import { useState } from "react";
 import { ActionTypes, Themes } from "../../constants/constants";
 import { parseDate } from "../utils/utils";
 
-const ToDoModal = ({id, actions, content = null }) => {
+const ToDoModal = ({listID, actions, content = null }) => {
   const today = new Date();
   const MAX_LENGTH = 250;
   // const {_id = null, title: toDoTitle = "", dueDate: toDoDueDate = "", owner: toDoOwner = "", details: toDoDetails = ""} = content || {};
@@ -33,7 +33,7 @@ const ToDoModal = ({id, actions, content = null }) => {
       color: ""
     };
 
-   actions[ActionTypes.SUBMIT]({listID: id, todo});
+   actions[ActionTypes.SUBMIT]({listID, todo});
     
   };
 

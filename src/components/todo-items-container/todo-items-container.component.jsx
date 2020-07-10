@@ -14,9 +14,13 @@ import {
   dropToDo,
   updateToDo,
   updateSorts,
+  fetchFilteredToDoS,
 } from "../../redux/todo-container/todo-container.actions";
 
-import { addToDo, removeToDo } from "../../redux/todo-lists-container/todo-lists-container.actions";
+import {
+  addToDo,
+  removeToDo,
+} from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import {
   selectFilters,
@@ -24,7 +28,7 @@ import {
   selectSorts,
   selectLoading,
   selectError,
-  selectLists
+  selectLists,
 } from "../../redux/todo-container/todo-container.selectors";
 
 import { ActionTypes } from "../../constants/constants";
@@ -49,6 +53,7 @@ const ToDoItemsContainer = ({
 
   const [editMode, updateEditMode] = useState(false);
   const [dragModeOn, toggleDragMode] = useState(false);
+
 
   // METHODS
 
@@ -80,7 +85,6 @@ const ToDoItemsContainer = ({
       <div className="todo-items-container__title">{title}</div>
       <NavTop
         listID={listID}
-        // sorts={sorts}
         actions={{
           [DRAG]: toggleDrag,
           [EDIT]: toggleEditMode,
@@ -115,10 +119,10 @@ const ToDoItemsContainer = ({
             listID={listID}
             actions={{
               [ActionTypes.CANCEL]: toggleEditMode,
-              [ActionTypes.SUBMIT]: ({listID, todo}) => {
+              [ActionTypes.SUBMIT]: ({ listID, todo }) => {
                 toggleEditMode(!editMode);
-                addToDo({listID, todo})
-              } 
+                addToDo({ listID, todo });
+              },
             }}
           />
         </>
@@ -128,7 +132,7 @@ const ToDoItemsContainer = ({
 };
 
 const mapStateToProps = createStructuredSelector({
-  // filters: selectFilters,
+  filters: selectFilters,
   // listCount: selectToDosCount
   // sorts: selectSorts,
   // loading: selectLoading,
@@ -145,6 +149,8 @@ const mapDispatchToProps = (dispatch) => ({
 
   addToDo: ({ listID, todo }) => dispatch(addToDo({ listID, todo })),
   removeToDo: ({ listID, todoID }) => dispatch(removeToDo({ listID, todoID })),
+  fetchFilteredToDoS: ({ listID, filters }) =>
+    dispatch(fetchFilteredToDoS({ listID, filters })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoItemsContainer);

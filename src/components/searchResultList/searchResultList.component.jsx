@@ -5,12 +5,9 @@ import { ActionTypes } from "../../constants/constants";
 
 const SearchResultList = ({ preview = [], word, search }) => {
   // incoming format: [{key: value}], e.g. [{owner: "peter"},{owner: "peter kowalski"}, {details: "peter did smth"}];
-  const regex = new RegExp(`\w*${word}\w*`, "ig");
+  const regex = new RegExp(`\w*${word}\w*`, "i");
   let results = {};
   let entry, matches;
-
-// console.log(`preview: ${JSON.stringify(preview)}`);
-// debugger;
 
   preview.forEach((item) => {
     for (let key in item) {
@@ -19,7 +16,7 @@ const SearchResultList = ({ preview = [], word, search }) => {
       if (regex.test(entry)) {
         if (key in results && !results[key].includes(entry)) {
           results[key].push(entry);
-        } else {
+        } else if (!(key in results)) {
           results[key] = [entry];
         }
       }
@@ -44,7 +41,7 @@ const SearchResultList = ({ preview = [], word, search }) => {
     });
   });
 
-   // resulting format: {owner: [{text: "peter", formattedText: "<span>peter</span>"}]}
+  // resulting format: {owner: [{text: "peter", formattedText: "<span>peter</span>"}]}
 
   return (
     <div className="search-results">
@@ -58,14 +55,14 @@ const SearchResultList = ({ preview = [], word, search }) => {
                 key={idx}
                 className="search-results__record"
                 onClick={() => {
-                  search({ [key]: entry.text });
+                  search({[key]: entry.text });
                 }}
               >
                 {" "}
                 <div
                   className="search-results__record"
                   dangerouslySetInnerHTML={{
-                    __html: entry.formattedText
+                    __html: entry.formattedText,
                   }}
                 ></div>
               </div>

@@ -11,10 +11,12 @@ import SearchResultList from "../../components/searchResultList/searchResultList
 import { selectFilters } from "../../redux/todo-container/todo-container.selectors";
 import { selectFilterPreview } from "../../redux/filter-bar/filter-bar.selectors";
 
+import { fetchFilteredToDoS } from "../../redux/todo-container/todo-container.actions";
+
 import { ActionTypes } from "../../constants/constants";
 
 import {
-  applyFilter,
+  addFilter,
   removeFilter,
 } from "../../redux/todo-container/todo-container.actions";
 import { showFilterPreview } from "../../redux/filter-bar/filter-bar.actions";
@@ -23,9 +25,10 @@ const FilterBar = ({
   listID,
   filters,
   filterPreview,
-  applyFilter,
+  addFilter,
   removeFilter,
   showFilterPreview,
+  fetchFilteredToDoS
 }) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
   const [filterMode, updateFilterMode] = useState(true);
@@ -50,11 +53,12 @@ const FilterBar = ({
     showFilterPreview({ listID, filters, word });
   };
 
-  const addFilter = (filter) => {
-    applyFilter(filter);
+  const applyFilter = (filter) => {
+    addFilter({ listID, filter });
     updateFilterMode(false);
     updateFilterWord("");
     updateFilterBarContent("");
+    fetchFilteredToDoS({ listID, filters });
   };
 
   return (
@@ -78,7 +82,7 @@ const FilterBar = ({
         <SearchResultList
           word={filterWord}
           preview={filterPreview}
-          search={addFilter}
+          search={applyFilter}
         />
       ) : null}
     </>
@@ -91,10 +95,12 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  applyFilter: (filter) => dispatch(applyFilter(filter)),
+  addFilter: ({ listID, filter }) => dispatch(addFilter({ listID, filter })),
   removeFilter: (filter) => dispatch(removeFilter(filter)),
   showFilterPreview: ({ listID, filters, word }) =>
     dispatch(showFilterPreview({ listID, filters, word })),
+  fetchFilteredToDoS: ({ listID, filters }) =>
+    dispatch(fetchFilteredToDoS({ listID, filters })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterBar);

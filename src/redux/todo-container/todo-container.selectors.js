@@ -1,27 +1,8 @@
 import { createSelector } from "reselect";
 import { PromiseProvider } from "mongoose";
 
-// const selectToDoLists = (state, props) => {
-//     const lists = state.todoListsContainer.todoLists;
-//     console.dir(`STATE: ${JSON.stringify(state)}`);
-//     console.dir(`PROPS: ${JSON.stringify(props)}`);
-//     console.dir(`LISTS: ${JSON.stringify(lists)}`);
-//     debugger;
-// } 
-
-// export const selectToDos = createSelector(
-//     [selectToDoContainer],
-//     container => container.todoItems
-// )
 
 const selectListByID = (state, props) => state.todoListsContainer.todoLists.find(list => list._id === props.listID);
-
-// export const selectLists = createSelector(
-//     selectToDoLists,
-//     // (list) => list.owner  
-//     lists => lists  
-// )
-
 
 export const selectFilters = createSelector(
     selectListByID,
