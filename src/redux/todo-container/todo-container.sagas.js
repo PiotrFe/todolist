@@ -6,6 +6,7 @@ import { asyncActionStart } from "../todo-lists-container/todo-lists-container.a
 
 
 export function* fetchFilteredToDos({ payload: { listID, filters } }) {
+  // debugger;
   yield put(asyncActionStart());
   try {
     const data = yield fetch("/api/todos/filters", {
@@ -17,8 +18,6 @@ export function* fetchFilteredToDos({ payload: { listID, filters } }) {
     });
 
     const todos = yield data.json();
-    // console.log(JSON.stringify(todos));
-    // debugger;
 
     yield put(fetchToDoSSuccess({ listID, todos } ));
   } catch (error) {

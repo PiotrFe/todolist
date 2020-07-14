@@ -45,13 +45,7 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         todoItems: reorderItem(state.todoItems, action.payload),
       };
-    case REMOVE_FILTER:
-      return {
-        ...state,
-        filters: state.filters.filter(
-          (item) => JSON.stringify(item) !== JSON.stringify(action.payload)
-        ),
-      };
+
     case UPDATE_SORTS:
       return {
         ...state,

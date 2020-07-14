@@ -114,45 +114,31 @@ exports.filterTodos = async (req, res) => {
     res.json(error);
   }
 
-  query
-    // .sort(sortObj)
-    // .collation({ locale: "en" })
-    // .exec()
-    // .then((todos) => {
-    //   res.json(todos);
-    // })
-    // .catch((err) => res.send(err));
+  query;
+  // .sort(sortObj)
+  // .collation({ locale: "en" })
+  // .exec()
+  // .then((todos) => {
+  //   res.json(todos);
+  // })
+  // .catch((err) => res.send(err));
 };
 
 exports.resultsPreview = async (req, res) => {
   const { listID, filters, keyword } = req.body;
   console.log(
-    `listID: ${listID}, filters${filters} - ${Array.isArray(
+    `listID: ${listID}, filters${JSON.stringify(filters)} - ${Array.isArray(
       filters
     )}, keyword: ${keyword}`
   );
   const fieldArray = ["owner", "title", "details"];
   let filterArray = [];
-  let key;
-  let freqCounter = {};
 
-  // creating frequency counter for existing filters
+  // pushing the keyword to filter array 
   for (field of fieldArray) {
-    freqCounter[field] = 0;
-  }
-
-  // counting existing filters
-  filters.forEach((item) => {
-    key = Object.keys(item)[0];
-    if (item[key] === keyword) freqCounter[key]++;
-  });
-
-  // pushing the keyword to filter array only if filter does not exist
-  for (field of fieldArray) {
-    if (freqCounter[field] === 0)
-      filterArray.push({
-        [field]: { $regex: new RegExp(`\w*${keyword}\w*`, "i") },
-      });
+    filterArray.push({
+      [field]: { $regex: new RegExp(`\w*${keyword}\w*`, "i") },
+    });
   }
 
   // building query
@@ -160,15 +146,17 @@ exports.resultsPreview = async (req, res) => {
     path: "todos",
     match: { $or: filterArray },
     select: {
-      name: 1,
+      title: 1,
       owner: 1,
       details: 1,
       _id: 0,
     },
   });
 
+  // executing query and sending results
   const queryData = await query.exec();
   const todoData = queryData ? queryData.todos : [];
+
   res.send(todoData);
 
   // query = db.ToDo.find({ $or: filterArray }).select({

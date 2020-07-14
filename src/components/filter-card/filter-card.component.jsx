@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import "./filter-card.styles.scss";
 import { ActionTypes } from "../../constants/constants";
 
-const FilterCard = ({ item, idx, remove }) => {
+const FilterCard = ({ item, remove }) => {
   const [key, value] = Object.entries(item)[0];
 
   return (

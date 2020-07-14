@@ -47,22 +47,24 @@ export const addFilter = ({ listID, filter }) => ({
   payload: { listID, filter },
 });
 
-export const removeFilter = (item) => ({ type: REMOVE_FILTER, payload: item });
+export const removeFilter = ({ listID, filter }) => ({
+  type: REMOVE_FILTER,
+  payload: { listID, filter },
+});
 
 export const fetchFilteredToDoS = ({ listID, filters }) => ({
   type: FETCH_TODOS_START,
-  payload: { listID, filters }
-})
+  payload: { listID, filters },
+});
 
-export const fetchToDoSSuccess = ( { listID, todos } ) => ({
+export const fetchToDoSSuccess = ({ listID, todos }) => ({
   type: FETCH_TODOS_SUCCESS,
-  payload: { listID, todos }
-})
+  payload: { listID, todos },
+});
 
-export const fetchToDoSFailure = ({ listID, error } ) => ({
+export const fetchToDoSFailure = ({ listID, error }) => ({
   type: FETCH_TODOS_FAILURE,
-  payload: { listID, error }
-
-})
+  payload: { listID, error },
+});
 
 export const updateSorts = (field) => ({ type: UPDATE_SORTS, payload: field });

@@ -15,6 +15,7 @@ const {
 
 const {
   ADD_FILTER,
+  REMOVE_FILTER,
   FETCH_TODOS_SUCCESS,
   FETCH_TODOS_FAILURE,
 } = ToDosActiontypes;
@@ -124,13 +125,30 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         }),
       };
 
+    case REMOVE_FILTER:
+      return {
+        ...state,
+        todoLists: state.todoLists.map((list) => {
+          if (list._id === action.payload.listID) {
+            return {
+              ...list,
+              filters: list.filters.filter(
+                (item) =>
+                  JSON.stringify(item) !== JSON.stringify(action.payload.filter)
+              ),
+            };
+          } else {
+            return list;
+          }
+        }),
+      };
     case FETCH_TODOS_SUCCESS:
       return {
         ...state,
         loading: false,
         todoLists: state.todoLists.map((list) => {
           if (list._id === action.payload.listID) {
-            list.todos = action.payload.todos
+            list.todos = action.payload.todos;
           }
           return list;
         }),
@@ -139,7 +157,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
     case FETCH_TODOS_FAILURE:
       return {
         ...state,
-        error: action.payload.error
+        error: action.payload.error,
       };
 
     default:

@@ -3,21 +3,30 @@ import React from "react";
 import "./searchResultList.styles.scss";
 import { ActionTypes } from "../../constants/constants";
 
-const SearchResultList = ({ preview = [], word, search }) => {
-  // incoming format: [{key: value}], e.g. [{owner: "peter"},{owner: "peter kowalski"}, {details: "peter did smth"}];
+const SearchResultList = ({ preview = [], word, search, filters }) => {
+  // incoming format: [{key: value}], e.g.
+  // [{"title":"teraz dziala","details":"","owner":"piotr"},{"title":"bum","details":"","owner":"piotr"},{"title":"mysh","details":"","owner":"piotr"},{"title":"mysh","details":"piotr","owner":"mario"}]
+
   const regex = new RegExp(`\w*${word}\w*`, "i");
   let results = {};
   let entry, matches;
+  let key, value;
+
+  const filterCounter = new Map();
 
   preview.forEach((item) => {
     for (let key in item) {
-      entry = item[key];
-
-      if (regex.test(entry)) {
-        if (key in results && !results[key].includes(entry)) {
-          results[key].push(entry);
+      value = item[key];
+      if (
+        regex.test(value) &&
+        !filters.some(
+          (filter) => JSON.stringify({[key]: value}) === JSON.stringify(filter)
+        )
+      ) {
+        if (key in results && !results[key].includes(value)) {
+          results[key].push(value);
         } else if (!(key in results)) {
-          results[key] = [entry];
+          results[key] = [value];
         }
       }
     }
@@ -55,7 +64,7 @@ const SearchResultList = ({ preview = [], word, search }) => {
                 key={idx}
                 className="search-results__record"
                 onClick={() => {
-                  search({[key]: entry.text });
+                  search({ [key]: entry.text });
                 }}
               >
                 {" "}

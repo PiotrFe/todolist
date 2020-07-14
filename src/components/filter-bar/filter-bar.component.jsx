@@ -28,12 +28,12 @@ const FilterBar = ({
   addFilter,
   removeFilter,
   showFilterPreview,
-  fetchFilteredToDoS
+  fetchFilteredToDoS,
 }) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
   const [filterMode, updateFilterMode] = useState(true);
-  // const [filterPreview, updateFilterPreview] = useState();
   const [filterWord, updateFilterWord] = useState("");
+  const [filtersLength, updateFiltersLength] = useState(0); // local state to only run a side effect and fetch data if number of filters changes
 
   const { CHANGE, REMOVE, SEARCH, SUBMIT } = ActionTypes;
 
@@ -42,6 +42,13 @@ const FilterBar = ({
       ? updateFilterMode(false)
       : updateFilterMode(true);
   }, [filterBarContent]);
+ 
+  useEffect(() => {
+    if (filters.length !== filtersLength) {
+      fetchFilteredToDoS({ listID, filters });
+      updateFiltersLength(filters.length);
+    }
+  }, [filters.length]);
 
   const updateFilterBar = (content) => {
     updateFilterBarContent(content);
@@ -58,7 +65,10 @@ const FilterBar = ({
     updateFilterMode(false);
     updateFilterWord("");
     updateFilterBarContent("");
-    fetchFilteredToDoS({ listID, filters });
+  };
+
+  const deleteFilter = (filter) => {
+    removeFilter({ listID, filter });
   };
 
   return (
@@ -70,7 +80,7 @@ const FilterBar = ({
         }}
       >
         {filters.map((item, idx) => (
-          <FilterCard key={idx} item={item} idx={idx} remove={removeFilter} />
+          <FilterCard key={idx} item={item} remove={deleteFilter} />
         ))}
         <TodoInput
           onChange={updateFilterBar}
@@ -82,6 +92,7 @@ const FilterBar = ({
         <SearchResultList
           word={filterWord}
           preview={filterPreview}
+          filters={filters}
           search={applyFilter}
         />
       ) : null}
@@ -96,7 +107,8 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   addFilter: ({ listID, filter }) => dispatch(addFilter({ listID, filter })),
-  removeFilter: (filter) => dispatch(removeFilter(filter)),
+  removeFilter: ({ listID, filter }) =>
+    dispatch(removeFilter({ listID, filter })),
   showFilterPreview: ({ listID, filters, word }) =>
     dispatch(showFilterPreview({ listID, filters, word })),
   fetchFilteredToDoS: ({ listID, filters }) =>
