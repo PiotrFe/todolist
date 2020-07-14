@@ -8,6 +8,7 @@ import ToDoItems from "../../components/todo-items/todo-items.component";
 import Overlay from "../../components/overlay/overlay.component";
 import LoadingSpinner from "../../components/loading-spinner/loading-spinner.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
+import TodoInput from "../../components/todo-input/todo-input.component";
 
 import {
   asyncActionBegin,
@@ -22,14 +23,7 @@ import {
   removeToDo,
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
-import {
-  selectFilters,
-  selectToDosCount,
-  selectSorts,
-  selectLoading,
-  selectError,
-  selectLists,
-} from "../../redux/todo-container/todo-container.selectors";
+import { selectFilters } from "../../redux/todo-container/todo-container.selectors";
 
 import { ActionTypes } from "../../constants/constants";
 
@@ -37,23 +31,19 @@ import "./todo-items-container.styles.scss";
 
 const ToDoItemsContainer = ({
   listID,
+  inCockpit = false,
   todoItems,
   title,
-  filters,
-  sorts,
-  asyncActionBegin,
   dropToDo,
   removeFilter,
   updateSorts,
-  updateToDo,
-  loading,
   addToDo,
+  children,
 }) => {
-  const { CHANGE_COLOR, DONE, DRAG, EDIT, REMOVE, SORT, UPDATE } = ActionTypes;
+  const { DRAG, EDIT, REMOVE, SORT } = ActionTypes;
 
   const [editMode, updateEditMode] = useState(false);
   const [dragModeOn, toggleDragMode] = useState(false);
-
 
   // METHODS
 
@@ -78,20 +68,24 @@ const ToDoItemsContainer = ({
       return;
 
     dropToDo(source.index, destination.index);
-  };
+  }
 
+  // if component is rendered in cockpit, it gets a custom NavTob; otherwise gets a default one
   return (
     <div className="todo-items-container">
       <div className="todo-items-container__title">{title}</div>
-      <NavTop
-        listID={listID}
-        actions={{
-          [DRAG]: toggleDrag,
-          [EDIT]: toggleEditMode,
-          [SORT]: updateSorts,
-        }}
-        dragModeOn={dragModeOn}
-      />
+      {inCockpit ? children : (
+        <NavTop
+          listID={listID}
+          actions={{
+            [DRAG]: toggleDrag,
+            [EDIT]: toggleEditMode,
+            [SORT]: updateSorts,
+          }}
+          dragModeOn={dragModeOn}
+        />
+      )}
+
       <FilterBar
         listID={listID}
         actions={{
@@ -106,13 +100,7 @@ const ToDoItemsContainer = ({
         }}
         dragModeOn={dragModeOn}
       />
-      {loading ? (
-        <>
-          <Overlay show={loading} onClick={null} opaque={true} />
-          <LoadingSpinner />
-        </>
-      ) : null}
-      {editMode ? (
+      {!inCockpit && editMode ? (
         <>
           <Overlay show={true} onClick={null} opaque={true} />
           <ToDoModal
@@ -133,11 +121,6 @@ const ToDoItemsContainer = ({
 
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
-  // listCount: selectToDosCount
-  // sorts: selectSorts,
-  // loading: selectLoading,
-  // error: selectError,
-  // lists: selectLists
 });
 
 const mapDispatchToProps = (dispatch) => ({

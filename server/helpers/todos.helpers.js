@@ -134,7 +134,7 @@ exports.resultsPreview = async (req, res) => {
   const fieldArray = ["owner", "title", "details"];
   let filterArray = [];
 
-  // pushing the keyword to filter array 
+  // pushing the keyword to filter array
   for (field of fieldArray) {
     filterArray.push({
       [field]: { $regex: new RegExp(`\w*${keyword}\w*`, "i") },
@@ -173,6 +173,15 @@ exports.resultsPreview = async (req, res) => {
   //     res.json(todos);
   //   })
   //   .catch((err) => res.send(err));
+};
+
+exports.addList = async (req, res) => {
+  const { title } = req.body;
+
+  const newList = new db.ToDoList({ title });
+  const savedList = await newList.save();
+
+  res.json(savedList);
 };
 
 module.exports = exports;

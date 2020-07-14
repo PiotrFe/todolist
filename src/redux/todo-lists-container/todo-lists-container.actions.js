@@ -8,6 +8,9 @@ const {
   ADD_TODO_START,
   ADD_TODO_SUCCESS,
   ADD_TODO_FAILURE,
+  ADD_LIST_START,
+  ADD_LIST_SUCCESS,
+  ADD_LIST_FAILURE,
   REMOVE_TODO_START,
   REMOVE_TODO_SUCCESS,
   REMOVE_TODO_FAILURE,
@@ -78,4 +81,19 @@ export const updateToDoSuccess = ({ todoID, field, value }) => ({
 export const updateToDoFailure = (error) => ({
   type: UPDATE_TODO_FAILURE,
   payload: error,
+});
+
+export const addList = ({ title }) => ({
+  type: ADD_LIST_START,
+  payload: title,
+});
+
+export const addListSuccess = ({ listID, title }) => ({
+  type: ADD_LIST_SUCCESS,
+  payload: { listID, title },
+});
+
+export const addListFailure = ({ error }) => ({
+  type: ADD_LIST_SUCCESS,
+  payload: { error },
 });

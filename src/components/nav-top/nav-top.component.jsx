@@ -1,6 +1,4 @@
 import React from "react";
-import {connect} from "react-redux";
-import {createStructuredSelector} from "reselect";
 
 import "./nav-top.styles.scss";
 
@@ -8,9 +6,7 @@ import Icon from "../icon/icon.component";
 import Slider from "../slider/slider.component";
 
 import { IconTypes } from "../icon/icon.types";
-import { Sizes, Components, ActionTypes, ToDoFields } from "../../constants/constants";
-
-// import {selectToDosCount,selectToDosPendingCount, selectToDosDoneCount} from "../../redux/todo-container/todo-container.selectors";
+import { Sizes, ActionTypes, ToDoFields } from "../../constants/constants";
 
 const NavTop = ({listID, actions, dragModeOn, todosCount, todosCountPending, todosCountDone}) => {
 
@@ -107,10 +103,5 @@ const NavTop = ({listID, actions, dragModeOn, todosCount, todosCountPending, tod
   );
 };
 
-const mapStateToProps = createStructuredSelector({
-  // todosCount: selectToDosCount,
-  // todosCountPending: selectToDosPendingCount,
-  // todosCountDone: selectToDosDoneCount,
-});
 
-export default connect(mapStateToProps)(NavTop);
+export default NavTop;

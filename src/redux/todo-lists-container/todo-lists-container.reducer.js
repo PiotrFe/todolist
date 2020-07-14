@@ -7,6 +7,8 @@ const {
   FETCH_LISTS_FAILURE,
   ADD_TODO_SUCCESS,
   ADD_TODO_FAILURE,
+  ADD_LIST_SUCCESS,
+  ADD_LIST_FAILURE,
   REMOVE_TODO_SUCCESS,
   REMOVE_TODO_FAILURE,
   UPDATE_TODO_SUCCESS,
@@ -123,6 +125,18 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
           }
           return list;
         }),
+      };
+
+    case ADD_LIST_SUCCESS:
+      return {
+        ...state,
+        todoLists: [...state.todoLists, action.payload],
+      };
+
+    case ADD_LIST_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
       };
 
     case REMOVE_FILTER:

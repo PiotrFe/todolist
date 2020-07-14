@@ -94,6 +94,10 @@ export function* updateToDo({ payload: { todoID, field, value } }) {
   }
 }
 
+export function* addList({payload: {title}}) {
+
+}
+
 export function* onFetchLists() {
   yield takeLatest(ToDoListsActionTypes.FETCH_LISTS_START, fetchLists);
 }
@@ -114,11 +118,16 @@ export function* onAddFilter() {
   yield takeLatest
 }
 
+export function* onAddList() {
+  yield takeLatest(ToDoListsActionTypes.ADD_LIST_START, addList);
+}
+
 export function* todoListsContainerSaga() {
   yield all([
     call(onFetchLists),
     call(onToDoAdd),
     call(onToDoRemove),
     call(onToDoUpdate),
+    call(onAddList)
   ]);
 }

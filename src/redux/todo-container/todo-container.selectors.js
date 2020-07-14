@@ -6,7 +6,7 @@ const selectListByID = (state, props) => state.todoListsContainer.todoLists.find
 
 export const selectFilters = createSelector(
     selectListByID,
-    list => list.filters  
+    list => list ? list.filters : []  
 )
 
 

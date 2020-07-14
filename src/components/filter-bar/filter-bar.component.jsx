@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 
@@ -38,17 +38,22 @@ const FilterBar = ({
   const { CHANGE, REMOVE, SEARCH, SUBMIT } = ActionTypes;
 
   useEffect(() => {
-    filterBarContent.length < 3
-      ? updateFilterMode(false)
-      : updateFilterMode(true);
+    if (filterBarContent.length >= 3) {
+      updateFilterMode(true);
+      fetchFilterPreview(filterBarContent);
+    } else {
+      updateFilterMode(false);
+    }
   }, [filterBarContent]);
- 
+
   useEffect(() => {
     if (filters.length !== filtersLength) {
       fetchFilteredToDoS({ listID, filters });
       updateFiltersLength(filters.length);
     }
   }, [filters.length]);
+
+  const inputEl = useRef(null);
 
   const updateFilterBar = (content) => {
     updateFilterBarContent(content);
@@ -76,7 +81,7 @@ const FilterBar = ({
       <div
         className="filter-bar"
         onClick={() => {
-          document.getElementById("filter-search-field").focus();
+          inputEl.current.focus();
         }}
       >
         {filters.map((item, idx) => (
@@ -84,8 +89,8 @@ const FilterBar = ({
         ))}
         <TodoInput
           onChange={updateFilterBar}
-          onSubmit={fetchFilterPreview}
           content={filterBarContent}
+          ref={inputEl}
         />
       </div>
       {filterMode ? (

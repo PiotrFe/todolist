@@ -1,18 +1,6 @@
 @import "../../constants/mixins";
 @import "../../constants//constants";
 
-.test-button {
-  background-color: black;
-
-  @include themeDark {
-    background-color: $color-black;
-  }
-
-  @include themeLight {
-    background-color: $color-white;
-  }
-}
-
 .search-form {
   display: flex;
   padding: .5rem;
@@ -25,6 +13,7 @@
   padding: .7rem;
   border: none;
   width: 30vw;
+  border: 2px solid red;
   
 
   &:focus {

@@ -1,0 +1,5 @@
+export const ToDoCockpitActionTypes = {
+    ADD_LIST_START: "ADD_LIST_START",
+    ADD_LIST_SUCCESS: "ADD_LIST_SUCCESS",
+    ADD_LIST_FAILURE: "ADD_LIST_FAILURE"
+}

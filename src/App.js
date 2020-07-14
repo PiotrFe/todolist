@@ -15,6 +15,7 @@ import UserPage from "./pages/user/user-page.component";
 import SignInAndSignUp from "./pages/sign-in-and-sign-up/SignInAndSignUp.component";
 import ToDoListsContainer from "./components/todo-lists-container/todo-lists-container.component";
 import UserLogo from "./components/user-logo/user-logo.component";
+import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
 
 import {
   signOutUser,
@@ -55,7 +56,7 @@ function App() {
           />
         ) : null}
       <div className="app-split app-split__left-side">
-        <HomePage />
+      <ToDoCockpit />
       </div>
       <div className="app-split app-split__right-side">
       <ToDoListsContainer />

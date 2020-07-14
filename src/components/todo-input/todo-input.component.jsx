@@ -1,40 +1,34 @@
 import React, { useEffect } from "react";
 
-import ButtonAdd from "../button-add/button-add.component";
-import InputField from "../input-field/input-field.component";
-
-import ThemeContext from "../../contexts/ThemeContext";
-
-import { ActionTypes, Sizes, Themes } from "../../constants/constants";
-
 import "./todo-input.styles.scss";
-import { useState } from "react";
 
-const TodoInput = ({ content = "", onChange, onSubmit }) => {
-  useEffect(() => {
-    if (content.length >= 3) {
-      onSubmit(content);
-    }
-
-  }, [content]);
-
-  return (
-    <form
-      className="search-form"
-      autoComplete="off"
-      onSubmit={(e) => {
-        e.preventDefault();
-      }}
-    >
-      <input
-        type="text"
-        className="search-field"
-        id="filter-search-field"
-        name="filter"
-        value={content}
-        onChange={(e) => onChange(e.target.value)}
-      />
-    </form>
-  );
-};
+const TodoInput = React.forwardRef(
+  (
+    { content = "", placeholder = "", onChange = null, onSubmit = null },
+    ref
+  ) => {
+    return (
+      <form
+        className="search-form"
+        autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (onSubmit) onSubmit();
+        }}
+      >
+        <input
+          type="text"
+          className="search-field"
+          id="filter-search-field"
+          name="filter"
+          ref={ref}
+          value={content}
+          onChange={(e) => {
+            if (onChange) onChange(e.target.value);
+          }}
+        />
+      </form>
+    );
+  }
+);
 export default TodoInput;
