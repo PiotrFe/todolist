@@ -17,9 +17,9 @@ export function* fetchPreview({ payload: { listID, filters, word } }) {
 
     const data = yield res.json();
 
-    yield put(showFilterPreviewSuccess(data));
+    yield put(showFilterPreviewSuccess({listID, data}));
   } catch (error) {
-    yield put(showFilterPreviewFailure(error));
+    yield put(showFilterPreviewFailure({listID, error}));
   }
 }
 

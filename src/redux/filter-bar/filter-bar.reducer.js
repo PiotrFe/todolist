@@ -6,8 +6,7 @@ const {
 } = FilterBarTypes;
 
 const INITIAL_STATE = {
-  filterPreview: [],
-  error: null,
+
 };
 
 const FilterBarReducer = (state = INITIAL_STATE, action) => {
@@ -15,12 +14,12 @@ const FilterBarReducer = (state = INITIAL_STATE, action) => {
     case FETCH_FILTER_PREVIEW_SUCCESS:
       return {
         ...state,
-        filterPreview: action.payload,
+        [action.payload.listID]: action.payload.data
       };
     case FETCH_FILTER_PREVIEW_FAILURE:
       return {
         ...state,
-        error: action.payload,
+        [action.payload.listID]: action.payload.error
       };
     default:
       return state;
