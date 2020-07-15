@@ -1,13 +1,19 @@
 import React, { useState, useRef } from "react";
+import { connect } from "react-redux";
 
 import ToDoItemsContainer from "../todo-items-container/todo-items-container.component";
 import TodoInput from "../todo-input/todo-input.component";
 import NavTop from "../nav-top/nav-top.component";
+import Overlay from "../overlay/overlay.component";
 import { ActionTypes } from "../../constants/constants";
+
+import {
+  addList
+} from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import "./todo-cockpit.styles.scss";
 
-const ToDoCockpit = () => {
+const ToDoCockpit = ({addList}) => {
   const [inputContent, updateInputContent] = useState("");
   const [editMode, toggleEditMode] = useState(false);
   const [dragMode, toggleDragMode] = useState(false);
@@ -16,8 +22,9 @@ const ToDoCockpit = () => {
   const listID = "Cockpit";
 
   const addToDoList = () => {
-    // Add to do list
-    console.log(inputContent);
+    addList(inputContent);
+    updateInputContent("");
+    toggleEditMode(!editMode);
   };
 
   const updateSorts = () => {
@@ -26,7 +33,24 @@ const ToDoCockpit = () => {
 
   return (
     <div className="todo-cockpit">
-      {editMode && <TodoInput ref={inputRef} content={inputContent} onSubmit={addToDoList} onChange={updateInputContent} />}
+      {editMode && (
+        <>
+          <Overlay
+            show={true}
+            onClick={() => toggleEditMode(!editMode)}
+            opaque={true}
+          />
+          <div className="add-list-input">
+            <TodoInput
+              ref={inputRef}
+              content={inputContent}
+              onSubmit={addToDoList}
+              onChange={updateInputContent}
+              placeholder={"Enter list title"}
+            />
+          </div>
+        </>
+      )}
 
       <ToDoItemsContainer
         listID={listID}
@@ -49,4 +73,8 @@ const ToDoCockpit = () => {
   );
 };
 
-export default ToDoCockpit;
+const mapDispatchToProps = dispatch => ({
+  addList: (title) => dispatch(addList(title))
+})
+
+export default connect(null, mapDispatchToProps)(ToDoCockpit);

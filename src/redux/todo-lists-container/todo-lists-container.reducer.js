@@ -41,7 +41,6 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         todoLists: action.payload,
       };
-
     case FETCH_LISTS_FAILURE:
       return {
         ...state,
@@ -59,6 +58,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
               todos: [...list.todos, action.payload.todo],
             };
           }
+          else return list;
         }),
       };
     case ADD_TODO_FAILURE:
@@ -107,7 +107,6 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
           };
         }),
       };
-
     case UPDATE_TODO_FAILURE: {
       return {
         ...state,
@@ -115,7 +114,6 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         error: action.payload,
       };
     }
-
     case ADD_FILTER:
       return {
         ...state,
@@ -126,19 +124,18 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
           return list;
         }),
       };
-
     case ADD_LIST_SUCCESS:
       return {
         ...state,
+        loading: false,
         todoLists: [...state.todoLists, action.payload],
       };
-
     case ADD_LIST_FAILURE:
       return {
         ...state,
+        loading: false,
         error: action.payload,
       };
-
     case REMOVE_FILTER:
       return {
         ...state,
@@ -167,13 +164,11 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
           return list;
         }),
       };
-
     case FETCH_TODOS_FAILURE:
       return {
         ...state,
         error: action.payload.error,
       };
-
     default:
       return state;
   }

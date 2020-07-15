@@ -178,10 +178,15 @@ exports.resultsPreview = async (req, res) => {
 exports.addList = async (req, res) => {
   const { title } = req.body;
 
-  const newList = new db.ToDoList({ title });
-  const savedList = await newList.save();
+  const newList = new db.ToDoList();
+  newList.title = title;
 
-  res.json(savedList);
+  try {
+    const savedList = await newList.save();
+    res.json(savedList);
+  } catch (err) {
+    res.json(err);
+  }
 };
 
 module.exports = exports;

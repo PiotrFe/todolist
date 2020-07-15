@@ -6,9 +6,7 @@ import NavTop from "../../components/nav-top/nav-top.component";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
 import ToDoItems from "../../components/todo-items/todo-items.component";
 import Overlay from "../../components/overlay/overlay.component";
-import LoadingSpinner from "../../components/loading-spinner/loading-spinner.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
-import TodoInput from "../../components/todo-input/todo-input.component";
 
 import {
   asyncActionBegin,

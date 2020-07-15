@@ -23,6 +23,7 @@ const TodoInput = React.forwardRef(
           name="filter"
           ref={ref}
           value={content}
+          placeholder={placeholder}
           onChange={(e) => {
             if (onChange) onChange(e.target.value);
           }}

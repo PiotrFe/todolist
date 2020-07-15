@@ -20,8 +20,8 @@ const {
 } = ToDoListsActionTypes;
 
 export const asyncActionStart = () => ({
-  type: ASYNC_ACTION_START
-})
+  type: ASYNC_ACTION_START,
+});
 
 export const fetchLists = () => ({
   type: FETCH_LISTS_START,
@@ -44,7 +44,7 @@ export const addToDo = ({ listID, todo }) => ({
 
 export const addToDoSuccess = ({ listID, todo }) => ({
   type: ADD_TODO_SUCCESS,
-  payload: ({ listID, todo }),
+  payload: { listID, todo },
 });
 
 export const addToDoFailure = (error) => ({
@@ -67,7 +67,6 @@ export const removeToDoFailure = (error) => ({
   payload: error,
 });
 
-
 export const updateToDo = ({ todoID, field, value }) => ({
   type: UPDATE_TODO_START,
   payload: { todoID, field, value },
@@ -83,17 +82,17 @@ export const updateToDoFailure = (error) => ({
   payload: error,
 });
 
-export const addList = ({ title }) => ({
+export const addList = (title) => ({
   type: ADD_LIST_START,
-  payload: title,
+  payload: { title },
 });
 
-export const addListSuccess = ({ listID, title }) => ({
+export const addListSuccess = (list) => ({
   type: ADD_LIST_SUCCESS,
-  payload: { listID, title },
+  payload: list,
 });
 
 export const addListFailure = ({ error }) => ({
-  type: ADD_LIST_SUCCESS,
+  type: ADD_LIST_FAILURE,
   payload: { error },
 });

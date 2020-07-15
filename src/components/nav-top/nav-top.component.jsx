@@ -68,7 +68,7 @@ const NavTop = ({listID, actions, dragModeOn, todosCount, todosCountPending, tod
           size={Sizes.SMALL}
         />
       </div>
-      <div className="header-top__item-box">
+      {/* <div className="header-top__item-box">
   <span className="header-top__item">{`Total: ${todosCount}`}</span>
       </div>
       <div className="header-top__item-box">
@@ -76,7 +76,7 @@ const NavTop = ({listID, actions, dragModeOn, todosCount, todosCountPending, tod
       </div>
       <div className="header-top__item-box">
         <span className="header-top__item">{`Done: ${todosCountDone}`} </span>
-      </div>
+      </div> */}
     </div>
 
 

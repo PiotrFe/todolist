@@ -1,14 +1,19 @@
 import { createSelector } from "reselect";
-import { PromiseProvider } from "mongoose";
 
+const selectListByID = (state, props) => {
+  // debugger;
+  if (props.listID === "Cockpit") {
+    return state.todoCockpit;
+  } else {
+    return state.todoListsContainer.todoLists.find(
+      (list) => list._id === props.listID
+    );
+  }
+};
 
-const selectListByID = (state, props) => state.todoListsContainer.todoLists.find(list => list._id === props.listID);
-
-export const selectFilters = createSelector(
-    selectListByID,
-    list => list ? list.filters : []  
-)
-
+export const selectFilters = createSelector(selectListByID, (list) =>
+  list ? list.filters : []
+);
 
 // export const selectLoading = createSelector(
 //     [selectToDoContainer],

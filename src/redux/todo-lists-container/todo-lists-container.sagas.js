@@ -12,9 +12,9 @@ import {
   removeToDoFailure,
   updateToDoSuccess,
   updateToDoFailure,
+  addListSuccess,
+  addListFailure,
 } from "./todo-lists-container.actions";
-
-
 
 export function* fetchLists() {
   yield put(asyncActionStart());
@@ -80,8 +80,8 @@ export function* updateToDo({ payload: { todoID, field, value } }) {
       },
       body: JSON.stringify({ todoID, field, value }),
     });
-
     const json = yield res.json();
+
     yield put(
       updateToDoSuccess({
         todoID: json.todoID,
@@ -94,8 +94,22 @@ export function* updateToDo({ payload: { todoID, field, value } }) {
   }
 }
 
-export function* addList({payload: {title}}) {
+export function* addList({ payload: { title } }) {
+  yield put(asyncActionStart());
+  try {
+    const res = yield fetch("api/todos/lists", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title }),
+    });
+    const list = yield res.json();
 
+    yield put(addListSuccess(list));
+  } catch (error) {
+    yield put(addListFailure(error));
+  }
 }
 
 export function* onFetchLists() {
@@ -115,7 +129,7 @@ export function* onToDoUpdate() {
 }
 
 export function* onAddFilter() {
-  yield takeLatest
+  yield takeLatest;
 }
 
 export function* onAddList() {
@@ -128,6 +142,6 @@ export function* todoListsContainerSaga() {
     call(onToDoAdd),
     call(onToDoRemove),
     call(onToDoUpdate),
-    call(onAddList)
+    call(onAddList),
   ]);
 }
