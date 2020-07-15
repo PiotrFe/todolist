@@ -8,7 +8,9 @@ const SearchResultList = ({ preview = [], word, search, filters }) => {
   // [{"title":"teraz dziala","details":"","owner":"piotr"},{"title":"bum","details":"","owner":"piotr"},{"title":"mysh","details":"","owner":"piotr"},{"title":"mysh","details":"piotr","owner":"mario"}]
 
   const regex = new RegExp(`\w*${word}\w*`, "i");
-  let results = {};
+  let results = {
+    all: []
+  };
   let entry, matches;
   let key, value;
 
@@ -25,8 +27,12 @@ const SearchResultList = ({ preview = [], word, search, filters }) => {
       ) {
         if (key in results && !results[key].includes(value)) {
           results[key].push(value);
-        } else if (!(key in results)) {
+        } 
+        if (!(key in results)) {
           results[key] = [value];
+        }
+        if (!results["all"].includes(value)) {
+          results["all"].push(value);
         }
       }
     }
@@ -56,8 +62,7 @@ const SearchResultList = ({ preview = [], word, search, filters }) => {
     <div className="search-results">
       {Object.keys(formattedResults).map((key, idx) => (
         <div key={idx} className="search-results-group">
-          <div className="search-results__header">{key}</div>
-
+          <div className={`search-results__header ${key === "all" ? "search-results__header--all" : null}`}>{key}</div>
           <ul className="search-results__records">
             {formattedResults[key].map((entry, idx) => (
               <div

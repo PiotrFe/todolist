@@ -1,5 +1,7 @@
 const db = require("../models/index.model");
 
+const fieldArray = ["owner", "title", "details"];
+
 exports.getTodos = (req, res) => {
   db.ToDoList.find()
     .populate("todos")
@@ -80,8 +82,9 @@ exports.updateTodoField = (req, res) => {
 exports.filterTodos = async (req, res) => {
   const { listID, filters } = req.body;
 
-  let query, key, filterArray;
-
+  let query, key;
+  let filterArray = [];
+  let subQuery = [];
   // let sortObj = sorts.reduce((acc, { field, sortDirection }) => {
   //   if (sortDirection === 1) {
   //     return Object.assign(acc, { [field]: 1 });
@@ -93,10 +96,23 @@ exports.filterTodos = async (req, res) => {
   query = db.ToDoList.findById(listID);
 
   if (filters.length > 0) {
-    filterArray = filters.map((filter) => {
+    filterArray = filters.flatMap((filter) => {
       key = Object.keys(filter)[0];
-      return { [key]: { $regex: filter[key], $options: "i" } };
+      if (key === "all") {
+        for (field of fieldArray) {
+          subQuery.push({ [field]: { $regex: filter[key], $options: "i" } });
+        }
+        return subQuery;
+      } else {
+        return { [key]: { $regex: filter[key], $options: "i" } };
+      }
     });
+
+    console.log(`-----------------
+    FILTER_ARRAY: ${JSON.stringify(filterArray)}
+    FILTER_ARRAY_LENGTH: ${filterArray.length}
+    ---------------------`);
+
     query.populate({
       path: "todos",
       match: { $or: filterArray },
@@ -131,7 +147,6 @@ exports.resultsPreview = async (req, res) => {
       filters
     )}, keyword: ${keyword}`
   );
-  const fieldArray = ["owner", "title", "details"];
   let filterArray = [];
 
   // pushing the keyword to filter array
