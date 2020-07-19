@@ -6,7 +6,6 @@ import { asyncActionStart } from "../todo-lists-container/todo-lists-container.a
 
 
 export function* fetchFilteredToDos({ payload: { listID, filters, sorts } }) {
-  debugger;
   yield put(asyncActionStart());
   try {
     const data = yield fetch("/api/todos/filters", {

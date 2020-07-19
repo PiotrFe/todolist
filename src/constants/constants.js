@@ -68,3 +68,10 @@ export const Themes = {
   LIGHT: "theme-light",
   DARK: "theme-dark"
 }
+
+export const DEFAULT_SORTS = {
+  [ToDoFields.TITLE]: 0,
+  [ToDoFields.DUE_DATE]: 1,
+  [ToDoFields.OWNER]: 0,
+  [ToDoFields.COLOR]: 0,
+};

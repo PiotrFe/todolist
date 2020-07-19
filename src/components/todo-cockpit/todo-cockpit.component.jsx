@@ -6,6 +6,7 @@ import TodoInput from "../todo-input/todo-input.component";
 import NavTop from "../nav-top/nav-top.component";
 import Overlay from "../overlay/overlay.component";
 import { ActionTypes } from "../../constants/constants";
+import {DEFAULT_SORTS} from "../../constants/constants";
 
 import {
   addList
@@ -66,6 +67,7 @@ const ToDoCockpit = ({addList}) => {
             [ActionTypes.EDIT]: () => toggleEditMode(!editMode),
             [ActionTypes.SORT]: updateSorts,
           }}
+          sorts={DEFAULT_SORTS}
           dragModeOn={dragMode}
         />
       </ToDoItemsContainer>

@@ -120,7 +120,6 @@ exports.filterTodos = async (req, res) => {
   }
 
   if (Object.keys(sortObj).length) {
-    // populateObj.sort = sortObj;
     populateObj.options = {sort: sortObj}
     // populateObj.collation = { locale: "en" };
   }

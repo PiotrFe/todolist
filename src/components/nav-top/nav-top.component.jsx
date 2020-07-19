@@ -12,25 +12,23 @@ const NavTop = ({
   listID,
   actions,
   dragModeOn,
+  sorts,
   todosCount,
   todosCountPending,
   todosCountDone,
 }) => {
-  const sorts = [
-    { field: ToDoFields.TITLE, sortDirection: 0 },
-    { field: ToDoFields.DUE_DATE, sortDirection: 1 },
-    { field: ToDoFields.OWNER, sortDirection: 0 },
-    { field: ToDoFields.COLOR, sortDirection: 0 },
-  ];
-
-  const [sortTitle, sortDueDate, sortOwner, sortColor] = sorts;
+  const { TITLE, DUE_DATE, OWNER, COLOR } = ToDoFields;
   const { SORT } = ActionTypes;
   const { SORT_BOTH, SORT_ASC, SORT_DESC } = IconTypes;
+
   const sortDirection = {
     "0": SORT_BOTH,
     "1": SORT_ASC,
     "-1": SORT_DESC,
   };
+
+  console.log(JSON.stringify(sorts));
+
 
   return (
     <header className="header-top">
@@ -38,36 +36,36 @@ const NavTop = ({
         <div className="header-top__item header-top__item-box">
           <span className="header-top__item">Title</span>
           <Icon
-            type={sortDirection[sortTitle.sortDirection]}
-            parent={sortTitle.field}
-            onClick={() => actions[SORT](listID, sortTitle.field)}
+            type={sortDirection[sorts[TITLE]]}
+            // parent={sortTitle.field}
+            onClick={() => actions[SORT](listID, TITLE)}
             size={Sizes.SMALL}
           />
         </div>
         <div className="header-top__item-box">
           <span className="header-top__item">Due date</span>
           <Icon
-            type={sortDirection[sortDueDate.sortDirection]}
-            parent={sortDueDate.field}
-            onClick={() => actions[SORT](listID, sortDueDate.field)}
+            type={sortDirection[sorts[DUE_DATE]]}
+            // parent={sortDueDate.field}
+            onClick={() => actions[SORT](listID, DUE_DATE)}
             size={Sizes.SMALL}
           />
         </div>
         <div className="header-top__item-box">
           <span className="header-top__item">Owner</span>
           <Icon
-            type={sortDirection[sortOwner.sortDirection]}
-            parent={sortOwner.field}
-            onClick={() => actions[SORT](listID, sortOwner.field)}
+            type={sortDirection[sorts[OWNER]]}
+            // parent={sortOwner.field}
+            onClick={() => actions[SORT](listID, OWNER)}
             size={Sizes.SMALL}
           />
         </div>
         <div className="header-top__item-box">
           <span className="header-top__item">Color</span>
           <Icon
-            type={sortDirection[sortColor.sortDirection]}
-            parent={sortColor.field}
-            onClick={() => actions[SORT](listID, sortColor.field)}
+            type={sortDirection[sorts[COLOR]]}
+            // parent={sortColor.field}
+            onClick={() => actions[SORT](listID, COLOR)}
             size={Sizes.SMALL}
           />
         </div>
@@ -89,7 +87,7 @@ const NavTop = ({
           id={null}
           type={IconTypes.ADD}
           parent={null}
-          onClick={listID, actions[ActionTypes.EDIT]}
+          onClick={(listID, actions[ActionTypes.EDIT])}
           size={Sizes.SMALL}
         />
         <Icon

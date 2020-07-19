@@ -28,7 +28,7 @@ import {
 
 import { ActionTypes } from "../../constants/constants";
 
-import {DEFAULT_SORTS} from "../../redux/todo-lists-container/todo-lists-container.reducer";
+import {DEFAULT_SORTS} from "../../constants/constants";
 
 import "./todo-items-container.styles.scss";
 import { useCallback } from "react";
@@ -98,6 +98,7 @@ const ToDoItemsContainer = ({
             [EDIT]: toggleEditMode,
             [SORT]: updateSorts,
           }}
+          sorts={sorts}
           dragModeOn={dragModeOn}
         />
       )}

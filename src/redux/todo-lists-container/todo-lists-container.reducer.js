@@ -3,6 +3,8 @@ import { TodoContainerTypes } from "../todo-container/todo-container.types";
 import { ToDoFields } from "../../constants/constants";
 import { updateSorts } from "./todo-lists-container.utils";
 
+import { DEFAULT_SORTS } from "../../constants/constants";
+
 const {
   ASYNC_ACTION_START,
   FETCH_LISTS_SUCCESS,
@@ -31,12 +33,6 @@ const INITIAL_STATE = {
   error: null,
 };
 
-export const DEFAULT_SORTS = {
-  [ToDoFields.TITLE]: 0,
-  [ToDoFields.DUE_DATE]: 1,
-  [ToDoFields.OWNER]: 0,
-  [ToDoFields.COLOR]: 0,
-};
 
 const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
