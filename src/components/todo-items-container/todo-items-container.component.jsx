@@ -21,17 +21,27 @@ import {
   removeToDo,
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
-import { selectFilters } from "../../redux/todo-container/todo-container.selectors";
+import {
+  selectFilters,
+  selectSorts,
+} from "../../redux/todo-container/todo-container.selectors";
 
 import { ActionTypes } from "../../constants/constants";
 
+import {DEFAULT_SORTS} from "../../redux/todo-lists-container/todo-lists-container.reducer";
+
 import "./todo-items-container.styles.scss";
+import { useCallback } from "react";
 
 const ToDoItemsContainer = ({
   listID,
   inCockpit = false,
   todoItems,
   title,
+  filters = [],
+  // filtersLength,
+  sorts = DEFAULT_SORTS,
+  fetchFilteredToDoS,
   dropToDo,
   removeFilter,
   updateSorts,
@@ -40,11 +50,17 @@ const ToDoItemsContainer = ({
 }) => {
   const { DRAG, EDIT, REMOVE, SORT } = ActionTypes;
 
+  // Local state
   const [editMode, updateEditMode] = useState(false);
   const [dragModeOn, toggleDragMode] = useState(false);
 
-  // METHODS
+  // Effects
+  useEffect(() => {    
+      // debugger;
+      fetchFilteredToDoS({ listID, filters, sorts });
+  }, [filters.length, JSON.stringify(sorts)]);
 
+  // Methods
   const toggleEditMode = () => {
     updateEditMode(!editMode);
   };
@@ -66,13 +82,15 @@ const ToDoItemsContainer = ({
       return;
 
     dropToDo(source.index, destination.index);
-  }
+  };
 
   // if component is rendered in cockpit, it gets a custom NavTob; otherwise gets a default one
   return (
     <div className="todo-items-container">
       <div className="todo-items-container__title">{title}</div>
-      {inCockpit ? children : (
+      {inCockpit ? (
+        children
+      ) : (
         <NavTop
           listID={listID}
           actions={{
@@ -119,19 +137,20 @@ const ToDoItemsContainer = ({
 
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
+  sorts: selectSorts,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   asyncActionBegin: () => dispatch(asyncActionBegin()),
   dropToDo: (idxFrom, idxTo) => dispatch(dropToDo(idxFrom, idxTo)),
-  updateSorts: (field) => dispatch(updateSorts(field)),
+  updateSorts: (listID, field) => dispatch(updateSorts({ listID, field })),
   updateToDo: ({ id, field, value }) =>
     dispatch(updateToDo({ id, field, value })),
 
   addToDo: ({ listID, todo }) => dispatch(addToDo({ listID, todo })),
   removeToDo: ({ listID, todoID }) => dispatch(removeToDo({ listID, todoID })),
-  fetchFilteredToDoS: ({ listID, filters }) =>
-    dispatch(fetchFilteredToDoS({ listID, filters })),
+  fetchFilteredToDoS: ({ listID, filters, sorts }) =>
+    dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoItemsContainer);

@@ -1,7 +1,7 @@
 import todoItemReducer from "./todo-item.reducer";
 
 import { ToDoActionTypes } from "./todo-item.types";
-import { ToDosActiontypes } from "../todo-container/todo-container.types";
+import { TodoContainerTypes } from "../todo-container/todo-container.types";
 
 describe("todo-item reducer", () => {
   const INITIAL_STATE = {
@@ -20,7 +20,7 @@ describe("todo-item reducer", () => {
     const state = setup();
     const expectedState = setup({ detailsVisible: true });
     const action = {
-      type: ToDosActiontypes.TOGGLE_DETAILS,
+      type: TodoContainerTypes.TOGGLE_DETAILS,
     };
     expect(todoItemReducer(state, action)).toEqual(expectedState);
   });

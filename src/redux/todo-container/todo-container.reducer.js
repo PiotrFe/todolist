@@ -1,22 +1,14 @@
-import { ToDosActiontypes } from "./todo-container.types";
-import { ToDoFields } from "../../constants/constants";
+import { TodoContainerTypes } from "./todo-container.types";
 
 const {
   ASYNC_ACTION_BEGIN,
   DROP_TODO,
-  REMOVE_FILTER,
-  UPDATE_SORTS,
-} = ToDosActiontypes;
+} = TodoContainerTypes;
 
 const INITIAL_STATE = {
   todos: [],
   filters: [],
-  sorts: [
-    { field: ToDoFields.TITLE, sortDirection: 0 },
-    { field: ToDoFields.DUE_DATE, sortDirection: 1 },
-    { field: ToDoFields.OWNER, sortDirection: 0 },
-    { field: ToDoFields.COLOR, sortDirection: 0 },
-  ],
+
   loading: false,
   error: null,
 };
@@ -46,28 +38,7 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
         todoItems: reorderItem(state.todoItems, action.payload),
       };
 
-    case UPDATE_SORTS:
-      return {
-        ...state,
-        sorts: state.sorts.map((item) => {
-          if (item.field === action.payload) {
-            switch (item.sortDirection) {
-              case 0:
-                item.sortDirection = 1;
-                break;
-              case 1:
-                item.sortDirection = -1;
-                break;
-              case -1:
-                item.sortDirection = 0;
-                break;
-            }
-          } else {
-            item.sortDirection = 0;
-          }
-          return item;
-        }),
-      };
+
 
     default:
       return state;

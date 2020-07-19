@@ -1,4 +1,4 @@
-import { ToDosActiontypes } from "./todo-container.types";
+import { TodoContainerTypes } from "./todo-container.types";
 import { ToDoFields, ActionTypes } from "../../constants/constants";
 
 import todoContainerReducer from "./todo-container.reducer";
@@ -31,7 +31,7 @@ describe("TodoContainer reducer", () => {
   it("handles FETCH_TODOS_SUCCESS action", () => {
     const state = setup({ loading: true });
     const payload = [firstToDo, secondToDo];
-    const action = { type: ToDosActiontypes.FETCH_TODOS_SUCCESS, payload };
+    const action = { type: TodoContainerTypes.FETCH_TODOS_SUCCESS, payload };
     const expectedState = setup({ todoItems: payload, loading: false });
 
     expect(todoContainerReducer(state, action)).toEqual(expectedState);
@@ -40,7 +40,7 @@ describe("TodoContainer reducer", () => {
   it("handles ADD_TODO_SUCCESS action", () => {
     const state = setup({ loading: true });
     const action = {
-      type: ToDosActiontypes.ADD_TODO_SUCCESS,
+      type: TodoContainerTypes.ADD_TODO_SUCCESS,
       payload: firstToDo,
     };
     const expectedState = setup({
@@ -58,7 +58,7 @@ describe("TodoContainer reducer", () => {
     });
 
     const action = {
-      type: ToDosActiontypes.REMOVE_TODO_SUCCESS,
+      type: TodoContainerTypes.REMOVE_TODO_SUCCESS,
       payload: firstToDo._id,
     };
 
@@ -73,7 +73,7 @@ describe("TodoContainer reducer", () => {
   it("handles UPDATE_SORTS action", () => {
     const state = setup();
     const field = ToDoFields.DUE_DATE;
-    const action = { type: ToDosActiontypes.UPDATE_SORTS, payload: field };
+    const action = { type: TodoContainerTypes.UPDATE_SORTS, payload: field };
     const expectedState = setup({
       sorts: [
         { field: ToDoFields.TITLE, sortDirection: 0 },

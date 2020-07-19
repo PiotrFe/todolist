@@ -2,7 +2,7 @@ import configureStore from 'redux-mock-store'
 
 import * as actions from "./todo-container.actions";
 
-import { ToDosActiontypes } from "./todo-container.types";
+import { TodoContainerTypes } from "./todo-container.types";
 
 describe("Todo container actions", () => {
     const middlewares = [];
@@ -11,7 +11,7 @@ describe("Todo container actions", () => {
   it("should create remove action", () => {
     const id = 123;
     const expectedAction = {
-      type: ToDosActiontypes.REMOVE_TODO_START,
+      type: TodoContainerTypes.REMOVE_TODO_START,
       payload: id,
     };
     expect(actions.removeToDo(id)).toEqual(expectedAction);
@@ -19,7 +19,7 @@ describe("Todo container actions", () => {
 
   it("begins an async action", () => {
       const store = mockStore();
-      const { ASYNC_ACTION_BEGIN } = ToDosActiontypes;
+      const { ASYNC_ACTION_BEGIN } = TodoContainerTypes;
 
       store.dispatch(actions.asyncActionBegin());
       const action = store.getActions();

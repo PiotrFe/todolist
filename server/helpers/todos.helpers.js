@@ -80,22 +80,24 @@ exports.updateTodoField = (req, res) => {
 };
 
 exports.filterTodos = async (req, res) => {
-  const { listID, filters } = req.body;
+  const { listID, filters = [], sorts = [] } = req.body;
 
   let query, key;
   let filterArray = [];
   let subQuery = [];
-  // let sortObj = sorts.reduce((acc, { field, sortDirection }) => {
-  //   if (sortDirection === 1) {
-  //     return Object.assign(acc, { [field]: 1 });
-  //   } else if (sortDirection === -1) {
-  //     return Object.assign(acc, { [field]: -1 });
-  //   } else return acc;
-  // }, {});
+  let sortObj = {};
 
-  query = db.ToDoList.findById(listID);
+  if (sorts.length) {
+    sortObj = sorts.reduce((acc, { field, sortDirection }) => {
+      if (sortDirection === 1) {
+        return Object.assign(acc, { [field]: 1 });
+      } else if (sortDirection === -1) {
+        return Object.assign(acc, { [field]: -1 });
+      } else return acc;
+    }, {});
+  }
 
-  if (filters.length > 0) {
+  if (filters.length) {
     filterArray = filters.flatMap((filter) => {
       key = Object.keys(filter)[0];
       if (key === "all") {
@@ -107,21 +109,20 @@ exports.filterTodos = async (req, res) => {
         return { [key]: { $regex: filter[key], $options: "i" } };
       }
     });
-
-    console.log(`-----------------
-    FILTER_ARRAY: ${JSON.stringify(filterArray)}
-    FILTER_ARRAY_LENGTH: ${filterArray.length}
-    ---------------------`);
-
-    query.populate({
-      path: "todos",
-      match: { $or: filterArray },
-    });
-  } else {
-    query.populate({
-      path: "todos",
-    });
   }
+
+  query = db.ToDoList.findById(listID);
+
+  filters.length ? 
+    query.populate({
+    path: "todos",
+    match: { $or: filterArray },
+  }) : 
+  query.populate({
+    path: "todos",
+  });
+
+  sorts.length ? query.sort(sortObj).collation({ locale: "en" }) : null;
 
   try {
     const filteredList = await query.exec();
@@ -129,15 +130,6 @@ exports.filterTodos = async (req, res) => {
   } catch (error) {
     res.json(error);
   }
-
-  query;
-  // .sort(sortObj)
-  // .collation({ locale: "en" })
-  // .exec()
-  // .then((todos) => {
-  //   res.json(todos);
-  // })
-  // .catch((err) => res.send(err));
 };
 
 exports.resultsPreview = async (req, res) => {

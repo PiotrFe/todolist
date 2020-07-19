@@ -11,8 +11,6 @@ import SearchResultList from "../../components/searchResultList/searchResultList
 import { selectFilters } from "../../redux/todo-container/todo-container.selectors";
 import { selectFilterPreview } from "../../redux/filter-bar/filter-bar.selectors";
 
-import { fetchFilteredToDoS } from "../../redux/todo-container/todo-container.actions";
-
 import { ActionTypes } from "../../constants/constants";
 
 import {
@@ -23,17 +21,16 @@ import { showFilterPreview } from "../../redux/filter-bar/filter-bar.actions";
 
 const FilterBar = ({
   listID,
-  filters,
+  filters = [],
   filterPreview,
   addFilter,
   removeFilter,
   showFilterPreview,
-  fetchFilteredToDoS,
 }) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
   const [filterMode, updateFilterMode] = useState(true);
   const [filterWord, updateFilterWord] = useState("");
-  const [filtersLength, updateFiltersLength] = useState(0); // local state to only run a side effect and fetch data if number of filters changes
+
 
   const { CHANGE, REMOVE, SEARCH, SUBMIT } = ActionTypes;
 
@@ -46,12 +43,6 @@ const FilterBar = ({
     }
   }, [filterBarContent]);
 
-  useEffect(() => {
-    if (filters.length !== filtersLength) {
-      fetchFilteredToDoS({ listID, filters });
-      updateFiltersLength(filters.length);
-    }
-  }, [filters.length]);
 
   const inputEl = useRef(null);
 
@@ -116,8 +107,6 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(removeFilter({ listID, filter })),
   showFilterPreview: ({ listID, filters, word }) =>
     dispatch(showFilterPreview({ listID, filters, word })),
-  fetchFilteredToDoS: ({ listID, filters }) =>
-    dispatch(fetchFilteredToDoS({ listID, filters })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterBar);

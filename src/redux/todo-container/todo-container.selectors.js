@@ -1,7 +1,6 @@
 import { createSelector } from "reselect";
 
 const selectListByID = (state, props) => {
-  // debugger;
   if (props.listID === "Cockpit") {
     return state.todoCockpit;
   } else {
@@ -11,9 +10,18 @@ const selectListByID = (state, props) => {
   }
 };
 
-export const selectFilters = createSelector(selectListByID, (list) =>
-  list ? list.filters : []
-);
+export const selectFilters = createSelector(selectListByID, (list) => {
+  if (list) {
+    return list.filters;
+  } else return [];
+});
+
+export const selectSorts = createSelector(selectListByID, (list) => {
+  if (list) {
+    return list.sorts;
+  } else { return {}
+  }
+});
 
 // export const selectLoading = createSelector(
 //     [selectToDoContainer],

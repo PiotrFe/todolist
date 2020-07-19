@@ -1,4 +1,4 @@
-import { ToDosActiontypes } from "./todo-container.types";
+import { TodoContainerTypes } from "./todo-container.types";
 
 const {
   ADD_TODO_START,
@@ -13,7 +13,7 @@ const {
   UPDATE_TODO_START,
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILURE,
-} = ToDosActiontypes;
+} = TodoContainerTypes;
 
 export const addToDo = ({ listID, item }) => ({
   type: ADD_TODO_START,
@@ -52,9 +52,9 @@ export const removeFilter = ({ listID, filter }) => ({
   payload: { listID, filter },
 });
 
-export const fetchFilteredToDoS = ({ listID, filters }) => ({
+export const fetchFilteredToDoS = ({ listID, filters, sorts }) => ({
   type: FETCH_TODOS_START,
-  payload: { listID, filters },
+  payload: { listID, filters, sorts },
 });
 
 export const fetchToDoSSuccess = ({ listID, todos }) => ({
@@ -67,4 +67,7 @@ export const fetchToDoSFailure = ({ listID, error }) => ({
   payload: { listID, error },
 });
 
-export const updateSorts = (field) => ({ type: UPDATE_SORTS, payload: field });
+export const updateSorts = ({ listID, field }) => ({
+  type: UPDATE_SORTS,
+  payload: { listID, field },
+});
