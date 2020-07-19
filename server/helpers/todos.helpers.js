@@ -1,4 +1,5 @@
 const db = require("../models/index.model");
+const { populate } = require("../models/todos.model");
 
 const fieldArray = ["owner", "title", "details"];
 
@@ -86,12 +87,13 @@ exports.filterTodos = async (req, res) => {
   let filterArray = [];
   let subQuery = [];
   let sortObj = {};
+  let populateObj = {};
 
   if (Object.keys(sorts).length) {
     for (let field in sorts) {
-       if (sorts[field] !== 0) {
-         sortObj[field] = sorts[field]
-       }
+      if (sorts[field] !== 0) {
+        sortObj[field] = sorts[field];
+      }
     }
   }
 
@@ -111,16 +113,23 @@ exports.filterTodos = async (req, res) => {
 
   query = db.ToDoList.findById(listID);
 
-  filters.length ? 
-    query.populate({
-    path: "todos",
-    match: { $or: filterArray },
-  }) : 
-  query.populate({
-    path: "todos",
-  });
+  populateObj.path = "todos";
 
-  if (Object.keys(sortObj).length) query.sort(sortObj).collation({ locale: "en" });
+  if (filters.length) {
+    populateObj.match = { $or: filterArray };
+  }
+
+  if (Object.keys(sortObj).length) {
+    // populateObj.sort = sortObj;
+    populateObj.options = {sort: sortObj}
+    // populateObj.collation = { locale: "en" };
+  }
+
+  console.log(`-------------------
+  ${JSON.stringify(populateObj)}
+  -------------------------`);
+
+  query.populate(populateObj).collation({ locale: "en" });
 
   try {
     const filteredList = await query.exec();
