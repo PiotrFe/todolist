@@ -80,21 +80,19 @@ exports.updateTodoField = (req, res) => {
 };
 
 exports.filterTodos = async (req, res) => {
-  const { listID, filters = [], sorts = [] } = req.body;
+  const { listID, filters = [], sorts = {} } = req.body;
 
   let query, key;
   let filterArray = [];
   let subQuery = [];
   let sortObj = {};
 
-  if (sorts.length) {
-    sortObj = sorts.reduce((acc, { field, sortDirection }) => {
-      if (sortDirection === 1) {
-        return Object.assign(acc, { [field]: 1 });
-      } else if (sortDirection === -1) {
-        return Object.assign(acc, { [field]: -1 });
-      } else return acc;
-    }, {});
+  if (Object.keys(sorts).length) {
+    for (let field in sorts) {
+       if (sorts[field] !== 0) {
+         sortObj[field] = sorts[field]
+       }
+    }
   }
 
   if (filters.length) {
@@ -122,7 +120,7 @@ exports.filterTodos = async (req, res) => {
     path: "todos",
   });
 
-  sorts.length ? query.sort(sortObj).collation({ locale: "en" }) : null;
+  if (Object.keys(sortObj).length) query.sort(sortObj).collation({ locale: "en" });
 
   try {
     const filteredList = await query.exec();

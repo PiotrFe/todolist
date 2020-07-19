@@ -57,9 +57,9 @@ export const fetchFilteredToDoS = ({ listID, filters, sorts }) => ({
   payload: { listID, filters, sorts },
 });
 
-export const fetchToDoSSuccess = ({ listID, todos }) => ({
+export const fetchToDoSSuccess = ({ listID, todos, filters = [], sorts = {} }) => ({
   type: FETCH_TODOS_SUCCESS,
-  payload: { listID, todos },
+  payload: { listID, todos, filters, sorts },
 });
 
 export const fetchToDoSFailure = ({ listID, error }) => ({

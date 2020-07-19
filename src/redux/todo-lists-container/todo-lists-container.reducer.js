@@ -1,6 +1,7 @@
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
 import { TodoContainerTypes } from "../todo-container/todo-container.types";
 import { ToDoFields } from "../../constants/constants";
+import { updateSorts } from "./todo-lists-container.utils";
 
 const {
   ASYNC_ACTION_START,
@@ -146,9 +147,8 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loading: false,
         todoLists: [
-          ...state.todoLists,
-          // { ...action.payload, sorts: DEFAULT_SORTS, filters: ["a", "b", "c", "d"] },
           { ...action.payload},
+          ...state.todoLists
         ],
       };
     case ADD_LIST_FAILURE:
@@ -204,26 +204,21 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
               case 0:
                 return {
                   ...list,
-                  sorts: {
-                    ...list.sorts,
-                    [field]: 1,
-                  },
+                  sorts: updateSorts(list.sorts, field, 1)
+                  // {
+                  //   ...list.sorts,
+                  //   [field]: 1,
+                  // },
                 };
               case 1:
                 return {
                   ...list,
-                  sorts: {
-                    ...list.sorts,
-                    [field]: -1,
-                  },
+                  sorts: updateSorts(list.sorts, field, -1)
                 };
               case -1:
                 return {
                   ...list,
-                  sorts: {
-                    ...list.sorts,
-                    [field]: 0,
-                  },
+                  sorts: updateSorts(list.sorts, field, 0)
                 };
             }
           }
