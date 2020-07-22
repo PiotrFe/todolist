@@ -7,6 +7,11 @@ import FilterBar from "../../components/filter-bar/filter-bar.component";
 import ToDoItems from "../../components/todo-items/todo-items.component";
 import Overlay from "../../components/overlay/overlay.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
+import Icon from "../icon/icon.component";
+import Slider from "../slider/slider.component";
+
+import { IconTypes } from "../icon/icon.types";
+import { Sizes, ActionTypes, ToDoFields } from "../../constants/constants";
 
 import {
   asyncActionBegin,
@@ -18,15 +23,13 @@ import {
 import {
   addToDo,
   removeToDo,
-  updateToDo
+  updateToDo,
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import {
   selectFilters,
   selectSorts,
 } from "../../redux/todo-container/todo-container.selectors";
-
-import { ActionTypes } from "../../constants/constants";
 
 import { DEFAULT_SORTS } from "../../constants/constants";
 
@@ -116,13 +119,33 @@ const ToDoItemsContainer = ({
           [REMOVE]: removeFilter,
         }}
       />
+
+      <div className="header-top__action-icons">
+        <Slider toggle={toggleDrag} dragModeOn={dragModeOn} />
+
+        <Icon
+          id={null}
+          type={IconTypes.ADD}
+          parent={null}
+          onClick={(listID, toggleEditMode)}
+          size={Sizes.SMALL}
+        />
+        <Icon
+          id={null}
+          type={IconTypes.DOWNLOAD}
+          parent={null}
+          onClick={null}
+          size={Sizes.SMALL}
+        />
+      </div>
+
       <ToDoItems
         listID={listID}
         todoItems={todoItems}
         actions={{
           [DRAG]: handleDragEnd,
           [REMOVE]: removeToDo,
-          [UPDATE]: handleToDoUpdate
+          [UPDATE]: handleToDoUpdate,
         }}
         dragModeOn={dragModeOn}
       />

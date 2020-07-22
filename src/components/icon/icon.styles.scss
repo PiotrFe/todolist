@@ -1,6 +1,6 @@
 .icon {
     float: right;
-    margin: 0 1rem;
+
     transition: all .2s;
 
     &--large {
@@ -9,6 +9,7 @@
 
     &--small {
         font-size: 1.5rem;
+        margin: 0 .4rem
     }
 
     &:hover {

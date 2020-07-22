@@ -51,7 +51,6 @@ const FilterBar = ({
   };
 
   const fetchFilterPreview = (word) => {
-    updateFilterMode(true);
     updateFilterWord(word);
     showFilterPreview({ listID, filters, word });
   };

@@ -6,6 +6,9 @@ import {
 } from "./filter-bar.actions";
 
 export function* fetchPreview({ payload: { listID, filters, word } }) {
+
+  debugger;
+
   try {
     const res = yield fetch(`api/todos/preview/${listID}`, {
       method: "POST",

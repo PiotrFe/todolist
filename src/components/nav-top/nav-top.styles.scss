@@ -1,21 +1,17 @@
 @import "../../constants/constants";
 
 .header-top {
-  // position: fixed;
   height: 4rem;
   background-color: greenyellow;
+  width: 100%;
 
-  display: flex;
-  justify-content: space-between;
   align-items: center;
 
   &__items {
+    height: 100%;
     display: flex;
-    margin-left: 1rem;
-  }
-
-  &__action-icons {
-    margin-right: 1rem;
+    justify-content: space-around;
+    align-items: center;
   }
 
   &__item-box {
@@ -25,7 +21,7 @@
     align-items: center;
 
     &:not(:first-child) {
-      margin-left: 1rem;
+      margin-left: .5rem;
     }
   }
 

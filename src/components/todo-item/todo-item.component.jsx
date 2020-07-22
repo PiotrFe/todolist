@@ -8,6 +8,8 @@ import { Sizes, Components, ActionTypes } from "../../constants/constants";
 import Overlay from "../../components/overlay/overlay.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 
+import { Dropdown } from "rsuite";
+
 import "./todo-item.styles.scss";
 
 const ToDoItem = ({
@@ -42,7 +44,7 @@ const ToDoItem = ({
 
   const icons = (
     <>
-      <Icon
+      {/* <Icon
         type={IconTypes.COLOR}
         onClick={() => toggleColorPicker(!colorPickerVisible)}
         parent={Components.TODO_ITEM}
@@ -71,7 +73,7 @@ const ToDoItem = ({
         onClick={() => toggleDetailsVisible(!detailsVisible)}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
-      />
+      /> */}
     </>
   );
 
@@ -79,26 +81,46 @@ const ToDoItem = ({
     <div className="todo-container">
       <div className="todo-item">
         <div
-          className={`todo-item__side todo-item__side--front todo-item__side--front${
-            detailsVisible ? "" : "--visible"
+          className={`todo-item__side todo-item__side--front ${
+            detailsVisible ? "" : "todo-item__side--front--visible"
           }`}
         >
-          <div className="todo-item__icons">{icons}</div>
-
           <div
-            className={`todo-item__text todo-item__text--${
+            className={`todo-item__content todo-item__content--${
               done ? "done" : "pending"
             }`}
           >
-            <div
-              className="todo-item__title--front"
-              style={{
-                backgroundImage: `linear-gradient(to right, ${color}, transparent`,
-              }}
-            >
-              {title}
+            <div className="todo-item__header">
+              <div
+                className="todo-item__title todo-item__title--front"
+                style={{
+                  backgroundImage: `linear-gradient(to right, ${color}, transparent`,
+                }}
+              >
+                {title}
+              </div>
+              <div className="todo-item__icons">
+                {icons}
+
+                <Dropdown title="..." trigger="hover" noCaret>
+                  <Dropdown.Item
+                    onSelect={() => toggleDetailsVisible(!detailsVisible)}
+                  >
+                    More info
+                  </Dropdown.Item>
+                  <Dropdown.Item onSelect={handleToDoDone}>Done</Dropdown.Item>
+                  <Dropdown.Item>Edit</Dropdown.Item>
+                  <Dropdown.Item
+                    onSelect={() => actions[REMOVE]({ listID, todoID: id })}
+                  >
+                    Remove
+                  </Dropdown.Item>
+                  <Dropdown.Item>Color</Dropdown.Item>
+                </Dropdown>
+              </div>
             </div>
-            <div className="todo-item__details--front">
+
+            <div className="todo-item__details todo-item__details--front">
               <div className="todo-item__duedate todo-item__duedate--front">
                 Due date: <span>{formattedDate}</span>
               </div>
@@ -111,8 +133,8 @@ const ToDoItem = ({
         </div>
 
         <div
-          className={`todo-item__side todo-item__side--back todo-item__side--back${
-            detailsVisible ? "--visible" : ""
+          className={`todo-item__side todo-item__side--back ${
+            detailsVisible ? "todo-item__side--back--visible" : ""
           }`}
           style={{
             backgroundImage: `linear-gradient(to right, ${color}, ${color})`,
@@ -121,15 +143,12 @@ const ToDoItem = ({
           <div className="todo-item__icons todo-item__icons--back">{icons}</div>
 
           <div className="todo-item__title todo-item__title--back">{title}</div>
-          <div className="todo-item__details todo-item__details--back">
-            {details}
-          </div>
+          <div className="todo-item__more">{details}</div>
+
           <div className="todo-item__duedate todo-item__duedate--back">
             <span>{formattedDate}</span>
           </div>
-          <div className="todo-item__owner todo-item__owner--back">
-            <span>{owner}</span>
-          </div>
+          <div className="todo-item__owner todo-item__owner--back"><span>{owner}</span></div>
         </div>
       </div>
       <CSSTransitionGroup

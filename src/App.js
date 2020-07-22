@@ -17,6 +17,8 @@ import ToDoListsContainer from "./components/todo-lists-container/todo-lists-con
 import UserLogo from "./components/user-logo/user-logo.component";
 import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
 
+import 'rsuite/dist/styles/rsuite-default.css';
+
 import {
   signOutUser,
   auth,

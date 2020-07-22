@@ -3,7 +3,6 @@ import React from "react";
 import "./nav-top.styles.scss";
 
 import Icon from "../icon/icon.component";
-import Slider from "../slider/slider.component";
 
 import { IconTypes } from "../icon/icon.types";
 import { Sizes, ActionTypes, ToDoFields } from "../../constants/constants";
@@ -33,11 +32,10 @@ const NavTop = ({
   return (
     <header className="header-top">
       <div className="header-top__items">
-        <div className="header-top__item header-top__item-box">
+        <div className="header-top__item-box">
           <span className="header-top__item">Title</span>
           <Icon
             type={sortDirection[sorts[TITLE]]}
-            // parent={sortTitle.field}
             onClick={() => actions[SORT](listID, TITLE)}
             size={Sizes.SMALL}
           />
@@ -46,7 +44,6 @@ const NavTop = ({
           <span className="header-top__item">Due date</span>
           <Icon
             type={sortDirection[sorts[DUE_DATE]]}
-            // parent={sortDueDate.field}
             onClick={() => actions[SORT](listID, DUE_DATE)}
             size={Sizes.SMALL}
           />
@@ -55,7 +52,6 @@ const NavTop = ({
           <span className="header-top__item">Owner</span>
           <Icon
             type={sortDirection[sorts[OWNER]]}
-            // parent={sortOwner.field}
             onClick={() => actions[SORT](listID, OWNER)}
             size={Sizes.SMALL}
           />
@@ -64,7 +60,6 @@ const NavTop = ({
           <span className="header-top__item">Color</span>
           <Icon
             type={sortDirection[sorts[COLOR]]}
-            // parent={sortColor.field}
             onClick={() => actions[SORT](listID, COLOR)}
             size={Sizes.SMALL}
           />
@@ -80,24 +75,7 @@ const NavTop = ({
       </div> */}
       </div>
 
-      <div className="header-top__action-icons">
-        <Slider toggle={actions[ActionTypes.DRAG]} dragModeOn={dragModeOn} />
 
-        <Icon
-          id={null}
-          type={IconTypes.ADD}
-          parent={null}
-          onClick={(listID, actions[ActionTypes.EDIT])}
-          size={Sizes.SMALL}
-        />
-        <Icon
-          id={null}
-          type={IconTypes.DOWNLOAD}
-          parent={null}
-          onClick={null}
-          size={Sizes.SMALL}
-        />
-      </div>
     </header>
   );
 };

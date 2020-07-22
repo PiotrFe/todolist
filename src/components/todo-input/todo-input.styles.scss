@@ -1,23 +1,23 @@
 @import "../../constants/mixins";
 @import "../../constants//constants";
 
-.search-form {
-  display: flex;
-  padding: .5rem;
-
-}
-
-.search-field {
-  font-size: 1.5rem;
-  font-family: inherit;
-  padding: .7rem;
-  border: none;
-  width: 30vw;
-  border: 2px solid red;
-  
-
-  &:focus {
-    outline: none;
+.todo-input {
+  &__search-form {
+    width: 100%;
+    display: flex;
+    padding: 0.5rem;
   }
 
+  &__search-field {
+    font-size: 1.5rem;
+    font-family: inherit;
+    padding: 0.7rem;
+    border: none;
+    width: 100%;
+    border: 2px solid red;
+
+    &:focus {
+      outline: none;
+    }
+  }
 }

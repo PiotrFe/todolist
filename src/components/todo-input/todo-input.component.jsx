@@ -9,7 +9,7 @@ const TodoInput = React.forwardRef(
   ) => {
     return (
       <form
-        className="search-form"
+        className="todo-input__search-form"
         autoComplete="off"
         onSubmit={(e) => {
           e.preventDefault();
@@ -18,7 +18,7 @@ const TodoInput = React.forwardRef(
       >
         <input
           type="text"
-          className="search-field"
+          className="todo-input__search-field"
           id="filter-search-field"
           name="filter"
           ref={ref}

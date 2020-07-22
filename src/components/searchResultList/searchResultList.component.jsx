@@ -9,7 +9,7 @@ const SearchResultList = ({ preview = [], word, search, filters }) => {
 
   const regex = new RegExp(`\w*${word}\w*`, "i");
   let results = {
-    all: []
+    all: [],
   };
   let entry, matches;
   let key, value;
@@ -22,12 +22,13 @@ const SearchResultList = ({ preview = [], word, search, filters }) => {
       if (
         regex.test(value) &&
         !filters.some(
-          (filter) => JSON.stringify({[key]: value}) === JSON.stringify(filter)
+          (filter) =>
+            JSON.stringify({ [key]: value }) === JSON.stringify(filter)
         )
       ) {
         if (key in results && !results[key].includes(value)) {
           results[key].push(value);
-        } 
+        }
         if (!(key in results)) {
           results[key] = [value];
         }
@@ -59,31 +60,43 @@ const SearchResultList = ({ preview = [], word, search, filters }) => {
   // resulting format: {owner: [{text: "peter", formattedText: "<span>peter</span>"}]}
 
   return (
-    <div className="search-results">
-      {Object.keys(formattedResults).map((key, idx) => (
-        <div key={idx} className="search-results-group">
-          <div className={`search-results__header ${key === "all" ? "search-results__header--all" : null}`}>{key}</div>
-          <ul className="search-results__records">
-            {formattedResults[key].map((entry, idx) => (
+    <div className="search-results-container">
+      <div className="search-results">
+        {preview.length > 0 ? (
+          Object.keys(formattedResults).map((key, idx) => (
+            <div key={idx} className="search-results-group">
               <div
-                key={idx}
-                className="search-results__record"
-                onClick={() => {
-                  search({ [key]: entry.text });
-                }}
+                className={`search-results__header ${
+                  key === "all" ? "search-results__header--all" : null
+                }`}
               >
-                {" "}
-                <div
-                  className="search-results__record"
-                  dangerouslySetInnerHTML={{
-                    __html: entry.formattedText,
-                  }}
-                ></div>
+                {key}
               </div>
-            ))}
-          </ul>
-        </div>
-      ))}
+              <ul className="search-results__records">
+                {formattedResults[key].map((entry, idx) => (
+                  <div
+                    key={idx}
+                    className="search-results__record"
+                    onClick={() => {
+                      search({ [key]: entry.text });
+                    }}
+                  >
+                    {" "}
+                    <div
+                      className="search-results__record"
+                      dangerouslySetInnerHTML={{
+                        __html: entry.formattedText,
+                      }}
+                    ></div>
+                  </div>
+                ))}
+              </ul>
+            </div>
+          ))
+        ) : (
+          <div>LOADING</div>
+        )}
+      </div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 .todo-items-container {
     border: 1px solid greenyellow;
-    width: 30vw;
+    min-width: 30vw;
     overflow-y: scroll;
     overflow-x: scroll;
     margin: 0 2rem;
@@ -14,7 +14,7 @@
         font-size: 1.5rem;
         margin-left: auto;
         text-align: center;
-        text-justify: center;
+        // text-justify: center;
     }
 
 }
