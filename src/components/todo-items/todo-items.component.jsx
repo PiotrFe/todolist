@@ -69,10 +69,6 @@ const ToDoList = ({listID, todoItems, actions, dragModeOn}) => {
                 return !dragModeOn ? (
                   <ToDoItem
                     actions={{
-                      [CHANGE]: actions[CHANGE],
-                      [CHANGE_COLOR]: actions[CHANGE_COLOR],
-                      [DONE]: actions[DONE],
-                      [EDIT]: actions[EDIT],
                       [REMOVE]: actions[REMOVE],
                       [UPDATE]: actions[UPDATE],
                     }}

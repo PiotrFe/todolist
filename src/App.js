@@ -27,6 +27,7 @@ require("dotenv").config();
 
 function App() {
   const [currentUser, updateCurrentUser] = useState("");
+  const [cockpitVisible, toggleCockpit] = useState(true);
 
   useEffect(() => {
     const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
@@ -56,7 +57,7 @@ function App() {
           />
         ) : null}
       <div className="app-split app-split__left-side">
-      <ToDoCockpit />
+        {cockpitVisible ? <ToDoCockpit /> : null}
       </div>
       <div className="app-split app-split__right-side">
       <ToDoListsContainer />

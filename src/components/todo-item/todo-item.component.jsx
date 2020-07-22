@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
 import { CSSTransitionGroup } from "react-transition-group";
 
 import Icon from "../icon/icon.component";
@@ -9,16 +8,11 @@ import { Sizes, Components, ActionTypes } from "../../constants/constants";
 import Overlay from "../../components/overlay/overlay.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 
-import { toggleDetails } from "../../redux/todo-item/todo-item.actions";
-import {
-  removeToDo,
-  updateToDo,
-} from "../../redux/todo-lists-container/todo-lists-container.actions";
-
 import "./todo-item.styles.scss";
 
 const ToDoItem = ({
   actions,
+  color,
   details,
   done,
   dueDate,
@@ -26,15 +20,12 @@ const ToDoItem = ({
   listID,
   owner,
   title,
-  color,
-  removeToDo,
-  updateToDo,
 }) => {
   const [colorPickerVisible, toggleColorPicker] = useState(false);
   const [editMode, toggleEditMode] = useState(false);
   const [detailsVisible, toggleDetailsVisible] = useState(false);
 
-  const { DONE } = ActionTypes;
+  const { DONE, EDIT, REMOVE, UPDATE } = ActionTypes;
 
   const date = new Date(dueDate);
   const formattedDate = `${date.getDate()}-${
@@ -42,52 +33,42 @@ const ToDoItem = ({
   }-${date.getFullYear()}`;
 
   const handleToDoDone = () => {
-    updateToDo({ todoID: id, field: "done", value: !done });
+    actions[UPDATE]({ todoID: id, field: "done", value: !done });
   };
 
   const handleToDoChangeColor = ({ color }) => {
-    updateToDo({ todoID: id, field: "color", value: color });
-  };
-
-  const handleToDoUpdate = ({ id: todoID, field, value }) => {
-    // asyncActionBegin();
-    updateToDo({ todoID, field, value });
+    actions[UPDATE]({ todoID: id, field: "color", value: color });
   };
 
   const icons = (
     <>
       <Icon
-        id={id}
         type={IconTypes.COLOR}
-        handleClick={() => toggleColorPicker(!colorPickerVisible)}
+        onClick={() => toggleColorPicker(!colorPickerVisible)}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
-        id={id}
         type={IconTypes.REMOVE}
-        handleClick={() => removeToDo({ listID, todoID: id })}
+        onClick={() => actions[REMOVE]({ listID, todoID: id })}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
-        id={id}
         type={IconTypes.EDIT}
-        handleClick={() => toggleEditMode(!editMode)}
+        onClick={() => toggleEditMode(!editMode)}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
-        id={id}
         type={IconTypes.DONE}
-        handleClick={handleToDoDone}
+        onClick={handleToDoDone}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
       <Icon
-        id={id}
         type={IconTypes.TOGGLE_DETAILS}
-        handleClick={() => toggleDetailsVisible(!detailsVisible)}
+        onClick={() => toggleDetailsVisible(!detailsVisible)}
         parent={Components.TODO_ITEM}
         size={Sizes.SMALL}
       />
@@ -172,7 +153,7 @@ const ToDoItem = ({
             id={id}
             actions={{
               [ActionTypes.CANCEL]: toggleEditMode,
-              [ActionTypes.EDIT]: handleToDoUpdate,
+              [ActionTypes.EDIT]: actions[UPDATE],
               [ActionTypes.SUBMIT]: ({ listID: id, todo }) => {
                 toggleEditMode(!editMode);
               },
@@ -184,10 +165,4 @@ const ToDoItem = ({
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  removeToDo: ({ todoID, listID }) => dispatch(removeToDo({ todoID, listID })),
-  updateToDo: ({ todoID, field, value }) =>
-    dispatch(updateToDo({ todoID, field, value })),
-});
-
-export default connect(null, mapDispatchToProps)(ToDoItem);
+export default ToDoItem;

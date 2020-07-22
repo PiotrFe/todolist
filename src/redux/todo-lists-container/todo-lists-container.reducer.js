@@ -91,6 +91,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
               ),
             };
           }
+          return list;
         }),
       };
     case REMOVE_TODO_FAILURE:

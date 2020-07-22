@@ -11,7 +11,6 @@ import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 import {
   asyncActionBegin,
   dropToDo,
-  updateToDo,
   updateSorts,
   fetchFilteredToDoS,
 } from "../../redux/todo-container/todo-container.actions";
@@ -19,6 +18,7 @@ import {
 import {
   addToDo,
   removeToDo,
+  updateToDo
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import {
@@ -28,7 +28,7 @@ import {
 
 import { ActionTypes } from "../../constants/constants";
 
-import {DEFAULT_SORTS} from "../../constants/constants";
+import { DEFAULT_SORTS } from "../../constants/constants";
 
 import "./todo-items-container.styles.scss";
 import { useCallback } from "react";
@@ -36,33 +36,40 @@ import { useCallback } from "react";
 const ToDoItemsContainer = ({
   listID,
   inCockpit = false,
-  todoItems,
   title,
   filters = [],
+  todoItems,
   // filtersLength,
-  sorts = DEFAULT_SORTS,
-  fetchFilteredToDoS,
-  dropToDo,
-  removeFilter,
-  updateSorts,
   addToDo,
+  dropToDo,
+  fetchFilteredToDoS,
+  sorts = DEFAULT_SORTS,
+  removeFilter,
+  removeToDo,
+  updateSorts,
+  updateToDo,
   children,
 }) => {
-  const { DRAG, EDIT, REMOVE, SORT } = ActionTypes;
+  const { DRAG, EDIT, REMOVE, SORT, UPDATE } = ActionTypes;
 
   // Local state
   const [editMode, updateEditMode] = useState(false);
   const [dragModeOn, toggleDragMode] = useState(false);
 
   // Effects
-  useEffect(() => {    
-      // debugger;
-      fetchFilteredToDoS({ listID, filters, sorts });
+  useEffect(() => {
+    // debugger;
+    fetchFilteredToDoS({ listID, filters, sorts });
   }, [filters.length, JSON.stringify(sorts)]);
 
   // Methods
   const toggleEditMode = () => {
     updateEditMode(!editMode);
+  };
+
+  const handleToDoUpdate = ({ todoID, field, value }) => {
+    // asyncActionBegin();
+    updateToDo({ todoID, field, value });
   };
 
   // HANDLING DRAG
@@ -114,6 +121,8 @@ const ToDoItemsContainer = ({
         todoItems={todoItems}
         actions={{
           [DRAG]: handleDragEnd,
+          [REMOVE]: removeToDo,
+          [UPDATE]: handleToDoUpdate
         }}
         dragModeOn={dragModeOn}
       />
@@ -142,16 +151,15 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  addToDo: ({ listID, todo }) => dispatch(addToDo({ listID, todo })),
   asyncActionBegin: () => dispatch(asyncActionBegin()),
   dropToDo: (idxFrom, idxTo) => dispatch(dropToDo(idxFrom, idxTo)),
-  updateSorts: (listID, field) => dispatch(updateSorts({ listID, field })),
-  updateToDo: ({ id, field, value }) =>
-    dispatch(updateToDo({ id, field, value })),
-
-  addToDo: ({ listID, todo }) => dispatch(addToDo({ listID, todo })),
-  removeToDo: ({ listID, todoID }) => dispatch(removeToDo({ listID, todoID })),
   fetchFilteredToDoS: ({ listID, filters, sorts }) =>
     dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
+  removeToDo: ({ todoID, listID }) => dispatch(removeToDo({ todoID, listID })),
+  updateSorts: (listID, field) => dispatch(updateSorts({ listID, field })),
+  updateToDo: ({ todoID, field, value }) =>
+    dispatch(updateToDo({ todoID, field, value })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoItemsContainer);
