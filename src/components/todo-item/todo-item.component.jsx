@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { CSSTransitionGroup } from "react-transition-group";
 
-import Icon from "../icon/icon.component";
 import ColorPicker from "../color-picker/color-picker.component";
-import { IconTypes } from "../icon/icon.types";
-import { Sizes, Components, ActionTypes } from "../../constants/constants";
+import {  ActionTypes } from "../../constants/constants";
 import Overlay from "../../components/overlay/overlay.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 
@@ -42,40 +40,24 @@ const ToDoItem = ({
     actions[UPDATE]({ todoID: id, field: "color", value: color });
   };
 
-  const icons = (
-    <>
-      {/* <Icon
-        type={IconTypes.COLOR}
-        onClick={() => toggleColorPicker(!colorPickerVisible)}
-        parent={Components.TODO_ITEM}
-        size={Sizes.SMALL}
-      />
-      <Icon
-        type={IconTypes.REMOVE}
-        onClick={() => actions[REMOVE]({ listID, todoID: id })}
-        parent={Components.TODO_ITEM}
-        size={Sizes.SMALL}
-      />
-      <Icon
-        type={IconTypes.EDIT}
-        onClick={() => toggleEditMode(!editMode)}
-        parent={Components.TODO_ITEM}
-        size={Sizes.SMALL}
-      />
-      <Icon
-        type={IconTypes.DONE}
-        onClick={handleToDoDone}
-        parent={Components.TODO_ITEM}
-        size={Sizes.SMALL}
-      />
-      <Icon
-        type={IconTypes.TOGGLE_DETAILS}
-        onClick={() => toggleDetailsVisible(!detailsVisible)}
-        parent={Components.TODO_ITEM}
-        size={Sizes.SMALL}
-      /> */}
-    </>
-  );
+  const dropDown = (
+
+    <Dropdown title="..." trigger="hover" placement="bottomEnd" noCaret>
+    <Dropdown.Item
+      onSelect={() => toggleDetailsVisible(!detailsVisible)}
+    >
+      More info
+    </Dropdown.Item>
+    <Dropdown.Item onSelect={handleToDoDone}>Done</Dropdown.Item>
+    <Dropdown.Item>Edit</Dropdown.Item>
+    <Dropdown.Item
+      onSelect={() => actions[REMOVE]({ listID, todoID: id })}
+    >
+      Remove
+    </Dropdown.Item>
+    <Dropdown.Item>Color</Dropdown.Item>
+  </Dropdown>
+  )
 
   return (
     <div className="todo-container">
@@ -100,23 +82,8 @@ const ToDoItem = ({
                 {title}
               </div>
               <div className="todo-item__icons">
-                {icons}
+              {dropDown}
 
-                <Dropdown title="..." trigger="hover" noCaret>
-                  <Dropdown.Item
-                    onSelect={() => toggleDetailsVisible(!detailsVisible)}
-                  >
-                    More info
-                  </Dropdown.Item>
-                  <Dropdown.Item onSelect={handleToDoDone}>Done</Dropdown.Item>
-                  <Dropdown.Item>Edit</Dropdown.Item>
-                  <Dropdown.Item
-                    onSelect={() => actions[REMOVE]({ listID, todoID: id })}
-                  >
-                    Remove
-                  </Dropdown.Item>
-                  <Dropdown.Item>Color</Dropdown.Item>
-                </Dropdown>
               </div>
             </div>
 
@@ -140,7 +107,7 @@ const ToDoItem = ({
             backgroundImage: `linear-gradient(to right, ${color}, ${color})`,
           }}
         >
-          <div className="todo-item__icons todo-item__icons--back">{icons}</div>
+          <div className="todo-item__icons todo-item__icons--back">{dropDown}</div>
 
           <div className="todo-item__title todo-item__title--back">{title}</div>
           <div className="todo-item__more">{details}</div>

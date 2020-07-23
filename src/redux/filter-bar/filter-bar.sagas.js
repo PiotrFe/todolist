@@ -7,7 +7,7 @@ import {
 
 export function* fetchPreview({ payload: { listID, filters, word } }) {
 
-  debugger;
+  // debugger;
 
   try {
     const res = yield fetch(`api/todos/preview/${listID}`, {

@@ -1,9 +1,23 @@
+@import "../../constants/constants";
+
 .todo-items-container {
     border: 1px solid greenyellow;
     min-width: 30vw;
-    overflow-y: scroll;
-    overflow-x: scroll;
+    overflow-y: auto;
+    overflow-x: auto;
     margin: 0 2rem;
+    box-shadow: 0 1rem 3rem rgba($color-black, 0.15);
+
+    display: flex;
+    flex-direction: column;
+
+    &__header-group {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        flex-basis: 20%;
+
+    }
 
     &__title {
         display: block;
@@ -12,9 +26,14 @@
         height: 3rem;
         line-height: 3rem;
         font-size: 1.5rem;
-        margin-left: auto;
         text-align: center;
         // text-justify: center;
     }
 
+}
+
+.header-top__action-icons {
+    width: 100%;
+    display: flex;
+    background-color: $color-white;
 }

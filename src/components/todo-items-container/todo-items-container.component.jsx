@@ -97,46 +97,48 @@ const ToDoItemsContainer = ({
   // if component is rendered in cockpit, it gets a custom NavTob; otherwise gets a default one
   return (
     <div className="todo-items-container">
-      <div className="todo-items-container__title">{title}</div>
-      {inCockpit ? (
-        children
-      ) : (
-        <NavTop
+      <div className="todo-items-container__header-group">
+        <div className="todo-items-container__title">{title}</div>
+        {inCockpit ? (
+          children
+        ) : (
+          <NavTop
+            listID={listID}
+            actions={{
+              [DRAG]: toggleDrag,
+              [EDIT]: toggleEditMode,
+              [SORT]: updateSorts,
+            }}
+            sorts={sorts}
+            dragModeOn={dragModeOn}
+          />
+        )}
+
+        <FilterBar
           listID={listID}
           actions={{
-            [DRAG]: toggleDrag,
-            [EDIT]: toggleEditMode,
-            [SORT]: updateSorts,
+            [REMOVE]: removeFilter,
           }}
-          sorts={sorts}
-          dragModeOn={dragModeOn}
         />
-      )}
 
-      <FilterBar
-        listID={listID}
-        actions={{
-          [REMOVE]: removeFilter,
-        }}
-      />
+        <div className="header-top__action-icons">
+          <Slider toggle={toggleDrag} dragModeOn={dragModeOn} />
 
-      <div className="header-top__action-icons">
-        <Slider toggle={toggleDrag} dragModeOn={dragModeOn} />
-
-        <Icon
-          id={null}
-          type={IconTypes.ADD}
-          parent={null}
-          onClick={(listID, toggleEditMode)}
-          size={Sizes.SMALL}
-        />
-        <Icon
-          id={null}
-          type={IconTypes.DOWNLOAD}
-          parent={null}
-          onClick={null}
-          size={Sizes.SMALL}
-        />
+          <Icon
+            id={null}
+            type={IconTypes.ADD}
+            parent={null}
+            onClick={(listID, toggleEditMode)}
+            size={Sizes.SMALL}
+          />
+          <Icon
+            id={null}
+            type={IconTypes.DOWNLOAD}
+            parent={null}
+            onClick={null}
+            size={Sizes.SMALL}
+          />
+        </div>
       </div>
 
       <ToDoItems
