@@ -5,5 +5,10 @@ const selectFilterPreviewByID = (state, props) => state.filterBar[props.listID]
 
 export const selectFilterPreview = createSelector(
   [selectFilterPreviewByID],
-  (filterPreview) => filterPreview
+  (list) => list?.preview
+);
+
+export const selectFilterLoading = createSelector(
+  [selectFilterPreviewByID],
+  (list) => list?.loading
 );

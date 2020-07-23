@@ -3,11 +3,12 @@ import { FilterBarTypes } from "./filter-bar.types";
 import {
   showFilterPreviewSuccess,
   showFilterPreviewFailure,
+  setPreviewLoading
 } from "./filter-bar.actions";
 
 export function* fetchPreview({ payload: { listID, filters, word } }) {
 
-  // debugger;
+  yield put(setPreviewLoading(listID));
 
   try {
     const res = yield fetch(`api/todos/preview/${listID}`, {

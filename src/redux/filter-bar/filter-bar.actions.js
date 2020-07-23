@@ -4,6 +4,8 @@ const {
   FETCH_FILTER_PREVIEW_START,
   FETCH_FILTER_PREVIEW_SUCCESS,
   FETCH_FILTER_PREVIEW_FAILURE,
+  CLEAR_FILTER_PREVIEW,
+  SET_PREVIEW_LOADING
 } = FilterBarTypes;
 
 export const showFilterPreview = ({ listID, filters, word }) => ({
@@ -20,3 +22,13 @@ export const showFilterPreviewFailure = (error) => ({
   type: FETCH_FILTER_PREVIEW_FAILURE,
   payload: error,
 });
+
+export const clearFilterPreview = (listID) => ({
+  type: CLEAR_FILTER_PREVIEW,
+  payload: {listID}
+})
+
+export const setPreviewLoading = listID => ({
+  type: SET_PREVIEW_LOADING,
+  payload: {listID}
+})

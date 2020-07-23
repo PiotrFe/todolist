@@ -1,68 +1,27 @@
 import React from "react";
+import { Loader } from "rsuite";
+
+import { formatSearchResults } from "./searchResultList.utils";
 
 import "./searchResultList.styles.scss";
-import { ActionTypes } from "../../constants/constants";
 
-const SearchResultList = ({ preview = [], word, search, filters }) => {
-  // incoming format: [{key: value}], e.g.
-  // [{"title":"teraz dziala","details":"","owner":"piotr"},{"title":"bum","details":"","owner":"piotr"},{"title":"mysh","details":"","owner":"piotr"},{"title":"mysh","details":"piotr","owner":"mario"}]
+const SearchResultList = ({ preview = [], word, search, filters, loading }) => {
+  let formattedResults;
+  let noResultsMessage = "Not found";
 
-  const regex = new RegExp(`\w*${word}\w*`, "i");
-  let results = {
-    all: [],
-  };
-  let entry, matches;
-  let key, value;
+  if (preview.length > 0) {
+    formattedResults = formatSearchResults({ preview, word, search, filters });
+  } 
 
-  const filterCounter = new Map();
-
-  preview.forEach((item) => {
-    for (let key in item) {
-      value = item[key];
-      if (
-        regex.test(value) &&
-        !filters.some(
-          (filter) =>
-            JSON.stringify({ [key]: value }) === JSON.stringify(filter)
-        )
-      ) {
-        if (key in results && !results[key].includes(value)) {
-          results[key].push(value);
-        }
-        if (!(key in results)) {
-          results[key] = [value];
-        }
-        if (!results["all"].includes(value)) {
-          results["all"].push(value);
-        }
-      }
-    }
-  });
-  // resulting format: {owner: ["peter", "peter kowalski"], details: ["peter did smth"]}
-
-  const formattedResults = {};
-  let htmlNode;
-
-  Object.keys(results).forEach((key) => {
-    Object.assign(formattedResults, { [key]: [] });
-
-    results[key].forEach((entry) => {
-      formattedResults[key].push({
-        text: entry,
-        formattedText: entry.replace(
-          new RegExp(word, "g"),
-          `<span>${word}</span>`
-        ),
-      });
-    });
-  });
-
-  // resulting format: {owner: [{text: "peter", formattedText: "<span>peter</span>"}]}
+  console.log(`---------------
+  ${JSON.stringify(preview)}
+  --------------`)
 
   return (
     <div className="search-results-container">
       <div className="search-results">
-        {preview.length > 0 ? (
+        {preview.length > 0 &&
+          preview[0] !== noResultsMessage &&
           Object.keys(formattedResults).map((key, idx) => (
             <div key={idx} className="search-results-group">
               <div
@@ -92,10 +51,16 @@ const SearchResultList = ({ preview = [], word, search, filters }) => {
                 ))}
               </ul>
             </div>
-          ))
-        ) : (
-          <div>LOADING</div>
-        )}
+          ))}
+
+        <div>
+          {(!loading && preview.length === 0) && "No results"}
+          {loading && (
+            <div>
+              <Loader /> LOADING..
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
