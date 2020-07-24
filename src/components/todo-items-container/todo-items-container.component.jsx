@@ -8,7 +8,7 @@ import ToDoItems from "../../components/todo-items/todo-items.component";
 import Overlay from "../../components/overlay/overlay.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 import Icon from "../icon/icon.component";
-import Slider from "../slider/slider.component";
+import { Toggle, Button } from "rsuite";
 
 import { IconTypes } from "../icon/icon.types";
 import { Sizes, ActionTypes, ToDoFields } from "../../constants/constants";
@@ -96,7 +96,11 @@ const ToDoItemsContainer = ({
 
   // if component is rendered in cockpit, it gets a custom NavTob; otherwise gets a default one
   return (
-    <div className={`todo-items-container ${inCockpit ? "todo-items-container--cockpit" : null}`}>
+    <div
+      className={`todo-items-container ${
+        inCockpit ? "todo-items-container--cockpit" : null
+      }`}
+    >
       <div className="todo-items-container__header-group">
         <div className="todo-items-container__title">{title}</div>
         {inCockpit ? (
@@ -119,25 +123,20 @@ const ToDoItemsContainer = ({
           actions={{
             [REMOVE]: removeFilter,
           }}
+          inCockpit={inCockpit}
         />
 
         <div className="header-top__action-icons">
-          <Slider toggle={toggleDrag} dragModeOn={dragModeOn} />
-
-          <Icon
-            id={null}
-            type={IconTypes.ADD}
-            parent={null}
-            onClick={(listID, toggleEditMode)}
-            size={Sizes.SMALL}
+          <Toggle
+            size="md"
+            checkedChildren="Ready"
+            unCheckedChildren="Sort"
+            onChange={toggleDrag}
           />
-          <Icon
-            id={null}
-            type={IconTypes.DOWNLOAD}
-            parent={null}
-            onClick={null}
-            size={Sizes.SMALL}
-          />
+          <Button side="md" onClick={(listID, toggleEditMode)}>
+            Add
+          </Button>
+          <Button side="md">Download</Button>
         </div>
       </div>
 

@@ -27,6 +27,7 @@ const FilterBar = ({
   filters = [],
   filterPreview,
   loading,
+  inCockpit,
   addFilter,
   removeFilter,
   showFilterPreview,
@@ -85,6 +86,8 @@ const FilterBar = ({
           onChange={updateFilterBar}
           content={filterBarContent}
           ref={inputEl}
+          placeholder={"Type to search in list"}
+          inCockpit={inCockpit}
         />
       </div>
       {filterMode ? (

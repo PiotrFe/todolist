@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-import { CSSTransition  } from "react-transition-group";
+import { CSSTransition } from "react-transition-group";
 
 import "./App.styles.scss";
 
 import ToDoListsContainer from "./components/todo-lists-container/todo-lists-container.component";
 import UserLogo from "./components/user-logo/user-logo.component";
 import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
+import TodoInput from "./components/todo-input/todo-input.component";
 
 import "rsuite/dist/styles/rsuite-default.css";
 
@@ -21,6 +22,9 @@ require("dotenv").config();
 function App() {
   const [currentUser, updateCurrentUser] = useState("");
   const [cockpitVisible, toggleCockpit] = useState(true);
+  const [inputContent, updateInputContent] = useState("");
+
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
@@ -51,13 +55,22 @@ function App() {
           !cockpitVisible ? "app-split__left-side--hidden" : null
         }`}
       >
-          <ToDoCockpit
-            visible={cockpitVisible}
-            toggle={() => toggleCockpit(!cockpitVisible)}
-          />
+        <ToDoCockpit
+          visible={cockpitVisible}
+          toggle={() => toggleCockpit(!cockpitVisible)}
+        />
       </div>
       <div className="app-split app-split__right-side">
+        <>
+        <TodoInput
+          ref={inputRef}
+          content={inputContent}
+          onSubmit={null}
+          onChange={updateInputContent}
+          placeholder={"Type to search in lists"}
+        />
         <ToDoListsContainer />
+        </>
       </div>
     </div>
   );

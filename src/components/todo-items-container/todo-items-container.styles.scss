@@ -41,6 +41,9 @@
 
 .header-top__action-icons {
     width: 100%;
-    display: flex;
+   
     background-color: $color-white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
