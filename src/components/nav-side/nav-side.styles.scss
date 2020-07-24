@@ -3,27 +3,10 @@
 .sidebar {
     background-color: $color-grey-dark-1;
     height: 100%;
-}
+    width: 6rem;
+    flex-basis: 15%;
 
-.side-nav {
-    list-style: none;
-    padding: 2rem;
-    font: #fff;
-
-    &__item {
-        font-size: 1.5rem;
-        padding: .5rem 0;
+    &--hidden {
+        transform: translateX(-10rem);
     }
-
-    &__link {
-        &,
-        &:link,
-        &:visited {
-            text-transform: uppercase;
-            text-decoration: none;
-            color: #fff;
-            cursor: pointer;
-        }
-    }
-
 }

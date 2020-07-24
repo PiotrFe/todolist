@@ -1,5 +1,5 @@
 .app {
-  width: 100vv;
+  width: 100vw;
   height: 100vh;
 
   display: flex;
@@ -16,12 +16,36 @@
 
 
   &__left-side {
-    left: 0px;
-    width: 30vw;
+    flex-basis: 35%;
+    height: 85%;
+    align-self: center;
+    margin-right: 1rem;
+
+    &-enter {
+      opacity: 0;
+    }
+
+    &-enter-active {
+      opacity: 1;
+      transition: opacity 200ms;
+    }
+
+    &-exit {
+      opacity: 1;
+    }
+
+    &-exit-active {
+      opacity: 1;
+      transition: opacity 200ms;
+    }
+
+    &--hidden {
+      transform: translateX(calc(-60%));
+      flex-basis: 10%;
+  }
   }
 
   &__right-side {
-    right: 0px;
-    width: 70vw;
+    // flex-basis: 70%
   }
 }

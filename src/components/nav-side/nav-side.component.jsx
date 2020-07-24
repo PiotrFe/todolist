@@ -1,34 +1,18 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 
 import { Link } from "react-router-dom";
 
+import MenuButton from "../button-menu/button-menu.component";
+
 import "./nav-side.styles.scss";
 
-const NavSide = () => (
-  <nav className="sidebar">
-    <ul className="side-nav">
-      <li className="side-nav__item">
-        <Link to="/" className="side-nav__link">
-          Home
-        </Link>
-      </li>
-      <li className="side-nav__item">
-        <Link to="/user" className="side-nav__link">
-          My lists
-        </Link>
-      </li>
-      <li className="side-nav__item">
-        <Link to="/templates" className="side-nav__link">
-          My templates
-        </Link>
-      </li>
-      <li className="side-nav__item">
-        <Link to="/logout" className="side-nav__link">
-            Log out
-        </Link>
-      </li>
-    </ul>
-  </nav>
-);
+const NavSide = ({toggle}) => {
+
+  return (
+    <nav className={`sidebar`}>
+      <MenuButton onClick={toggle} />
+    </nav>
+  );
+};
 
 export default NavSide;

@@ -96,7 +96,7 @@ const ToDoItemsContainer = ({
 
   // if component is rendered in cockpit, it gets a custom NavTob; otherwise gets a default one
   return (
-    <div className="todo-items-container">
+    <div className={`todo-items-container ${inCockpit ? "todo-items-container--cockpit" : null}`}>
       <div className="todo-items-container__header-group">
         <div className="todo-items-container__title">{title}</div>
         {inCockpit ? (

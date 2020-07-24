@@ -1,10 +1,12 @@
 import React, { useState, useRef } from "react";
 import { connect } from "react-redux";
 
+
 import ToDoItemsContainer from "../todo-items-container/todo-items-container.component";
 import TodoInput from "../todo-input/todo-input.component";
 import NavTop from "../nav-top/nav-top.component";
 import Overlay from "../overlay/overlay.component";
+import NavSide from "../nav-side/nav-side.component";
 import { ActionTypes } from "../../constants/constants";
 import {DEFAULT_SORTS} from "../../constants/constants";
 
@@ -14,7 +16,7 @@ import {
 
 import "./todo-cockpit.styles.scss";
 
-const ToDoCockpit = ({addList}) => {
+const ToDoCockpit = ({addList, visible, toggle}) => {
   const [inputContent, updateInputContent] = useState("");
   const [editMode, toggleEditMode] = useState(false);
   const [dragMode, toggleDragMode] = useState(false);
@@ -33,7 +35,7 @@ const ToDoCockpit = ({addList}) => {
   };
 
   return (
-    <div className="todo-cockpit">
+    <div className={`todo-cockpit`}>
       {editMode && (
         <>
           <Overlay
@@ -52,7 +54,7 @@ const ToDoCockpit = ({addList}) => {
           </div>
         </>
       )}
-
+     
       <ToDoItemsContainer
         listID={listID}
         inCockpit={true}
@@ -71,6 +73,7 @@ const ToDoCockpit = ({addList}) => {
           dragModeOn={dragMode}
         />
       </ToDoItemsContainer>
+      <NavSide toggle={toggle} />
     </div>
   );
 };
