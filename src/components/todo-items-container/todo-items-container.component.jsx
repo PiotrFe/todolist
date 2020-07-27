@@ -7,11 +7,9 @@ import FilterBar from "../../components/filter-bar/filter-bar.component";
 import ToDoItems from "../../components/todo-items/todo-items.component";
 import Overlay from "../../components/overlay/overlay.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
-import Icon from "../icon/icon.component";
 import { Toggle, Button } from "rsuite";
 
-import { IconTypes } from "../icon/icon.types";
-import { Sizes, ActionTypes, ToDoFields } from "../../constants/constants";
+import { ActionTypes } from "../../constants/constants";
 
 import {
   asyncActionBegin,
@@ -27,14 +25,14 @@ import {
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import {
-  selectFilters,
   selectSorts,
 } from "../../redux/todo-container/todo-container.selectors";
+
+import { selectFilters } from "../../redux/filter-bar/filter-bar.selectors";
 
 import { DEFAULT_SORTS } from "../../constants/constants";
 
 import "./todo-items-container.styles.scss";
-import { useCallback } from "react";
 
 const ToDoItemsContainer = ({
   listID,
@@ -42,12 +40,10 @@ const ToDoItemsContainer = ({
   title,
   filters = [],
   todoItems,
-  // filtersLength,
   addToDo,
   dropToDo,
   fetchFilteredToDoS,
   sorts = DEFAULT_SORTS,
-  removeFilter,
   removeToDo,
   updateSorts,
   updateToDo,
@@ -61,7 +57,6 @@ const ToDoItemsContainer = ({
 
   // Effects
   useEffect(() => {
-    // debugger;
     fetchFilteredToDoS({ listID, filters, sorts });
   }, [filters.length, JSON.stringify(sorts)]);
 
@@ -120,9 +115,6 @@ const ToDoItemsContainer = ({
 
         <FilterBar
           listID={listID}
-          actions={{
-            [REMOVE]: removeFilter,
-          }}
           inCockpit={inCockpit}
         />
 

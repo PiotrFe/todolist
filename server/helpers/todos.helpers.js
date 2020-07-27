@@ -124,10 +124,6 @@ exports.filterTodos = async (req, res) => {
     // populateObj.collation = { locale: "en" };
   }
 
-  console.log(`-------------------
-  ${JSON.stringify(populateObj)}
-  -------------------------`);
-
   query.populate(populateObj).collation({ locale: "en" });
 
   try {
@@ -140,11 +136,6 @@ exports.filterTodos = async (req, res) => {
 
 exports.resultsPreview = async (req, res) => {
   const { listID, filters, keyword } = req.body;
-  console.log(
-    `listID: ${listID}, filters${JSON.stringify(filters)} - ${Array.isArray(
-      filters
-    )}, keyword: ${keyword}`
-  );
   let filterArray = [];
 
   // pushing the keyword to filter array
@@ -155,22 +146,33 @@ exports.resultsPreview = async (req, res) => {
   }
 
   // building query
-  const query = db.ToDoList.findById(listID).populate({
+  let query; 
+
+  if (listID === "Main") {
+    query = db.ToDoList.find({});
+  } else {
+    query = db.ToDoList.findById(listID)
+  }
+  
+  query.populate({
     path: "todos",
     match: { $or: filterArray },
     select: {
       title: 1,
       owner: 1,
       details: 1,
+      lists: 1,
       _id: 0,
     },
   });
 
   // executing query and sending results
   const queryData = await query.exec();
-  const todoData = queryData ? queryData.todos : [];
+  // console.log(JSON.stringify([queryData].flat()));
+  // debugger;
+  const todoData = queryData ? [queryData].flat() : [];
 
-  res.send(todoData);
+  res.json(todoData);
 
   // query = db.ToDo.find({ $or: filterArray }).select({
   //   name: 1,

@@ -8,18 +8,22 @@ import TodoInput from "../todo-input/todo-input.component";
 import FilterCard from "../../components/filter-card/filter-card.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
 
-import { selectFilters } from "../../redux/todo-container/todo-container.selectors";
-import { selectFilterPreview, selectFilterLoading } from "../../redux/filter-bar/filter-bar.selectors";
+import { selectFilters } from "../../redux/filter-bar/filter-bar.selectors";
+import {
+  selectFilterPreview,
+  selectFilterLoading,
+} from "../../redux/filter-bar/filter-bar.selectors";
 
 import { ActionTypes } from "../../constants/constants";
 
 import {
   addFilter,
   removeFilter,
-} from "../../redux/todo-container/todo-container.actions";
+} from "../../redux/filter-bar/filter-bar.actions";
 import {
   showFilterPreview,
   clearFilterPreview,
+  setFiltersAndPreviewStore,
 } from "../../redux/filter-bar/filter-bar.actions";
 
 const FilterBar = ({
@@ -32,12 +36,17 @@ const FilterBar = ({
   removeFilter,
   showFilterPreview,
   clearFilterPreview,
+  setFiltersAndPreviewStore
 }) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
   const [filterMode, updateFilterMode] = useState(true);
   const [filterWord, updateFilterWord] = useState("");
 
   const { CHANGE, REMOVE, SEARCH, SUBMIT } = ActionTypes;
+
+  useEffect(() => {
+    setFiltersAndPreviewStore(listID);
+  }, [])
 
   useEffect(() => {
     if (filterBarContent.length >= 3) {
@@ -48,6 +57,7 @@ const FilterBar = ({
       clearFilterPreview(listID);
     }
   }, [filterBarContent]);
+
 
   const inputEl = useRef(null);
 
@@ -106,7 +116,7 @@ const FilterBar = ({
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
   filterPreview: selectFilterPreview,
-  loading: selectFilterLoading
+  loading: selectFilterLoading,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -116,6 +126,7 @@ const mapDispatchToProps = (dispatch) => ({
   showFilterPreview: ({ listID, filters, word }) =>
     dispatch(showFilterPreview({ listID, filters, word })),
   clearFilterPreview: (listID) => dispatch(clearFilterPreview(listID)),
+  setFiltersAndPreviewStore: (listID) => dispatch(setFiltersAndPreviewStore(listID))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterBar);

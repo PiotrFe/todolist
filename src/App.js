@@ -7,7 +7,7 @@ import "./App.styles.scss";
 import ToDoListsContainer from "./components/todo-lists-container/todo-lists-container.component";
 import UserLogo from "./components/user-logo/user-logo.component";
 import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
-import TodoInput from "./components/todo-input/todo-input.component";
+import FilterBar from "./components/filter-bar/filter-bar.component";
 
 import "rsuite/dist/styles/rsuite-default.css";
 
@@ -62,12 +62,9 @@ function App() {
       </div>
       <div className="app-split app-split__right-side">
         <>
-        <TodoInput
-          ref={inputRef}
-          content={inputContent}
-          onSubmit={null}
-          onChange={updateInputContent}
-          placeholder={"Type to search in lists"}
+        <FilterBar
+          listID={"Main"}
+          inCockpit={false}
         />
         <ToDoListsContainer />
         </>

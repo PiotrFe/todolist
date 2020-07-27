@@ -5,7 +5,10 @@ const {
   FETCH_FILTER_PREVIEW_SUCCESS,
   FETCH_FILTER_PREVIEW_FAILURE,
   CLEAR_FILTER_PREVIEW,
-  SET_PREVIEW_LOADING
+  SET_PREVIEW_LOADING,
+  SET_FILTERS_AND_PREVIEW_STORE,
+  ADD_FILTER,
+  REMOVE_FILTER
 } = FilterBarTypes;
 
 export const showFilterPreview = ({ listID, filters, word }) => ({
@@ -32,3 +35,18 @@ export const setPreviewLoading = listID => ({
   type: SET_PREVIEW_LOADING,
   payload: {listID}
 })
+
+export const setFiltersAndPreviewStore = listID => ({
+  type: SET_FILTERS_AND_PREVIEW_STORE,
+  payload: {listID}
+})
+
+export const addFilter = ({ listID, filter }) => ({
+  type: ADD_FILTER,
+  payload: { listID, filter },
+});
+
+export const removeFilter = ({ listID, filter }) => ({
+  type: REMOVE_FILTER,
+  payload: { listID, filter },
+});

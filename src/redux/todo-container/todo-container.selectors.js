@@ -10,16 +10,17 @@ const selectListByID = (state, props) => {
   }
 };
 
-export const selectFilters = createSelector(selectListByID, (list) => {
-  if (list) {
-    return list.filters;
-  } else return [];
-});
+// export const selectFilters = createSelector(selectListByID, (list) => {
+//   if (list) {
+//     return list.filters;
+//   } else return [];
+// });
 
 export const selectSorts = createSelector(selectListByID, (list) => {
   if (list) {
     return list.sorts;
-  } else { return {}
+  } else {
+    return {};
   }
 });
 

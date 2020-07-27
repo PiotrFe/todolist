@@ -13,10 +13,6 @@ const SearchResultList = ({ preview = [], word, search, filters, loading }) => {
     formattedResults = formatSearchResults({ preview, word, search, filters });
   } 
 
-  console.log(`---------------
-  ${JSON.stringify(preview)}
-  --------------`)
-
   return (
     <div className="search-results-container">
       <div className="search-results">

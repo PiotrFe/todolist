@@ -12,3 +12,8 @@ export const selectFilterLoading = createSelector(
   [selectFilterPreviewByID],
   (list) => list?.loading
 );
+
+export const selectFilters = createSelector(
+  [selectFilterPreviewByID],
+  list => list?.filters
+)

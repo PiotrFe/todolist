@@ -20,8 +20,6 @@ const {
 } = ToDoListsActionTypes;
 
 const {
-  ADD_FILTER,
-  REMOVE_FILTER,
   FETCH_TODOS_SUCCESS,
   FETCH_TODOS_FAILURE,
   UPDATE_SORTS,
@@ -32,7 +30,6 @@ const INITIAL_STATE = {
   loading: false,
   error: null,
 };
-
 
 const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -126,27 +123,11 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         error: action.payload,
       };
     }
-    case ADD_FILTER:
-      return {
-        ...state,
-        todoLists: state.todoLists.map((list) => {
-          if (list._id === action.payload.listID) {
-            return {
-              ...list,
-              filters: [...list.filters, action.payload.filter],
-            };
-          }
-          return list;
-        }),
-      };
     case ADD_LIST_SUCCESS:
       return {
         ...state,
         loading: false,
-        todoLists: [
-          { ...action.payload},
-          ...state.todoLists
-        ],
+        todoLists: [{ ...action.payload }, ...state.todoLists],
       };
     case ADD_LIST_FAILURE:
       return {
@@ -154,23 +135,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         error: action.payload,
       };
-    case REMOVE_FILTER:
-      return {
-        ...state,
-        todoLists: state.todoLists.map((list) => {
-          if (list._id === action.payload.listID) {
-            return {
-              ...list,
-              filters: list.filters.filter(
-                (item) =>
-                  JSON.stringify(item) !== JSON.stringify(action.payload.filter)
-              ),
-            };
-          } else {
-            return list;
-          }
-        }),
-      };
+
     case FETCH_TODOS_SUCCESS:
       return {
         ...state,
@@ -201,7 +166,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
               case 0:
                 return {
                   ...list,
-                  sorts: updateSorts(list.sorts, field, 1)
+                  sorts: updateSorts(list.sorts, field, 1),
                   // {
                   //   ...list.sorts,
                   //   [field]: 1,
@@ -210,12 +175,12 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
               case 1:
                 return {
                   ...list,
-                  sorts: updateSorts(list.sorts, field, -1)
+                  sorts: updateSorts(list.sorts, field, -1),
                 };
               case -1:
                 return {
                   ...list,
-                  sorts: updateSorts(list.sorts, field, 0)
+                  sorts: updateSorts(list.sorts, field, 0),
                 };
             }
           }
