@@ -128,9 +128,6 @@ export function* onToDoUpdate() {
   yield takeLatest(ToDoListsActionTypes.UPDATE_TODO_START, updateToDo);
 }
 
-export function* onAddFilter() {
-  yield takeLatest;
-}
 
 export function* onAddList() {
   yield takeLatest(ToDoListsActionTypes.ADD_LIST_START, addList);

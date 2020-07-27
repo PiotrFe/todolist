@@ -14,12 +14,16 @@ import {
   selectFilterLoading,
 } from "../../redux/filter-bar/filter-bar.selectors";
 
+import {selectSorts} from "../../redux/todo-container/todo-container.selectors";
+
 import { ActionTypes } from "../../constants/constants";
 
 import {
   addFilter,
   removeFilter,
+  fetchFilteredToDoS,
 } from "../../redux/filter-bar/filter-bar.actions";
+
 import {
   showFilterPreview,
   clearFilterPreview,
@@ -29,6 +33,7 @@ import {
 const FilterBar = ({
   listID,
   filters = [],
+  sorts,
   filterPreview,
   loading,
   inCockpit,
@@ -36,7 +41,8 @@ const FilterBar = ({
   removeFilter,
   showFilterPreview,
   clearFilterPreview,
-  setFiltersAndPreviewStore
+  setFiltersAndPreviewStore,
+  fetchFilteredToDoS,
 }) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
   const [filterMode, updateFilterMode] = useState(true);
@@ -46,7 +52,7 @@ const FilterBar = ({
 
   useEffect(() => {
     setFiltersAndPreviewStore(listID);
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (filterBarContent.length >= 3) {
@@ -58,6 +64,9 @@ const FilterBar = ({
     }
   }, [filterBarContent]);
 
+  useEffect(() => {
+    fetchFilteredToDoS({ listID, filters, sorts });
+  }, [filters.length]);
 
   const inputEl = useRef(null);
 
@@ -115,6 +124,7 @@ const FilterBar = ({
 
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
+  sorts: selectSorts,
   filterPreview: selectFilterPreview,
   loading: selectFilterLoading,
 });
@@ -126,7 +136,10 @@ const mapDispatchToProps = (dispatch) => ({
   showFilterPreview: ({ listID, filters, word }) =>
     dispatch(showFilterPreview({ listID, filters, word })),
   clearFilterPreview: (listID) => dispatch(clearFilterPreview(listID)),
-  setFiltersAndPreviewStore: (listID) => dispatch(setFiltersAndPreviewStore(listID))
+  setFiltersAndPreviewStore: (listID) =>
+    dispatch(setFiltersAndPreviewStore(listID)),
+  fetchFilteredToDoS: ({ listID, filters, sorts }) =>
+    dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterBar);

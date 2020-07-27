@@ -40,11 +40,6 @@ export const updateToDoFailure = (error) => ({
   payload: error,
 });
 
-export const fetchFilteredToDoS = ({ listID, filters, sorts }) => ({
-  type: FETCH_TODOS_START,
-  payload: { listID, filters, sorts },
-});
-
 export const fetchToDoSSuccess = ({ listID, todos, filters = [], sorts = {} }) => ({
   type: FETCH_TODOS_SUCCESS,
   payload: { listID, todos, filters, sorts },

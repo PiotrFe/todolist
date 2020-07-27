@@ -111,8 +111,12 @@ exports.filterTodos = async (req, res) => {
     });
   }
 
-  query = db.ToDoList.findById(listID);
-
+  if (listID === "MAIN_INPUT_ID") {
+    query = db.ToDoList.find({});
+  } else {
+    query = db.ToDoList.findById(listID);
+  }
+  
   populateObj.path = "todos";
 
   if (filters.length) {
@@ -121,14 +125,21 @@ exports.filterTodos = async (req, res) => {
 
   if (Object.keys(sortObj).length) {
     populateObj.options = {sort: sortObj}
-    // populateObj.collation = { locale: "en" };
   }
 
   query.populate(populateObj).collation({ locale: "en" });
 
   try {
     const filteredList = await query.exec();
-    res.json(filteredList.todos);
+    console.log(`----------------
+    ${JSON.stringify(filteredList)}
+    -----------------`);
+    if (listID === "MAIN_INPUT_ID") {
+      res.json(filteredList);
+    } else {
+      res.json(filteredList.todos);
+    }
+    
   } catch (error) {
     res.json(error);
   }
@@ -148,7 +159,7 @@ exports.resultsPreview = async (req, res) => {
   // building query
   let query; 
 
-  if (listID === "Main") {
+  if (listID === "MAIN_INPUT_ID") {
     query = db.ToDoList.find({});
   } else {
     query = db.ToDoList.findById(listID)

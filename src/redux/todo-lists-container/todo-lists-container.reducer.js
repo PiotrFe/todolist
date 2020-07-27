@@ -1,5 +1,6 @@
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
 import { TodoContainerTypes } from "../todo-container/todo-container.types";
+import { FilterBarTypes } from "../filter-bar/filter-bar.types";
 import { ToDoFields } from "../../constants/constants";
 import { updateSorts } from "./todo-lists-container.utils";
 
@@ -24,6 +25,11 @@ const {
   FETCH_TODOS_FAILURE,
   UPDATE_SORTS,
 } = TodoContainerTypes;
+
+const {
+  FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
+  FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE
+} = FilterBarTypes
 
 const INITIAL_STATE = {
   todoLists: [],
@@ -135,7 +141,6 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         error: action.payload,
       };
-
     case FETCH_TODOS_SUCCESS:
       return {
         ...state,
@@ -154,6 +159,13 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         error: action.payload.error,
       };
+    case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
+    case FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE: {
+      return {
+        ...state,
+        loading: false
+      }
+    }
 
     case UPDATE_SORTS:
       return {

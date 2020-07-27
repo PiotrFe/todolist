@@ -2,8 +2,13 @@ import { take, takeLatest, put, call, all } from "redux-saga/effects";
 import { TodoContainerTypes } from "./todo-container.types";
 
 import { fetchToDoSSuccess, fetchToDoSFailure } from "./todo-container.actions";
-import { asyncActionStart } from "../todo-lists-container/todo-lists-container.actions";
+import {
+  fetchFilteredToDosMainInputSuccess,
+  fetchFilteredToDosMainInputFailure,
+} from "../filter-bar/filter-bar.actions";
 
+import { asyncActionStart } from "../todo-lists-container/todo-lists-container.actions";
+import { MAIN_INPUT_ID } from "../../constants/constants";
 
 export function* fetchFilteredToDos({ payload: { listID, filters, sorts } }) {
   yield put(asyncActionStart());
@@ -18,9 +23,17 @@ export function* fetchFilteredToDos({ payload: { listID, filters, sorts } }) {
 
     const todos = yield data.json();
 
-    yield put(fetchToDoSSuccess({ listID, todos, filters, sorts } ));
+    if (listID === MAIN_INPUT_ID) {
+      yield put(fetchFilteredToDosMainInputSuccess({ todos }));
+    } else {
+      yield put(fetchToDoSSuccess({ listID, todos, filters, sorts }));
+    }
   } catch (error) {
-    yield put(fetchToDoSFailure({ listID, error }));
+    if (listID === MAIN_INPUT_ID) {
+      yield put(fetchFilteredToDosMainInputFailure({ error }));
+    } else {
+      yield put(fetchToDoSFailure({ listID, error }));
+    }
   }
 }
 

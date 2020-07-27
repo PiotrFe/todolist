@@ -75,3 +75,5 @@ export const DEFAULT_SORTS = {
   [ToDoFields.OWNER]: 0,
   [ToDoFields.COLOR]: 0,
 };
+
+export const MAIN_INPUT_ID = "MAIN_INPUT_ID"

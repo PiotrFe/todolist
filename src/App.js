@@ -9,6 +9,8 @@ import UserLogo from "./components/user-logo/user-logo.component";
 import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
 import FilterBar from "./components/filter-bar/filter-bar.component";
 
+import { MAIN_INPUT_ID } from "./constants/constants"
+
 import "rsuite/dist/styles/rsuite-default.css";
 
 import {
@@ -63,7 +65,7 @@ function App() {
       <div className="app-split app-split__right-side">
         <>
         <FilterBar
-          listID={"Main"}
+          listID={MAIN_INPUT_ID}
           inCockpit={false}
         />
         <ToDoListsContainer />

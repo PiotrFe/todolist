@@ -1,5 +1,7 @@
 import { FilterBarTypes } from "./filter-bar.types";
 
+import { MAIN_INPUT_ID } from "../../constants/constants";
+
 const {
   SET_FILTERS_AND_PREVIEW_STORE,
   FETCH_FILTER_PREVIEW_SUCCESS,
@@ -7,8 +9,11 @@ const {
   CLEAR_FILTER_PREVIEW,
   SET_PREVIEW_LOADING,
   ADD_FILTER,
-  REMOVE_FILTER
+  REMOVE_FILTER,
+  FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
+  FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE,
 } = FilterBarTypes;
+
 
 const INITIAL_STATE = {};
 
@@ -80,6 +85,14 @@ const FilterBarReducer = (state = INITIAL_STATE, action) => {
             (item) =>
               JSON.stringify(item) !== JSON.stringify(action.payload.filter)
           ),
+        },
+      };
+    case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
+      return {
+        ...state,
+        [MAIN_INPUT_ID]: {
+          ...state[MAIN_INPUT_ID],
+          todoData: action.payload.todos,
         },
       };
     default:

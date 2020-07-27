@@ -1,7 +1,7 @@
 import { createSelector } from "reselect";
 
 const selectFilterBar = (state) => state.filterBar;
-const selectFilterPreviewByID = (state, props) => state.filterBar[props.listID]
+const selectFilterPreviewByID = (state, props) => state.filterBar[props.listID];
 
 export const selectFilterPreview = createSelector(
   [selectFilterPreviewByID],
@@ -15,5 +15,5 @@ export const selectFilterLoading = createSelector(
 
 export const selectFilters = createSelector(
   [selectFilterPreviewByID],
-  list => list?.filters
-)
+  (list) => list?.filters
+);

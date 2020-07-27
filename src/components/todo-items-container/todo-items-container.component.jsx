@@ -15,7 +15,6 @@ import {
   asyncActionBegin,
   dropToDo,
   updateSorts,
-  fetchFilteredToDoS,
 } from "../../redux/todo-container/todo-container.actions";
 
 import {
@@ -24,9 +23,9 @@ import {
   updateToDo,
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
-import {
-  selectSorts,
-} from "../../redux/todo-container/todo-container.selectors";
+import { fetchFilteredToDoS } from "../../redux/filter-bar/filter-bar.actions";
+
+import { selectSorts } from "../../redux/todo-container/todo-container.selectors";
 
 import { selectFilters } from "../../redux/filter-bar/filter-bar.selectors";
 
@@ -58,7 +57,7 @@ const ToDoItemsContainer = ({
   // Effects
   useEffect(() => {
     fetchFilteredToDoS({ listID, filters, sorts });
-  }, [filters.length, JSON.stringify(sorts)]);
+  }, [JSON.stringify(sorts)]);
 
   // Methods
   const toggleEditMode = () => {
@@ -113,10 +112,7 @@ const ToDoItemsContainer = ({
           />
         )}
 
-        <FilterBar
-          listID={listID}
-          inCockpit={inCockpit}
-        />
+        <FilterBar listID={listID} inCockpit={inCockpit} />
 
         <div className="header-top__action-icons">
           <Toggle
@@ -170,12 +166,12 @@ const mapDispatchToProps = (dispatch) => ({
   addToDo: ({ listID, todo }) => dispatch(addToDo({ listID, todo })),
   asyncActionBegin: () => dispatch(asyncActionBegin()),
   dropToDo: (idxFrom, idxTo) => dispatch(dropToDo(idxFrom, idxTo)),
-  fetchFilteredToDoS: ({ listID, filters, sorts }) =>
-    dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
   removeToDo: ({ todoID, listID }) => dispatch(removeToDo({ todoID, listID })),
   updateSorts: (listID, field) => dispatch(updateSorts({ listID, field })),
   updateToDo: ({ todoID, field, value }) =>
     dispatch(updateToDo({ todoID, field, value })),
+  fetchFilteredToDoS: ({ listID, filters, sorts }) =>
+    dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoItemsContainer);
