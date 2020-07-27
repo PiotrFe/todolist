@@ -166,7 +166,6 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false
       }
     }
-
     case UPDATE_SORTS:
       return {
         ...state,

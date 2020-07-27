@@ -26,9 +26,6 @@ const NavTop = ({
     "-1": SORT_DESC,
   };
 
-  console.log(JSON.stringify(sorts));
-
-
   return (
     <header className="header-top">
       <div className="header-top__items">

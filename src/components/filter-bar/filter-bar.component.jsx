@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 
@@ -14,7 +14,7 @@ import {
   selectFilterLoading,
 } from "../../redux/filter-bar/filter-bar.selectors";
 
-import {selectSorts} from "../../redux/todo-container/todo-container.selectors";
+import { selectSorts } from "../../redux/todo-container/todo-container.selectors";
 
 import { ActionTypes } from "../../constants/constants";
 
@@ -50,25 +50,39 @@ const FilterBar = ({
 
   const { CHANGE, REMOVE, SEARCH, SUBMIT } = ActionTypes;
 
-  useEffect(() => {
-    setFiltersAndPreviewStore(listID);
-  }, []);
+  const didMountRef = useRef(false);
+  const inputEl = useRef(null);
 
-  useEffect(() => {
+  const fetchData = useCallback(
+    () => fetchFilteredToDoS({ listID, filters, sorts }),
+    [filters.length]
+  );
+
+  const fetchPreview = useCallback(() => {
     if (filterBarContent.length >= 3) {
       updateFilterMode(true);
       fetchFilterPreview(filterBarContent);
     } else {
       updateFilterMode(false);
+    }
+    if (filterBarContent.length === 2) {
       clearFilterPreview(listID);
     }
   }, [filterBarContent]);
 
   useEffect(() => {
-    fetchFilteredToDoS({ listID, filters, sorts });
-  }, [filters.length]);
+    setFiltersAndPreviewStore(listID);
+  }, []);
 
-  const inputEl = useRef(null);
+  useEffect(() => {
+    if (didMountRef.current) {
+      fetchData();
+    } else didMountRef.current = true;
+  }, [fetchData]);
+
+  useEffect(() => {
+    fetchPreview();
+  }, [fetchPreview]);
 
   const updateFilterBar = (content) => {
     updateFilterBarContent(content);

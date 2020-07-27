@@ -27,11 +27,15 @@ import { fetchFilteredToDoS } from "../../redux/filter-bar/filter-bar.actions";
 
 import { selectSorts } from "../../redux/todo-container/todo-container.selectors";
 
-import { selectFilters } from "../../redux/filter-bar/filter-bar.selectors";
+import {
+  selectFilters,
+  selectDataFromMainFilter,
+} from "../../redux/filter-bar/filter-bar.selectors";
 
 import { DEFAULT_SORTS } from "../../constants/constants";
 
 import "./todo-items-container.styles.scss";
+import { useCallback } from "react";
 
 const ToDoItemsContainer = ({
   listID,
@@ -39,6 +43,7 @@ const ToDoItemsContainer = ({
   title,
   filters = [],
   todoItems,
+  mainInputFilteredData,
   addToDo,
   dropToDo,
   fetchFilteredToDoS,
@@ -53,11 +58,33 @@ const ToDoItemsContainer = ({
   // Local state
   const [editMode, updateEditMode] = useState(false);
   const [dragModeOn, toggleDragMode] = useState(false);
+  const [localView, updateLocalView] = useState(todoItems);
+
+  const didMount = useRef(false);
+  const mainInputFiltersChangedAfterRender = useRef(false);
 
   // Effects
-  useEffect(() => {
-    fetchFilteredToDoS({ listID, filters, sorts });
+  const fetchData = useCallback(() => {
+    if (didMount.current) fetchFilteredToDoS({ listID, filters, sorts });
+    else didMount.current = true;
   }, [JSON.stringify(sorts)]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => {
+    updateLocalView(todoItems);
+  }, [JSON.stringify(todoItems)]);
+
+  useEffect(() => {
+    if (mainInputFiltersChangedAfterRender.current) {
+      const updatedLocalData = todoItems.filter((item) =>
+        mainInputFilteredData.todos.includes(item._id)
+      );
+      updateLocalView(updatedLocalData);
+    } else mainInputFiltersChangedAfterRender.current = true;
+  }, [JSON.stringify(mainInputFilteredData)]);
 
   // Methods
   const toggleEditMode = () => {
@@ -130,7 +157,7 @@ const ToDoItemsContainer = ({
 
       <ToDoItems
         listID={listID}
-        todoItems={todoItems}
+        todoItems={localView}
         actions={{
           [DRAG]: handleDragEnd,
           [REMOVE]: removeToDo,
@@ -160,6 +187,7 @@ const ToDoItemsContainer = ({
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
   sorts: selectSorts,
+  mainInputFilteredData: selectDataFromMainFilter,
 });
 
 const mapDispatchToProps = (dispatch) => ({
