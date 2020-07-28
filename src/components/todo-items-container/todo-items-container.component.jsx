@@ -33,6 +33,8 @@ import {
 } from "../../redux/filter-bar/filter-bar.selectors";
 
 import { DEFAULT_SORTS } from "../../constants/constants";
+import { generateCVSData } from "./todo-items-container.utils";
+import { downloadBlob } from "../../utils/utils";
 
 import "./todo-items-container.styles.scss";
 import { useCallback } from "react";
@@ -79,8 +81,8 @@ const ToDoItemsContainer = ({
 
   useEffect(() => {
     if (mainInputFiltersChangedAfterRender.current) {
-      const updatedLocalData = todoItems.filter((item) =>
-        mainInputFilteredData.todos.includes(item._id)
+      const updatedLocalData = todoItems.filter(
+        (item) => mainInputFilteredData.todos.includes(item._id) // add functionality accounting for a scenario where a todo was added to the list by another user in the meantime
       );
       updateLocalView(updatedLocalData);
     } else mainInputFiltersChangedAfterRender.current = true;
@@ -94,6 +96,11 @@ const ToDoItemsContainer = ({
   const handleToDoUpdate = ({ todoID, field, value }) => {
     // asyncActionBegin();
     updateToDo({ todoID, field, value });
+  };
+
+  const handleCSVDownload = () => {
+    const CSVData = generateCVSData({ localView, title });
+    downloadBlob(CSVData, "download.csv");
   };
 
   // HANDLING DRAG
@@ -151,7 +158,9 @@ const ToDoItemsContainer = ({
           <Button side="md" onClick={(listID, toggleEditMode)}>
             Add
           </Button>
-          <Button side="md">Download</Button>
+          <Button side="md" onClick={handleCSVDownload}>
+            Download
+          </Button>
         </div>
       </div>
 
