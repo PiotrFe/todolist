@@ -37,3 +37,8 @@ export const selectDataFromMainFilter = createSelector(
     todos: data?.todos,
   })
 );
+
+export const selectActiveFiltersFromMainFilter = createSelector(
+  selectMainFilterBar,
+  (filterBar) => filterBar?.filters
+);

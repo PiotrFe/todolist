@@ -12,11 +12,16 @@ import { selectFilters } from "../../redux/filter-bar/filter-bar.selectors";
 import {
   selectFilterPreview,
   selectFilterLoading,
+  selectActiveFiltersFromMainFilter,
 } from "../../redux/filter-bar/filter-bar.selectors";
 
 import { selectSorts } from "../../redux/todo-container/todo-container.selectors";
 
-import { ActionTypes } from "../../constants/constants";
+import {
+  ActionTypes,
+  FILTER_STATUS,
+  MAIN_INPUT_ID,
+} from "../../constants/constants";
 
 import {
   addFilter,
@@ -30,9 +35,15 @@ import {
   setFiltersAndPreviewStore,
 } from "../../redux/filter-bar/filter-bar.actions";
 
+import {
+  updateActiveFilters,
+  clearActiveStatusFromFilters,
+} from "./filter-bar.utils";
+
 const FilterBar = ({
   listID,
   filters = [],
+  globalFilters = [],
   sorts,
   placeholder,
   filterPreview,
@@ -49,16 +60,17 @@ const FilterBar = ({
   const [filterBarContent, updateFilterBarContent] = useState("");
   const [filterMode, updateFilterMode] = useState(true);
   const [filterWord, updateFilterWord] = useState("");
+  const [activeFilters, setActiveFilters] = useState([]);
 
   const { CHANGE, REMOVE, SEARCH, SUBMIT } = ActionTypes;
 
   const didMountRef = useRef(false);
   const inputEl = useRef(null);
 
-  const fetchData = useCallback(
-    () => fetchFilteredToDoS({ listID, filters, sorts }),
-    [filters.length]
-  );
+  const fetchData = useCallback(() => {
+    fetchFilteredToDoS({ listID, filters, sorts });
+    setActiveFilters(filters);
+  }, [filters.length]);
 
   const fetchPreview = useCallback(() => {
     if (filterBarContent.length >= 3) {
@@ -86,6 +98,16 @@ const FilterBar = ({
     fetchPreview();
   }, [fetchPreview]);
 
+  useEffect(() => {
+    if (listID !== MAIN_INPUT_ID) {
+      if (globalFilters.length === 0) {
+        setActiveFilters(clearActiveStatusFromFilters(filters));
+      } else {
+        setActiveFilters(updateActiveFilters({ globalFilters, filters }));
+      }
+    }
+  }, [globalFilters.length]);
+
   const updateFilterBar = (content) => {
     updateFilterBarContent(content);
   };
@@ -96,7 +118,13 @@ const FilterBar = ({
   };
 
   const applyFilter = (filter) => {
-    addFilter({ listID, filter });
+    addFilter({
+      listID,
+      filter: {
+        ...filter,
+        status: FILTER_STATUS.ACTIVE,
+      },
+    });
     updateFilterMode(false);
     updateFilterWord("");
     updateFilterBarContent("");
@@ -114,7 +142,7 @@ const FilterBar = ({
           inputEl.current.focus();
         }}
       >
-        {filters.map((item, idx) => (
+        {activeFilters.map((item, idx) => (
           <FilterCard key={idx} item={item} remove={deleteFilter} />
         ))}
         <TodoInput
@@ -141,6 +169,7 @@ const FilterBar = ({
 
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
+  globalFilters: selectActiveFiltersFromMainFilter,
   sorts: selectSorts,
   filterPreview: selectFilterPreview,
   loading: selectFilterLoading,

@@ -1,8 +1,20 @@
 .filter-card {
-    border: 1px solid black;
+    border: 1px solid blue;
     margin: .5rem;
     padding: .5rem;
     font-size: 1.5rem;
+    background-color: black;
+    color: white;
+
+    &--highlighted {
+        opacity: 70%;
+    }
+
+    &--disabled {
+        opacity: 70%;
+        background-color: lightgrey;
+        color: grey;
+    }
 
     &__button {
         border: none;

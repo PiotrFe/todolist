@@ -76,4 +76,10 @@ export const DEFAULT_SORTS = {
   [ToDoFields.COLOR]: 0,
 };
 
-export const MAIN_INPUT_ID = "MAIN_INPUT_ID"
+export const MAIN_INPUT_ID = "MAIN_INPUT_ID";
+
+export const FILTER_STATUS = {
+  ACTIVE: "ACTIVE",
+  DISABLED: "DISABLED",
+  HIGHLIGHTED: "HIGHLIGHTED"
+}

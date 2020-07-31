@@ -17,6 +17,8 @@ const {
 
 const INITIAL_STATE = {};
 
+let key, value;
+
 const FilterBarReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SET_FILTERS_AND_PREVIEW_STORE:
@@ -82,8 +84,10 @@ const FilterBarReducer = (state = INITIAL_STATE, action) => {
           ...state[action.payload.listID],
           loading: false,
           filters: state[action.payload.listID].filters.filter(
-            (item) =>
-              JSON.stringify(item) !== JSON.stringify(action.payload.filter)
+            (item) => {
+              [key, value] = Object.entries(item)[0];
+              return JSON.stringify({[key]: value}) !== JSON.stringify(action.payload.filter)
+            }
           ),
         },
       };
