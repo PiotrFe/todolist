@@ -34,7 +34,7 @@ import {
 
 import { DEFAULT_SORTS } from "../../constants/constants";
 import { generateCVSData } from "./todo-items-container.utils";
-import { downloadBlob } from "../../utils/utils";
+import { downloadCSV } from "../../utils/utils";
 
 import "./todo-items-container.styles.scss";
 import { useCallback } from "react";
@@ -61,6 +61,7 @@ const ToDoItemsContainer = ({
   const [editMode, updateEditMode] = useState(false);
   const [dragModeOn, toggleDragMode] = useState(false);
   const [localView, updateLocalView] = useState(todoItems);
+  const [inputDisabled, toggleInputDisabled] = useState(false);
 
   const didMount = useRef(false);
   const mainInputFiltersChangedAfterRender = useRef(false);
@@ -81,10 +82,13 @@ const ToDoItemsContainer = ({
 
   useEffect(() => {
     if (mainInputFiltersChangedAfterRender.current) {
-      const updatedLocalData = todoItems.filter(
-        (item) => mainInputFilteredData.todos.includes(item._id) // add functionality accounting for a scenario where a todo was added to the list by another user in the meantime
-      );
-      updateLocalView(updatedLocalData);
+      if (mainInputFilteredData.filters.length === 0) {
+        updateLocalView(todoItems);
+        toggleInputDisabled(false);
+      } else {
+        updateLocalView(mainInputFilteredData.todos);
+        toggleInputDisabled(true);
+      }
     } else mainInputFiltersChangedAfterRender.current = true;
   }, [JSON.stringify(mainInputFilteredData)]);
 
@@ -100,7 +104,7 @@ const ToDoItemsContainer = ({
 
   const handleCSVDownload = () => {
     const CSVData = generateCVSData({ localView, title });
-    downloadBlob(CSVData, "download.csv");
+    downloadCSV(CSVData, title);
   };
 
   // HANDLING DRAG
@@ -146,7 +150,12 @@ const ToDoItemsContainer = ({
           />
         )}
 
-        <FilterBar listID={listID} inCockpit={inCockpit} />
+        <FilterBar
+          listID={listID}
+          inCockpit={inCockpit}
+          placeholder={"Type to search in list"}
+          disabled={inputDisabled}
+        />
 
         <div className="header-top__action-icons">
           <Toggle

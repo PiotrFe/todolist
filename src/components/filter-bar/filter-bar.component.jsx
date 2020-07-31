@@ -34,8 +34,10 @@ const FilterBar = ({
   listID,
   filters = [],
   sorts,
+  placeholder,
   filterPreview,
   loading,
+  disabled,
   inCockpit,
   addFilter,
   removeFilter,
@@ -119,8 +121,9 @@ const FilterBar = ({
           onChange={updateFilterBar}
           content={filterBarContent}
           ref={inputEl}
-          placeholder={"Type to search in list"}
+          placeholder={placeholder}
           inCockpit={inCockpit}
+          disabled={disabled}
         />
       </div>
       {filterMode ? (

@@ -1,4 +1,4 @@
-export const downloadBlob = (csvData, fileName) => {
+export const downloadCSV = (csvData, fileName) => {
 
     const blob = new Blob([csvData], { type: "text/csv" });
     const url = URL.createObjectURL(blob);

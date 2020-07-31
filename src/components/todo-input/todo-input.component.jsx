@@ -4,7 +4,7 @@ import "./todo-input.styles.scss";
 
 const TodoInput = React.forwardRef(
   (
-    { content = "", placeholder = "", onChange = null, onSubmit = null },
+    { content = "", placeholder = "", onChange = null, onSubmit = null, disabled = false },
     ref
   ) => {
     return (
@@ -17,6 +17,7 @@ const TodoInput = React.forwardRef(
         }}
       >
         <input
+          disabled={disabled}
           type="text"
           className="todo-input__search-field"
           id="filter-search-field"

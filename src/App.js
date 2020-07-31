@@ -67,6 +67,7 @@ function App() {
         <FilterBar
           listID={MAIN_INPUT_ID}
           inCockpit={false}
+          placeholder={"Type to search in all lists"}
         />
         <ToDoListsContainer />
         </>
