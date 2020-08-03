@@ -5,7 +5,6 @@ import { createStructuredSelector } from "reselect";
 import NavTop from "../../components/nav-top/nav-top.component";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
 import ToDoItems from "../../components/todo-items/todo-items.component";
-import Overlay from "../../components/overlay/overlay.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 import { Toggle, Button } from "rsuite";
 
@@ -33,7 +32,7 @@ import {
 } from "../../redux/filter-bar/filter-bar.selectors";
 
 import { DEFAULT_SORTS } from "../../constants/constants";
-import { generateCVSData } from "./todo-items-container.utils";
+import { generateCVSData, filterToDos } from "./todo-items-container.utils";
 import { downloadCSV } from "../../utils/utils";
 
 import "./todo-items-container.styles.scss";
@@ -77,7 +76,7 @@ const ToDoItemsContainer = ({
   }, [fetchData]);
 
   useEffect(() => {
-    updateLocalView(todoItems);
+    updateLocalView(filterToDos({mainSet: todoItems, subSet: mainInputFilteredData.todos}));
   }, [JSON.stringify(todoItems)]);
 
   useEffect(() => {
@@ -86,6 +85,7 @@ const ToDoItemsContainer = ({
         updateLocalView(todoItems);
         toggleInputDisabled(false);
       } else {
+        // updateLocalView(filterToDos({mainSet: todoItems, subSet: mainInputFilteredData.todos}));
         updateLocalView(mainInputFilteredData.todos);
         toggleInputDisabled(true);
       }

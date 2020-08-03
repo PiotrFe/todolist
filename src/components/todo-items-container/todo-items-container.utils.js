@@ -28,8 +28,16 @@ Add items or remote filters and try again`
         .filter(([key, value]) => !fieldsToExclude.includes(key))
         .map(([key, value]) => value)
     )
-    .map(values => `${values.join().trim()}\n`)
+    .map((values) => `${values.join().trim()}\n`)
     .join("");
 
   return `${headers}${values}`;
+};
+
+export const filterToDos = ({ mainSet = [], subSet = [] }) => {
+  if (mainSet.length === 0 || subSet.length === 0) return mainSet;
+
+  const subSetIDs = subSet.map(({ _id }) => _id);
+
+  return mainSet.filter((item) => subSetIDs.includes(item._id));
 };

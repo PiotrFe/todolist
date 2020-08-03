@@ -5,8 +5,8 @@ const selectFilterBar = (state) => state.filterBar;
 const selectMainFilterBar = (state) => state.filterBar[MAIN_INPUT_ID];
 const selectFilterPreviewByID = (state, props) => state.filterBar[props.listID];
 const selectFilteredDataFromMainInputByListID = (state, props) =>
-  state.filterBar[MAIN_INPUT_ID]?.todoData?.find((item) => {
-    return item._id === props.listID;
+  state.filterBar[MAIN_INPUT_ID]?.todoData?.find(({_id}) => {
+    return _id === props.listID;
   });
 
 export const selectFilterPreview = createSelector(
@@ -34,7 +34,7 @@ export const selectDataFromMainFilter = createSelector(
   selectFilteredDataFromMainInputByListID,
   (filterBar, data) => ({
     filters: filterBar?.filters,
-    todos: data?.todos,
+    todos: data?.todos
   })
 );
 

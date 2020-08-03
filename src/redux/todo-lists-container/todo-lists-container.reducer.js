@@ -178,10 +178,6 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
                 return {
                   ...list,
                   sorts: updateSorts(list.sorts, field, 1),
-                  // {
-                  //   ...list.sorts,
-                  //   [field]: 1,
-                  // },
                 };
               case 1:
                 return {

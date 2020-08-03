@@ -92,6 +92,14 @@ const FilterBarReducer = (state = INITIAL_STATE, action) => {
         },
       };
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
+      if (action.payload.filters.length === 0) return {
+        ...state,
+        [MAIN_INPUT_ID]: {
+          ...state[MAIN_INPUT_ID],
+          filters: [],
+          todoData: []
+        }
+      }
       return {
         ...state,
         [MAIN_INPUT_ID]: {
