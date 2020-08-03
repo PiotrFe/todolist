@@ -1,13 +1,12 @@
 import React, { useState } from "react";
-import { CSSTransitionGroup } from "react-transition-group";
 
-import ColorPicker from "../color-picker/color-picker.component";
 import { ActionTypes, ToDoFields } from "../../constants/constants";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 
-import { Dropdown } from "rsuite";
+import { Dropdown, Icon, IconButton } from "rsuite";
 
 import "./todo-item.styles.scss";
+import { ColorPickerColors } from "../../constants/constants";
 
 const ToDoItem = ({
   actions,
@@ -21,7 +20,6 @@ const ToDoItem = ({
   sorts,
   title,
 }) => {
-  const [colorPickerVisible, toggleColorPicker] = useState(false);
   const [editMode, toggleEditMode] = useState(false);
   const [detailsVisible, toggleDetailsVisible] = useState(false);
 
@@ -37,12 +35,19 @@ const ToDoItem = ({
     actions[UPDATE]({ todoID: id, field: "done", value: !done });
   };
 
-  const handleToDoChangeColor = ({ color }) => {
+  const handleColorChange = (color) => {
     actions[UPDATE]({ todoID: id, field: "color", value: color });
   };
 
   const dropDown = (
-    <Dropdown title="..." trigger="click" placement="leftStart" noCaret>
+    <Dropdown
+      placement="leftStart"
+      renderTitle={() => {
+        return (
+          <IconButton appearance="primary" icon={<Icon icon="more" />} circle />
+        );
+      }}
+    >
       <Dropdown.Item onSelect={() => toggleDetailsVisible(!detailsVisible)}>
         More info
       </Dropdown.Item>
@@ -51,7 +56,14 @@ const ToDoItem = ({
       <Dropdown.Item onSelect={() => actions[REMOVE]({ listID, todoID: id })}>
         Remove
       </Dropdown.Item>
-      <Dropdown.Item>Color</Dropdown.Item>
+      <Dropdown.Menu title="Color" pullLeft>
+        {Object.values(ColorPickerColors).map((color) => (
+          <Dropdown.Item
+            style={{ "background-color": `${color}` }}
+            onSelect={() => handleColorChange(color)}
+          ></Dropdown.Item>
+        ))}
+      </Dropdown.Menu>
     </Dropdown>
   );
 
@@ -64,6 +76,9 @@ const ToDoItem = ({
           className={`todo-item__side todo-item__side--front ${
             detailsVisible ? "" : "todo-item__side--front--visible"
           }`}
+          style={{
+            backgroundImage: `linear-gradient(to right, ${color}, transparent`,
+          }}
         >
           <div
             className={`todo-item__content todo-item__content--${
@@ -72,64 +87,67 @@ const ToDoItem = ({
           >
             <div className="todo-item__header">
               <div
-                className={`todo-item__title todo-item__title--front ${sorts[TITLE] !== 0 ? "todo-item__field--sorted" : null}`}
-                style={{
-                  backgroundImage: `linear-gradient(to right, ${color}, transparent`,
-                }}
+                className={`todo-item__title todo-item__title--front ${
+                  sorts[TITLE] !== 0 ? "todo-item__field--sorted" : null
+                }`}
               >
                 {title}
               </div>
             </div>
 
             <div className="todo-item__details todo-item__details--front">
-              <div className={`todo-item__duedate todo-item__duedate--front ${sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null}`}>
+              <div
+                className={`todo-item__duedate todo-item__duedate--front ${
+                  sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null
+                }`}
+              >
                 Due date: <span>{formattedDate}</span>
               </div>
-              <div className={`todo-item__owner todo-item__owner--front ${sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null}`}>
+              <div
+                className={`todo-item__owner todo-item__owner--front ${
+                  sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null
+                }`}
+              >
                 Owner:
                 <span>{owner}</span>
               </div>
             </div>
           </div>
         </div>
-        
+
         <div
           className={`todo-item__side todo-item__side--back ${
             detailsVisible ? "todo-item__side--back--visible" : ""
           }`}
           style={{
-            backgroundImage: `linear-gradient(to right, ${color}, ${color})`,
+            backgroundImage: `linear-gradient(to right, ${color}, transparent`,
           }}
         >
-          <div className="todo-item__icons todo-item__icons--back">
-            {dropDown}
+          <div
+            className={`todo-item__title todo-item__title--back ${
+              sorts[TITLE] !== 0 ? "todo-item__field--sorted" : null
+            }`}
+          >
+            {title}
           </div>
-
-          <div className={`todo-item__title todo-item__title--back ${sorts[TITLE] !== 0 ? "todo-item__field--sorted" : null}` }>{title}</div>
           <div className="todo-item__more">{details}</div>
 
-          <div className={`todo-item__duedate todo-item__duedate--back ${sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null}`}>
+          <div
+            className={`todo-item__duedate todo-item__duedate--back ${
+              sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null
+            }`}
+          >
             <span>{formattedDate}</span>
           </div>
-          <div className={`todo-item__owner todo-item__owner--back ${sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null}`}>
+          <div
+            className={`todo-item__owner todo-item__owner--back ${
+              sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null
+            }`}
+          >
             <span>{owner}</span>
           </div>
         </div>
       </div>
-      <CSSTransitionGroup
-        transitionName="color-picker"
-        transitionEnterTimeout={600}
-        transitionLeaveTimeout={600}
-      >
-        {colorPickerVisible ? (
-          <ColorPicker
-            id={id}
-            applyColor={handleToDoChangeColor}
-            showColorPicker={toggleColorPicker}
-          />
-        ) : null}
-      </CSSTransitionGroup>
-
       {editMode && (
         <ToDoModal
           id={id}

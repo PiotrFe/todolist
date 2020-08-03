@@ -52,6 +52,15 @@ export const Colors = {
   COLOR_PRIMARY_VERY_DARK: "#1b262c"
 };
 
+export const ColorPickerColors = {
+  COLOR_1: "#3D348B",
+  COLOR_2: "#7678ED",
+  COLOR_3: "#F7B801",
+  COLOR_4: "#F18701",
+  COLOR_5: "#F35B04",
+
+}
+
 export const Columns = {
   TITLE: "title",
   DUE_DATE: "dueDate",
