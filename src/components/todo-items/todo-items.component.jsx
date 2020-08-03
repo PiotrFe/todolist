@@ -14,7 +14,7 @@ import { IconTypes } from "../icon/icon.types";
 
 import "./todo-items.styles.scss";
 
-const ToDoList = ({listID, todoItems, actions, dragModeOn}) => {
+const ToDoList = ({listID, todoItems, actions, dragModeOn, sorts}) => {
 
   const {ADD, CHANGE, CHANGE_COLOR, DONE, DRAG, EDIT, REMOVE, SORT, SUBMIT, UPDATE} = ActionTypes;
 
@@ -83,6 +83,7 @@ const ToDoList = ({listID, todoItems, actions, dragModeOn}) => {
                     key={_id}
                     listID={listID}
                     owner={owner}
+                    sorts={sorts}
                     title={title}
                   />
                 ) : (
@@ -93,6 +94,7 @@ const ToDoList = ({listID, todoItems, actions, dragModeOn}) => {
                     idx={idx}
                     dueDate={dueDate}
                     owner={owner}
+                    sorts={sorts}
                     title={title}
                   />
                 );

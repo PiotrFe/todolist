@@ -182,6 +182,7 @@ const ToDoItemsContainer = ({
           [UPDATE]: handleToDoUpdate,
         }}
         dragModeOn={dragModeOn}
+        sorts={sorts}
       />
       {!inCockpit && editMode ? (
         <>

@@ -23,14 +23,13 @@ const ToDoListsContainer = ({ todoLists, loading, fetchLists }) => {
   return (
     <div className="todo-list-container">
       {todoLists.map(({ _id, title, owner, todos }) => (
-        <ToDoItemsContainer listID={_id} title={title} todoItems={todos}/>
+        <ToDoItemsContainer listID={_id} title={title} todoItems={todos} />
       ))}
-      {loading ? (
-        <>
-          <Overlay show={loading} onClick={null} opaque={true} />
-          <LoadingSpinner />
-        </>
-      ) : null}
+      {loading && (
+        <Overlay
+          withSpinner={true}
+        />
+      )}
     </div>
   );
 };

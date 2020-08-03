@@ -16,16 +16,16 @@ export const ActionTypes = {
 };
 
 export const ToDoFields = {
-  TITLE: "title",
+  COLOR: "color",
   DETAILS: "details",
-  DRAFT: "draft",
   DETAILS_DRAFT: "detailsDraft",
-  OWNER: "owner",
-  DUE_DATE: "dueDate",
-  DONE: "done",
-  EDIT_MODE: "editMode",
   DETAILS_VISIBLE: "detailsVisible",
-  COLOR: "color"
+  DONE: "done",
+  DRAFT: "draft",
+  DUE_DATE: "dueDate",
+  EDIT_MODE: "editMode",
+  OWNER: "owner",
+  TITLE: "title",
 }
 
 export const Sizes = {

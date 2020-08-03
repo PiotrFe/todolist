@@ -30,7 +30,7 @@ const NavTop = ({
     <header className="header-top">
       <div className="header-top__items">
         <div className="header-top__item-box">
-          <span className="header-top__item">Title</span>
+          <span className={`header-top__item ${sorts[TITLE] !== 0 ? "header-top__item--sorted" : 0}`}>Title</span>
           <Icon
             type={sortDirection[sorts[TITLE]]}
             onClick={() => actions[SORT](listID, TITLE)}
@@ -38,7 +38,7 @@ const NavTop = ({
           />
         </div>
         <div className="header-top__item-box">
-          <span className="header-top__item">Due date</span>
+          <span className={`header-top__item ${sorts[DUE_DATE] !== 0 ? "header-top__item--sorted" : 0}`}>Due date</span>
           <Icon
             type={sortDirection[sorts[DUE_DATE]]}
             onClick={() => actions[SORT](listID, DUE_DATE)}
@@ -46,7 +46,7 @@ const NavTop = ({
           />
         </div>
         <div className="header-top__item-box">
-          <span className="header-top__item">Owner</span>
+          <span className={`header-top__item ${sorts[OWNER] !== 0 ? "header-top__item--sorted" : 0}`}>Owner</span>
           <Icon
             type={sortDirection[sorts[OWNER]]}
             onClick={() => actions[SORT](listID, OWNER)}
@@ -54,7 +54,7 @@ const NavTop = ({
           />
         </div>
         <div className="header-top__item-box">
-          <span className="header-top__item">Color</span>
+          <span className={`header-top__item ${sorts[COLOR] !== 0 ? "header-top__item--sorted" : 0}`}>Color</span>
           <Icon
             type={sortDirection[sorts[COLOR]]}
             onClick={() => actions[SORT](listID, COLOR)}

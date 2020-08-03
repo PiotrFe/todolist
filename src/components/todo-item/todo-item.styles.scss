@@ -17,6 +17,10 @@
     transform: translateY(-0.3rem) scale(1.04);
   }
 
+  &__field--sorted {
+    border: 2px solid blue;
+  }
+
   // ICONS
 
   &__content {
@@ -40,6 +44,7 @@
     backface-visibility: hidden;
 
     transition: all 0.8s ease;
+
 
     // FRONTSIDE STYLING
 

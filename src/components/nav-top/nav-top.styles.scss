@@ -25,6 +25,10 @@
     }
   }
 
+  &__item--sorted {
+    border: 1px solid blue;
+  }
+
   &__item::selection {
     @extend %non-selectable;
   }

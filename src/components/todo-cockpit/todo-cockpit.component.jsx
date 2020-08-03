@@ -39,9 +39,7 @@ const ToDoCockpit = ({addList, visible, toggle}) => {
       {editMode && (
         <>
           <Overlay
-            show={true}
             onClick={() => toggleEditMode(!editMode)}
-            opaque={true}
           />
           <div className="add-list-input">
             <TodoInput

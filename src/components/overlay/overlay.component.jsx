@@ -5,7 +5,7 @@ import LoadingSpinner from "../loading-spinner/loading-spinner.component";
 
 import "./overlay.styles.scss";
 
-const Overlay = ({ children, show, onClick, opaque, withSpinner }) => {
+const Overlay = ({ children, show = true, onClick = null, opaque = true, withSpinner = false }) => {
   const modalRoot = document.getElementById("modal-root");
 
   return (

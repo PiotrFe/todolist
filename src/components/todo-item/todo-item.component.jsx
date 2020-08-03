@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { CSSTransitionGroup } from "react-transition-group";
 
 import ColorPicker from "../color-picker/color-picker.component";
-import {  ActionTypes } from "../../constants/constants";
-import Overlay from "../../components/overlay/overlay.component";
+import { ActionTypes, ToDoFields } from "../../constants/constants";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 
 import { Dropdown } from "rsuite";
@@ -19,6 +18,7 @@ const ToDoItem = ({
   id,
   listID,
   owner,
+  sorts,
   title,
 }) => {
   const [colorPickerVisible, toggleColorPicker] = useState(false);
@@ -26,6 +26,7 @@ const ToDoItem = ({
   const [detailsVisible, toggleDetailsVisible] = useState(false);
 
   const { DONE, EDIT, REMOVE, UPDATE } = ActionTypes;
+  const { TITLE, DUE_DATE, OWNER, COLOR } = ToDoFields;
 
   const date = new Date(dueDate);
   const formattedDate = `${date.getDate()}-${
@@ -41,23 +42,18 @@ const ToDoItem = ({
   };
 
   const dropDown = (
-
     <Dropdown title="..." trigger="hover" placement="bottomEnd" noCaret>
-    <Dropdown.Item
-      onSelect={() => toggleDetailsVisible(!detailsVisible)}
-    >
-      More info
-    </Dropdown.Item>
-    <Dropdown.Item onSelect={handleToDoDone}>Done</Dropdown.Item>
-    <Dropdown.Item>Edit</Dropdown.Item>
-    <Dropdown.Item
-      onSelect={() => actions[REMOVE]({ listID, todoID: id })}
-    >
-      Remove
-    </Dropdown.Item>
-    <Dropdown.Item>Color</Dropdown.Item>
-  </Dropdown>
-  )
+      <Dropdown.Item onSelect={() => toggleDetailsVisible(!detailsVisible)}>
+        More info
+      </Dropdown.Item>
+      <Dropdown.Item onSelect={handleToDoDone}>Done</Dropdown.Item>
+      <Dropdown.Item>Edit</Dropdown.Item>
+      <Dropdown.Item onSelect={() => actions[REMOVE]({ listID, todoID: id })}>
+        Remove
+      </Dropdown.Item>
+      <Dropdown.Item>Color</Dropdown.Item>
+    </Dropdown>
+  );
 
   return (
     <div className="todo-container">
@@ -74,24 +70,21 @@ const ToDoItem = ({
           >
             <div className="todo-item__header">
               <div
-                className="todo-item__title todo-item__title--front"
+                className={`todo-item__title todo-item__title--front ${sorts[TITLE] !== 0 ? "todo-item__field--sorted" : null}`}
                 style={{
                   backgroundImage: `linear-gradient(to right, ${color}, transparent`,
                 }}
               >
                 {title}
               </div>
-              <div className="todo-item__icons">
-              {dropDown}
-
-              </div>
+              <div className="todo-item__icons">{dropDown}</div>
             </div>
 
             <div className="todo-item__details todo-item__details--front">
-              <div className="todo-item__duedate todo-item__duedate--front">
+              <div className={`todo-item__duedate todo-item__duedate--front ${sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null}`}>
                 Due date: <span>{formattedDate}</span>
               </div>
-              <div className="todo-item__owner todo-item__owner--front">
+              <div className={`todo-item__owner todo-item__owner--front ${sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null}`}>
                 Owner:
                 <span>{owner}</span>
               </div>
@@ -107,15 +100,19 @@ const ToDoItem = ({
             backgroundImage: `linear-gradient(to right, ${color}, ${color})`,
           }}
         >
-          <div className="todo-item__icons todo-item__icons--back">{dropDown}</div>
+          <div className="todo-item__icons todo-item__icons--back">
+            {dropDown}
+          </div>
 
-          <div className="todo-item__title todo-item__title--back">{title}</div>
+          <div className={`todo-item__title todo-item__title--back ${sorts[TITLE] !== 0 ? "todo-item__field--sorted" : null}` }>{title}</div>
           <div className="todo-item__more">{details}</div>
 
-          <div className="todo-item__duedate todo-item__duedate--back">
+          <div className={`todo-item__duedate todo-item__duedate--back ${sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null}`}>
             <span>{formattedDate}</span>
           </div>
-          <div className="todo-item__owner todo-item__owner--back"><span>{owner}</span></div>
+          <div className={`todo-item__owner todo-item__owner--back ${sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null}`}>
+            <span>{owner}</span>
+          </div>
         </div>
       </div>
       <CSSTransitionGroup
@@ -132,21 +129,18 @@ const ToDoItem = ({
         ) : null}
       </CSSTransitionGroup>
 
-      {editMode ? (
-        <>
-          <Overlay show={true} onClick={null} opaque={true} />
-          <ToDoModal
-            id={id}
-            actions={{
-              [ActionTypes.CANCEL]: toggleEditMode,
-              [ActionTypes.EDIT]: actions[UPDATE],
-              [ActionTypes.SUBMIT]: ({ listID: id, todo }) => {
-                toggleEditMode(!editMode);
-              },
-            }}
-          />
-        </>
-      ) : null}
+      {editMode && (
+        <ToDoModal
+          id={id}
+          actions={{
+            [ActionTypes.CANCEL]: toggleEditMode,
+            [ActionTypes.EDIT]: actions[UPDATE],
+            [ActionTypes.SUBMIT]: ({ listID: id, todo }) => {
+              toggleEditMode(!editMode);
+            },
+          }}
+        />
+      )}
     </div>
   );
 };
