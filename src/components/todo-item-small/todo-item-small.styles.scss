@@ -2,11 +2,12 @@
 
 .todo-item-small {
   height: 5rem;
-  width: 55rem;
+  width: 100%;
   border: 1px solid black;
   font-size: 1.2rem;
   box-shadow: 0 1rem 3rem rgba($color-black, 0.15);
-  background-color: $color-white;
+  margin-bottom: 1rem;
+  border-radius: 3%;
 
   display: flex;
   justify-content: space-around;
@@ -17,21 +18,22 @@
   }
 
   &__title {
-    flex: 0 0 30%;
-
-    border: 1px solid black;
+    flex: 0 0 45%;
     padding: 0 0.5rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $color-white;
   }
 
   &__duedate {
-    flex: 0 0 30%;
+    flex: 0 0 20%;
 
     @extend %duedate-format;
   }
 
   &__owner {
-    flex: 0 0 30%;
-
+    flex: 0 0 20%;
+    align-self: center;
     @extend %owner-format;
   }
 }

@@ -16,10 +16,12 @@ const ToDoItemSmall = ({ color, dueDate, id, idx, owner, title }) => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           className={`todo-item-small ${snapshot.isDragging ? `todo-item-small--isdragging` : null}`}
+          style={{
+            backgroundImage: `linear-gradient(to right, ${color}, transparent`,
+          }}
         >
           <div
             className="todo-item-small__title"
-            style={{ backgroundColor: color }}
           >
             {title}
           </div>

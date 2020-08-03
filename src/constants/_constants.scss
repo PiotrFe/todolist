@@ -26,17 +26,17 @@ $color-custom-4: #F18701;
 $color-custom-5: #F35B04;
 
 %duedate-format {
-    border: 1px solid black;
     padding: 0 0.5rem;
     background-color: $color-blue-dark;
     color: $color-grey-light-1;
+    text-align: center;
 }
 
 %owner-format {
-    border: 1px solid black;
     padding: 0 0.5rem;
     background-color: $color-grey-dark-1;
     color: $color-grey-light-1;
+    text-align: center;
 }
 
 %non-selectable {

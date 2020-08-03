@@ -5,6 +5,7 @@
   flex-direction: row;
   height: 12rem;
   margin: 1rem;
+  color: $color-white;
 }
 
 .todo-item {
@@ -24,7 +25,6 @@
   &__icons {
     position: relative;
     top: 0;
-    // right: 4rem;
     z-index: 11;
     order: 1;
   }
@@ -106,6 +106,8 @@
 
   &__title {
     font-size: 2rem;
+    font-weight: bold;
+
 
     &--back {
       grid-column: 1 / span 1;

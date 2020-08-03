@@ -8,7 +8,12 @@
     min-height: 3rem;
     border-bottom: .5px solid $color-grey-dark-1;
     background-color: $color-white;
+}
 
+.rs-dropdown-menu > .rs-dropdown-item > .rs-dropdown-item-content:hover, .rs-dropdown-menu > .rs-dropdown-item > .rs-dropdown-item-content:focus {
+    text-decoration: none;
+    // color: #575757;
+    background-color:black;
 }
 
 
