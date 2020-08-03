@@ -47,8 +47,8 @@ function App() {
     return () => unsubscribeFromAuth();
   }, []);
 
-  return (
-    <div className="app">
+  return (<>
+    <div className="app" id="app">
       {currentUser ? (
         <UserLogo initials={currentUser.email} onClick={() => signOutUser()} />
       ) : null}
@@ -73,6 +73,8 @@ function App() {
         </>
       </div>
     </div>
+    <div className="modal-root" id="modal-root"></div>
+    </>
   );
 }
 

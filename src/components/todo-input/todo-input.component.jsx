@@ -4,7 +4,13 @@ import "./todo-input.styles.scss";
 
 const TodoInput = React.forwardRef(
   (
-    { content = "", placeholder = "", onChange = null, onSubmit = null, disabled = false },
+    {
+      content = "",
+      placeholder = "",
+      onChange = null,
+      onSubmit = null,
+      disabled = false,
+    },
     ref
   ) => {
     return (

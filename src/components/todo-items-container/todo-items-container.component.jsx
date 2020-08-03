@@ -185,7 +185,6 @@ const ToDoItemsContainer = ({
       />
       {!inCockpit && editMode ? (
         <>
-          <Overlay show={true} onClick={null} opaque={true} />
           <ToDoModal
             listID={listID}
             actions={{

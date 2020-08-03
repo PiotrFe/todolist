@@ -1,17 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+
+import Overlay from "../overlay/overlay.component";
+
+import { ActionTypes } from "../../constants/constants";
+import { parseDate } from "../utils/utils";
 
 import "./todo-new-modal.scss";
-
-import Overlay from "../../components/overlay/overlay.component";
-import { useState } from "react";
-
-import { ActionTypes, Themes } from "../../constants/constants";
-import { parseDate } from "../utils/utils";
 
 const ToDoModal = ({listID, actions, content = null }) => {
   const today = new Date();
   const MAX_LENGTH = 250;
-  // const {_id = null, title: toDoTitle = "", dueDate: toDoDueDate = "", owner: toDoOwner = "", details: toDoDetails = ""} = content || {};
 
   const [title, updateTitle] = useState("");
   const [dueDate, updateDueDate] = useState(new Date());
@@ -42,7 +40,7 @@ const ToDoModal = ({listID, actions, content = null }) => {
   };
 
   return (
-    <>
+    <Overlay show={true} opaque={true}>
       <div className="modal">
         <div className="modal__header">Enter to-do details</div>
         <form className="modal__form">
@@ -122,7 +120,7 @@ const ToDoModal = ({listID, actions, content = null }) => {
           </div>
         </form>
       </div>
-    </>
+    </Overlay>
   );
 };
 
