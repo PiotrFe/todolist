@@ -42,7 +42,7 @@ const ToDoItem = ({
   };
 
   const dropDown = (
-    <Dropdown title="..." trigger="hover" placement="bottomEnd" noCaret>
+    <Dropdown title="..." trigger="click" placement="leftStart" noCaret>
       <Dropdown.Item onSelect={() => toggleDetailsVisible(!detailsVisible)}>
         More info
       </Dropdown.Item>
@@ -57,6 +57,8 @@ const ToDoItem = ({
 
   return (
     <div className="todo-container">
+      <div className="todo-item__icons">{dropDown}</div>
+
       <div className="todo-item">
         <div
           className={`todo-item__side todo-item__side--front ${
@@ -77,7 +79,6 @@ const ToDoItem = ({
               >
                 {title}
               </div>
-              <div className="todo-item__icons">{dropDown}</div>
             </div>
 
             <div className="todo-item__details todo-item__details--front">
@@ -91,7 +92,7 @@ const ToDoItem = ({
             </div>
           </div>
         </div>
-
+        
         <div
           className={`todo-item__side todo-item__side--back ${
             detailsVisible ? "todo-item__side--back--visible" : ""
