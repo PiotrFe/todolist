@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 
 import "./todo-input.styles.scss";
 
@@ -13,13 +13,16 @@ const TodoInput = React.forwardRef(
     },
     ref
   ) => {
+    const [inputVal, updateInputVal] = useState(content);
+
     return (
       <form
         className="todo-input__search-form"
         autoComplete="off"
         onSubmit={(e) => {
           e.preventDefault();
-          if (onSubmit) onSubmit();
+          if (onChange && onSubmit) onSubmit();
+          else if (onSubmit) onSubmit(inputVal);
         }}
       >
         <input
@@ -33,6 +36,7 @@ const TodoInput = React.forwardRef(
           placeholder={placeholder}
           onChange={(e) => {
             if (onChange) onChange(e.target.value);
+            else updateInputVal(e.target.value);
           }}
         />
       </form>

@@ -71,7 +71,6 @@ const ToDoCockpit = ({addList, visible, toggle}) => {
           dragModeOn={dragMode}
         />
       </ToDoItemsContainer>
-      <NavSide toggle={toggle} />
     </div>
   );
 };

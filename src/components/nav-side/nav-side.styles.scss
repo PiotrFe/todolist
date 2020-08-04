@@ -1,12 +1,2 @@
 @import "../../constants/constants";
 
-.sidebar {
-    background-color: $color-grey-dark-1;
-    height: 100%;
-    width: 6rem;
-    flex-basis: 15%;
-
-    &--hidden {
-        transform: translateX(-10rem);
-    }
-}

@@ -6,44 +6,12 @@
 
 }
 
-.app-split {
-  // position: fixed;
+.app-main {
   height: 100%;
   top: 0px;
   border: 3px solid orangered;
   overflow-x: scroll;
   overflow-y: visible;
-
-
-  &__left-side {
-    flex-basis: 35%;
-    height: 85%;
-    align-self: center;
-    margin-right: 1rem;
-
-    &-enter {
-      opacity: 0;
-    }
-
-    &-enter-active {
-      opacity: 1;
-      transition: opacity 200ms;
-    }
-
-    &-exit {
-      opacity: 1;
-    }
-
-    &-exit-active {
-      opacity: 1;
-      transition: opacity 200ms;
-    }
-
-    &--hidden {
-      transform: translateX(calc(-60%));
-      flex-basis: 10%;
-  }
-  }
 
   &__right-side {
     // flex-basis: 70%
