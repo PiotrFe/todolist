@@ -1,9 +1,7 @@
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
 import { TodoContainerTypes } from "../todo-container/todo-container.types";
 import { FilterBarTypes } from "../filter-bar/filter-bar.types";
-import { ToDoFields } from "../../constants/constants";
-import { updateSorts } from "./todo-lists-container.utils";
-
+import { updateSorts, reorderItems } from "./todo-lists-container.utils";
 import { DEFAULT_SORTS } from "../../constants/constants";
 
 const {
@@ -18,6 +16,7 @@ const {
   REMOVE_TODO_FAILURE,
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILURE,
+  DROP_TODO,
 } = ToDoListsActionTypes;
 
 const {
@@ -28,8 +27,8 @@ const {
 
 const {
   FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
-  FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE
-} = FilterBarTypes
+  FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE,
+} = FilterBarTypes;
 
 const INITIAL_STATE = {
   todoLists: [],
@@ -111,7 +110,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
           return {
             ...list,
             todos: list.todos.map((item) => {
-              if (item._id != action.payload.todoID) return item;
+              if (item._id !== action.payload.todoID) return item;
               else {
                 return {
                   ...item,
@@ -163,8 +162,8 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
     case FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE: {
       return {
         ...state,
-        loading: false
-      }
+        loading: false,
+      };
     }
     case UPDATE_SORTS:
       return {
@@ -189,9 +188,28 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
                   ...list,
                   sorts: updateSorts(list.sorts, field, 0),
                 };
+              default:
+                return list
             }
           }
+          return list;
+        }),
+      };
 
+    case DROP_TODO:
+      return {
+        ...state,
+        todoLists: state.todoLists.map((list) => {
+          if (list._id === action.payload.listID) {
+            return {
+              ...list,
+              todos: reorderItems(
+                list.todos,
+                action.payload.from,
+                action.payload.to
+              ),
+            };
+          }
           return list;
         }),
       };

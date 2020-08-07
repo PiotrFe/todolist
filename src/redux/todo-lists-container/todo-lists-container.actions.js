@@ -17,6 +17,7 @@ const {
   UPDATE_TODO_START,
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILURE,
+  DROP_TODO,
 } = ToDoListsActionTypes;
 
 export const asyncActionStart = () => ({
@@ -95,4 +96,9 @@ export const addListSuccess = (list) => ({
 export const addListFailure = ({ error }) => ({
   type: ADD_LIST_FAILURE,
   payload: { error },
+});
+
+export const dropToDo = ({ listID, from, to }) => ({
+  type: DROP_TODO,
+  payload: { listID, from, to },
 });

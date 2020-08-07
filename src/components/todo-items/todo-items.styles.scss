@@ -1,16 +1,10 @@
 @import "../../constants/constants";
 
-.todo-area {
-    display: flex;
-    flex-direction: column;
-
-    align-items: center;
-    // background-color: orangered;
-}
-
 .todo-items {
     display: flex;
     flex-direction: column;
+    overflow: auto;
+    height: 100%;
 }
 
 .droppable {

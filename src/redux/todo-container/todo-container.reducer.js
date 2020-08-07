@@ -2,7 +2,6 @@ import { TodoContainerTypes } from "./todo-container.types";
 
 const {
   ASYNC_ACTION_BEGIN,
-  DROP_TODO,
 } = TodoContainerTypes;
 
 const INITIAL_STATE = {
@@ -32,14 +31,6 @@ const todoContainerReducer = (state = INITIAL_STATE, action) => {
         ...state,
         loading: true,
       };
-    case DROP_TODO:
-      return {
-        ...state,
-        todoItems: reorderItem(state.todoItems, action.payload),
-      };
-
-
-
     default:
       return state;
   }

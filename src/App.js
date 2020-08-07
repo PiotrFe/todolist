@@ -24,7 +24,7 @@ require("dotenv").config();
 
 function App() {
   const [currentUser, updateCurrentUser] = useState("");
-  const [cockpitVisible, toggleCockpit] = useState(true);
+  const [cockpitVisible, toggleCockpit] = useState(false);
   const [addListMode, toggleAddListMode] = useState(false);
 
   const mainInputRef = useRef(null);
@@ -82,6 +82,8 @@ function App() {
       <div className="modal-root" id="modal-root"></div>
     </>
   );
+
+  // return <Dnd />
 }
 
 export default App;

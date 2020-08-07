@@ -12,12 +12,13 @@ const ToDoItemSmall = ({ color, dueDate, id, idx, owner, title }) => {
     <Draggable draggableId={id} index={idx}>
       {(provided, snapshot) => (
         <div
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          ref={provided.innerRef}
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
           className={`todo-item-small ${snapshot.isDragging ? `todo-item-small--isdragging` : null}`}
           style={{
             backgroundImage: `linear-gradient(to right, ${color}, transparent`,
+            ...provided.draggableProps.style,
           }}
         >
           <div

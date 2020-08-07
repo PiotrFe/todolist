@@ -59,7 +59,8 @@ const ToDoItem = ({
       <Dropdown.Menu title="Color" pullLeft>
         {Object.values(ColorPickerColors).map((color) => (
           <Dropdown.Item
-            style={{ "background-color": `${color}` }}
+            key={`${id}_${color}`}
+            style={{ "backgroundColor": `${color}` }}
             onSelect={() => handleColorChange(color)}
           ></Dropdown.Item>
         ))}

@@ -12,7 +12,6 @@ import { ActionTypes } from "../../constants/constants";
 
 import {
   asyncActionBegin,
-  dropToDo,
   updateSorts,
 } from "../../redux/todo-container/todo-container.actions";
 
@@ -20,6 +19,7 @@ import {
   addToDo,
   removeToDo,
   updateToDo,
+  dropToDo
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import { fetchFilteredToDoS } from "../../redux/filter-bar/filter-bar.actions";
@@ -32,7 +32,11 @@ import {
 } from "../../redux/filter-bar/filter-bar.selectors";
 
 import { DEFAULT_SORTS } from "../../constants/constants";
-import { generateCVSData, filterToDos } from "./todo-items-container.utils";
+import {
+  generateCVSData,
+  filterToDos,
+  onDrop,
+} from "./todo-items-container.utils";
 import { downloadCSV } from "../../utils/utils";
 
 import "./todo-items-container.styles.scss";
@@ -65,19 +69,27 @@ const ToDoItemsContainer = ({
   const didMount = useRef(false);
   const mainInputFiltersChangedAfterRender = useRef(false);
 
-  // Effects
+  // Callbacks
   const fetchData = useCallback(() => {
     if (didMount.current) fetchFilteredToDoS({ listID, filters, sorts });
     else didMount.current = true;
   }, [JSON.stringify(sorts)]);
 
+  const filterData = useCallback(() => {
+    return filterToDos({
+      mainSet: todoItems,
+      subSet: mainInputFilteredData.todos,
+    });
+  }, [JSON.stringify(todoItems)]);
+
+  // Effects
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
   useEffect(() => {
-    updateLocalView(filterToDos({mainSet: todoItems, subSet: mainInputFilteredData.todos}));
-  }, [JSON.stringify(todoItems)]);
+    updateLocalView(filterData());
+  }, [filterData]);
 
   useEffect(() => {
     if (mainInputFiltersChangedAfterRender.current) {
@@ -85,7 +97,6 @@ const ToDoItemsContainer = ({
         updateLocalView(todoItems);
         toggleInputDisabled(false);
       } else {
-        // updateLocalView(filterToDos({mainSet: todoItems, subSet: mainInputFilteredData.todos}));
         updateLocalView(mainInputFilteredData.todos);
         toggleInputDisabled(true);
       }
@@ -113,17 +124,10 @@ const ToDoItemsContainer = ({
   };
 
   const handleDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
-
-    if (!destination) return;
-
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    )
-      return;
-
-    dropToDo(source.index, destination.index);
+    if (onDrop(result)) {
+      const { from, to } = onDrop(result);
+      dropToDo({ listID, from, to });
+    }
   };
 
   // if component is rendered in cockpit, it gets a custom NavTob; otherwise gets a default one
@@ -211,7 +215,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   addToDo: ({ listID, todo }) => dispatch(addToDo({ listID, todo })),
   asyncActionBegin: () => dispatch(asyncActionBegin()),
-  dropToDo: (idxFrom, idxTo) => dispatch(dropToDo(idxFrom, idxTo)),
+  dropToDo: ({ listID, from, to }) => dispatch(dropToDo({ listID, from, to })),
   removeToDo: ({ todoID, listID }) => dispatch(removeToDo({ todoID, listID })),
   updateSorts: (listID, field) => dispatch(updateSorts({ listID, field })),
   updateToDo: ({ todoID, field, value }) =>

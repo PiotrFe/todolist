@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import ToDoItem from "../../components/todo-item/todo-item.component";
@@ -8,17 +7,25 @@ import ToDoItemSmall from "../../components/todo-item-small/todo-item-small.comp
 import ToDoItemEditable from "../../components/todo-item-editable/todo-item-editable.component";
 import ConditionalWrapper from "../utils/ConditionalWrapper.util";
 
-
-import { ActionTypes, Themes, Columns } from "../../constants/constants";
-import { IconTypes } from "../icon/icon.types";
+import { ActionTypes } from "../../constants/constants";
 
 import "./todo-items.styles.scss";
 
-const ToDoList = ({listID, todoItems, actions, dragModeOn, sorts}) => {
-
-  const {ADD, CHANGE, CHANGE_COLOR, DONE, DRAG, EDIT, REMOVE, SORT, SUBMIT, UPDATE} = ActionTypes;
-
+const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts }) => {
+  const {
+    ADD,
+    CHANGE,
+    CHANGE_COLOR,
+    DONE,
+    DRAG,
+    EDIT,
+    REMOVE,
+    SORT,
+    SUBMIT,
+    UPDATE,
+  } = ActionTypes;
   const [editedToDo, setEditedToDo] = useState(null);
+  let baseProps, additionalProps;
 
   return (
     <>
@@ -30,82 +37,83 @@ const ToDoList = ({listID, todoItems, actions, dragModeOn, sorts}) => {
           </DragDropContext>
         )}
       >
-        <ConditionalWrapper
-          condition={dragModeOn}
-          wrapper={(children) => (
-            <Droppable droppableId={`RANDOM_ID`}>
-              {(provided, snapshot) => (
-                <div
-                  className={`droppable ${
-                    snapshot.isDraggingOver ? `droppable--is-dragging-over` : ""
-                  }`}
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {children}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          )}
-        >
-          <div className="todo-items">
-            {!todoItems ? null : todoItems.map(
-              (
-                {
-                  _id,
-                  title,
-                  details,
-                  draft,
-                  detailsDraft,
-                  dueDate,
-                  owner,
-                  done,
-                  editMode,
-                  color,
-                },
-                idx
-              ) => {
-                return !dragModeOn ? (
-                  <ToDoItem
-                    actions={{
-                      [REMOVE]: actions[REMOVE],
-                      [UPDATE]: actions[UPDATE],
-                    }}
-                    color={color}
-                    details={details}
-                    detailsDraft={detailsDraft}
-                    done={done}
-                    dueDate={dueDate}
-                    draft={draft}
-                    editMode={editMode}
-                    id={_id}
-                    key={_id}
-                    listID={listID}
-                    owner={owner}
-                    sorts={sorts}
-                    title={title}
-                  />
-                ) : (
-                  <ToDoItemSmall
-                    color={color}
-                    id={_id}
-                    key={_id}
-                    idx={idx}
-                    dueDate={dueDate}
-                    owner={owner}
-                    sorts={sorts}
-                    title={title}
-                  />
-                );
-              }
+      <ConditionalWrapper
+        condition={dragModeOn}
+        wrapper={(children) => (
+          <Droppable droppableId={listID}>
+            {(provided, snapshot) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {children}
+                {provided.placeholder}
+              </div>
             )}
-          </div>
-        </ConditionalWrapper>
+          </Droppable>
+        )}
+      >
+        <div className="todo-items">
+                {!todoItems
+                  ? null
+                  : todoItems.map(
+                      (
+                        {
+                          _id,
+                          title,
+                          details,
+                          draft,
+                          detailsDraft,
+                          dueDate,
+                          owner,
+                          done,
+                          editMode,
+                          color,
+                        },
+                        idx
+                      ) => {
+                        baseProps = {
+                          color,
+                          id: _id,
+                          idx,
+                          dueDate,
+                          owner,
+                          sorts,
+                          title,
+                        };
+
+                        additionalProps = {
+                          details,
+                          detailsDraft,
+                          done,
+                          draft,
+                          editMode,
+                          listID,
+                        };
+
+                        return !dragModeOn ? (
+                          <ToDoItem
+                            key={_id}
+                            actions={{
+                              [REMOVE]: actions[REMOVE],
+                              [UPDATE]: actions[UPDATE],
+                            }}
+                            {...baseProps}
+                            {...additionalProps}
+                          />
+                        ) : (
+                          <ToDoItemSmall key={`${_id}_small`} {...baseProps} />
+                        );
+
+                      }
+                    )}
+        </div>
+
+
       </ConditionalWrapper>
-      </>
+      </ConditionalWrapper>
+    </>
   );
 };
-
 
 export default ToDoList;

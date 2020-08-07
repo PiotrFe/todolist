@@ -34,6 +34,20 @@ Add items or remote filters and try again`
   return `${headers}${values}`;
 };
 
+export const onDrop = (result) => {
+  const { destination, source, draggableId } = result;
+
+  if (!destination) return;
+
+  if (
+    destination.droppableId === source.droppableId &&
+    destination.index === source.index
+  )
+    return;
+
+  return {from: source.index, to: destination.index }
+};
+
 export const filterToDos = ({ mainSet = [], subSet = [] }) => {
   if (mainSet.length === 0 || subSet.length === 0) return mainSet;
 
