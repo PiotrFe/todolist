@@ -65,32 +65,6 @@ const FilterBarReducer = (state = INITIAL_STATE, action) => {
           preview: [],
         },
       };
-    case ADD_FILTER:
-      return {
-        ...state,
-        [action.payload.listID]: {
-          ...state[action.payload.listID],
-          loading: false,
-          filters: [
-            ...state[action.payload.listID].filters,
-            action.payload.filter,
-          ],
-        },
-      };
-    case REMOVE_FILTER:
-      return {
-        ...state,
-        [action.payload.listID]: {
-          ...state[action.payload.listID],
-          loading: false,
-          filters: state[action.payload.listID].filters.filter(
-            (item) => {
-              [key, value] = Object.entries(item)[0];
-              return JSON.stringify({[key]: value}) !== JSON.stringify(action.payload.filter)
-            }
-          ),
-        },
-      };
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
       if (action.payload.filters.length === 0) return {
         ...state,

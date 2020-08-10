@@ -4,27 +4,23 @@ import { createStructuredSelector } from "reselect";
 
 import NavTop from "../../components/nav-top/nav-top.component";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
-import ToDoItems from "../../components/todo-items/todo-items.component";
+import ToDoList from "../../components/todo-list/todo-list.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 import { Toggle, Button } from "rsuite";
 
 import { ActionTypes } from "../../constants/constants";
 
 import {
-  asyncActionBegin,
-  updateSorts,
-} from "../../redux/todo-container/todo-container.actions";
-
-import {
   addToDo,
   removeToDo,
   updateToDo,
-  dropToDo
+  dropToDo,
+  updateSorts
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
-
 import { fetchFilteredToDoS } from "../../redux/filter-bar/filter-bar.actions";
 
-import { selectSorts } from "../../redux/todo-container/todo-container.selectors";
+// import { selectSorts } from "../../redux/todo-container/todo-container.selectors";
+import { selectTitle } from "../../redux/todo-list/todo-list.selectors";
 
 import {
   selectFilters,
@@ -70,11 +66,6 @@ const ToDoItemsContainer = ({
   const mainInputFiltersChangedAfterRender = useRef(false);
 
   // Callbacks
-  const fetchData = useCallback(() => {
-    if (didMount.current) fetchFilteredToDoS({ listID, filters, sorts });
-    else didMount.current = true;
-  }, [JSON.stringify(sorts)]);
-
   const filterData = useCallback(() => {
     return filterToDos({
       mainSet: todoItems,
@@ -83,10 +74,6 @@ const ToDoItemsContainer = ({
   }, [JSON.stringify(todoItems)]);
 
   // Effects
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
   useEffect(() => {
     updateLocalView(filterData());
   }, [filterData]);
@@ -109,7 +96,6 @@ const ToDoItemsContainer = ({
   };
 
   const handleToDoUpdate = ({ todoID, field, value }) => {
-    // asyncActionBegin();
     updateToDo({ todoID, field, value });
   };
 
@@ -177,16 +163,16 @@ const ToDoItemsContainer = ({
         </div>
       </div>
 
-      <ToDoItems
+      <ToDoList
         listID={listID}
-        todoItems={localView}
+        // todoItems={localView}
         actions={{
           [DRAG]: handleDragEnd,
           [REMOVE]: removeToDo,
           [UPDATE]: handleToDoUpdate,
         }}
         dragModeOn={dragModeOn}
-        sorts={sorts}
+        // sorts={sorts}
       />
       {!inCockpit && editMode ? (
         <>
@@ -208,13 +194,13 @@ const ToDoItemsContainer = ({
 
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
-  sorts: selectSorts,
+  // sorts: selectSorts,
   mainInputFilteredData: selectDataFromMainFilter,
+  title: selectTitle
 });
 
 const mapDispatchToProps = (dispatch) => ({
   addToDo: ({ listID, todo }) => dispatch(addToDo({ listID, todo })),
-  asyncActionBegin: () => dispatch(asyncActionBegin()),
   dropToDo: ({ listID, from, to }) => dispatch(dropToDo({ listID, from, to })),
   removeToDo: ({ todoID, listID }) => dispatch(removeToDo({ todoID, listID })),
   updateSorts: (listID, field) => dispatch(updateSorts({ listID, field })),

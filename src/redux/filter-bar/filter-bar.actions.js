@@ -1,5 +1,5 @@
 import { FilterBarTypes } from "./filter-bar.types";
-import { TodoContainerTypes } from "../todo-container/todo-container.types";
+import { ToDoListTypes } from "../todo-list/todo-list.types";
 
 const {
   FETCH_FILTER_PREVIEW_START,
@@ -11,12 +11,11 @@ const {
   ADD_FILTER,
   REMOVE_FILTER,
   FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
-  FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE
-} = FilterBarTypes;
-
-const {
+  FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE,
   FETCH_TODOS_START,
-} = TodoContainerTypes;
+  FETCH_TODOS_SUCCESS,
+  FETCH_TODOS_FAILURE
+} = FilterBarTypes;
 
 export const showFilterPreview = ({ listID, filters, word }) => ({
   type: FETCH_FILTER_PREVIEW_START,
@@ -72,3 +71,18 @@ export const fetchFilteredToDosMainInputFailure = ({todos, error}) => ({
   type: FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE,
   payload: {todos, error}
 })
+
+export const fetchToDoSSuccess = ({
+  listID,
+  todos,
+  filters = [],
+  sorts = {},
+}) => ({
+  type: FETCH_TODOS_SUCCESS,
+  payload: { listID, todos, filters, sorts },
+});
+
+export const fetchToDoSFailure = ({ listID, error }) => ({
+  type: FETCH_TODOS_FAILURE,
+  payload: { listID, error },
+});

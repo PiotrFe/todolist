@@ -1,5 +1,5 @@
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
-import { TodoContainerTypes } from "../todo-container/todo-container.types";
+import { ToDoListTypes } from "../todo-list/todo-list.types";
 import { FilterBarTypes } from "../filter-bar/filter-bar.types";
 import { updateSorts, reorderItems } from "./todo-lists-container.utils";
 import { DEFAULT_SORTS } from "../../constants/constants";
@@ -23,7 +23,7 @@ const {
   FETCH_TODOS_SUCCESS,
   FETCH_TODOS_FAILURE,
   UPDATE_SORTS,
-} = TodoContainerTypes;
+} = ToDoListTypes;
 
 const {
   FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
@@ -47,13 +47,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        todoLists: action.payload.map((list) => {
-          return {
-            ...list,
-            filters: [],
-            sorts: DEFAULT_SORTS,
-          };
-        }),
+        todoLists: action.payload.map((list) => list._id),
       };
     case FETCH_LISTS_FAILURE:
       return {
@@ -106,26 +100,11 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        todoLists: state.todoLists.map((list) => {
-          return {
-            ...list,
-            todos: list.todos.map((item) => {
-              if (item._id !== action.payload.todoID) return item;
-              else {
-                return {
-                  ...item,
-                  [action.payload.field]: action.payload.value,
-                };
-              }
-            }),
-          };
-        }),
       };
     case UPDATE_TODO_FAILURE: {
       return {
         ...state,
         loading: false,
-        error: action.payload,
       };
     }
     case ADD_LIST_SUCCESS:
@@ -141,30 +120,13 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         error: action.payload,
       };
     case FETCH_TODOS_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        todoLists: state.todoLists.map((list) => {
-          if (list._id === action.payload.listID) {
-            list.todos = action.payload.todos;
-            list.filters = action.payload.filters;
-            list.sorts = action.payload.sorts;
-          }
-          return list;
-        }),
-      };
     case FETCH_TODOS_FAILURE:
-      return {
-        ...state,
-        error: action.payload.error,
-      };
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
-    case FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE: {
+    case FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE:
       return {
         ...state,
         loading: false,
       };
-    }
     case UPDATE_SORTS:
       return {
         ...state,
@@ -189,7 +151,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
                   sorts: updateSorts(list.sorts, field, 0),
                 };
               default:
-                return list
+                return list;
             }
           }
           return list;

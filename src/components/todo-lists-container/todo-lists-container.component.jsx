@@ -4,7 +4,6 @@ import { createStructuredSelector } from "reselect";
 
 import ToDoItemsContainer from "../todo-items-container/todo-items-container.component";
 import Overlay from "../../components/overlay/overlay.component";
-import LoadingSpinner from "../../components/loading-spinner/loading-spinner.component";
 
 import {
   selectToDoLists,
@@ -22,14 +21,10 @@ const ToDoListsContainer = ({ todoLists, loading, fetchLists }) => {
 
   return (
     <div className="todo-list-container">
-      {todoLists.map(({ _id, title, owner, todos }) => (
-        <ToDoItemsContainer key={_id} listID={_id} title={title} todoItems={todos} />
+      {todoLists.map((_id) => (
+        <ToDoItemsContainer key={_id} listID={_id} />
       ))}
-      {loading && (
-        <Overlay
-          withSpinner={true}
-        />
-      )}
+      {loading && <Overlay withSpinner={true} />}
     </div>
   );
 };

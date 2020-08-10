@@ -1,20 +1,23 @@
 import React, { useState } from "react";
-
-import { ActionTypes, ToDoFields } from "../../constants/constants";
+import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
+import { Dropdown, Icon, IconButton } from "rsuite";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 
-import { Dropdown, Icon, IconButton } from "rsuite";
+import { selectTitle, selectColor, selectDetails, selectDone, selectDueDate, selectListIDs, selectOwner } from "../../redux/todo-item/todo-item.selectors";
+
+import { ActionTypes, ToDoFields, ColorPickerColors } from "../../constants/constants";
 
 import "./todo-item.styles.scss";
-import { ColorPickerColors } from "../../constants/constants";
+
 
 const ToDoItem = ({
+  _id,
   actions,
   color,
   details,
   done,
   dueDate,
-  id,
   listID,
   owner,
   sorts,
@@ -32,11 +35,11 @@ const ToDoItem = ({
   }-${date.getFullYear()}`;
 
   const handleToDoDone = () => {
-    actions[UPDATE]({ todoID: id, field: "done", value: !done });
+    actions[UPDATE]({ todoID: _id, field: "done", value: !done });
   };
 
   const handleColorChange = (color) => {
-    actions[UPDATE]({ todoID: id, field: "color", value: color });
+    actions[UPDATE]({ todoID: _id, field: "color", value: color });
   };
 
   const dropDown = (
@@ -53,13 +56,13 @@ const ToDoItem = ({
       </Dropdown.Item>
       <Dropdown.Item onSelect={handleToDoDone}>Done</Dropdown.Item>
       <Dropdown.Item>Edit</Dropdown.Item>
-      <Dropdown.Item onSelect={() => actions[REMOVE]({ listID, todoID: id })}>
+      <Dropdown.Item onSelect={() => actions[REMOVE]({ listID, todoID: _id })}>
         Remove
       </Dropdown.Item>
       <Dropdown.Menu title="Color" pullLeft>
         {Object.values(ColorPickerColors).map((color) => (
           <Dropdown.Item
-            key={`${id}_${color}`}
+            key={`${_id}_${color}`}
             style={{ "backgroundColor": `${color}` }}
             onSelect={() => handleColorChange(color)}
           ></Dropdown.Item>
@@ -151,7 +154,7 @@ const ToDoItem = ({
       </div>
       {editMode && (
         <ToDoModal
-          id={id}
+          id={_id}
           actions={{
             [ActionTypes.CANCEL]: toggleEditMode,
             [ActionTypes.EDIT]: actions[UPDATE],
@@ -165,4 +168,13 @@ const ToDoItem = ({
   );
 };
 
-export default ToDoItem;
+const mapStateToProps = createStructuredSelector({
+  title: selectTitle,
+  owner: selectOwner,
+  dueDate: selectDueDate,
+  color: selectColor,
+  details: selectDetails,
+  done: selectDone
+})
+
+export default connect(mapStateToProps)(ToDoItem);

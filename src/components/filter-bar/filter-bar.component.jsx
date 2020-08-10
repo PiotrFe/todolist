@@ -8,14 +8,13 @@ import TodoInput from "../todo-input/todo-input.component";
 import FilterCard from "../../components/filter-card/filter-card.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
 
-import { selectFilters } from "../../redux/filter-bar/filter-bar.selectors";
+import {selectFilters} from "../../redux/filters/filters.selectors";
+
 import {
   selectFilterPreview,
   selectFilterLoading,
   selectActiveFiltersFromMainFilter,
 } from "../../redux/filter-bar/filter-bar.selectors";
-
-import { selectSorts } from "../../redux/todo-container/todo-container.selectors";
 
 import {
   ActionTypes,
@@ -70,7 +69,7 @@ const FilterBar = ({
   const fetchData = useCallback(() => {
     fetchFilteredToDoS({ listID, filters, sorts });
     setActiveFilters(filters);
-  }, [filters.length]);
+  }, [filters.length, JSON.stringify(sorts)]);
 
   const fetchPreview = useCallback(() => {
     if (filterBarContent.length >= 3) {
@@ -170,7 +169,7 @@ const FilterBar = ({
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
   globalFilters: selectActiveFiltersFromMainFilter,
-  sorts: selectSorts,
+  // sorts: selectSorts,
   filterPreview: selectFilterPreview,
   loading: selectFilterLoading,
 });
