@@ -16,9 +16,7 @@ import {
 
 import { selectSorts } from "../../redux/sorts/sorts.selectors";
 
-import {
-  selectDataFromMainFilter,
-} from "../../redux/filter-bar/filter-bar.selectors";
+import {selectGlobalFilters} from "../../redux/filters/filters.selectors";
 
 import { filterToDos } from "./todo-list.utils";
 
@@ -26,7 +24,7 @@ import { ActionTypes } from "../../constants/constants";
 
 import "./todo-list.styles.scss";
 
-const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts, mainInputFilteredData }) => {
+const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts, mainInputFilteredData = "", globalFilters }) => {
   const { DRAG, REMOVE, UPDATE } = ActionTypes;
 
   const [editedToDo, setEditedToDo] = useState(null);
@@ -47,7 +45,7 @@ const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts, mainInputFilt
 
   useEffect(() => {
     if (mainInputFiltersChangedAfterRender.current) {
-      if (mainInputFilteredData.filters.length === 0) {
+      if (globalFilters.length === 0) {
         updateLocalView(todoItems);
       } else {
         updateLocalView(mainInputFilteredData.todos);
@@ -105,9 +103,10 @@ const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts, mainInputFilt
 
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
+  globalFilters: selectGlobalFilters,
   sorts: selectSorts,
   todoItems: selectTodos,
-  mainInputFilteredData: selectDataFromMainFilter,
+  // mainInputFilteredData: selectDataFromMainFilter,
 });
 
 export default connect(mapStateToProps)(ToDoList);

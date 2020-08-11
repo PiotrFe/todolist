@@ -73,7 +73,7 @@ const ToDoItemsContainer = ({
 
   useEffect(() => {
     if (mainInputFiltersChangedAfterRender.current) {
-      if (mainInputFilteredData.filters.length === 0) {
+      if (mainInputFilteredData.length === 0) {
         updateLocalView(todoItems);
         toggleInputDisabled(false);
       } else {

@@ -42,11 +42,6 @@ export const setPreviewLoading = (listID) => ({
   payload: { listID },
 });
 
-export const setFiltersAndPreviewStore = (listID) => ({
-  type: SET_FILTERS_AND_PREVIEW_STORE,
-  payload: { listID },
-});
-
 export const addFilter = ({ listID, filter }) => ({
   type: ADD_FILTER,
   payload: { listID, filter },

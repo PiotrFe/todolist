@@ -8,78 +8,88 @@ const {
   FETCH_FILTER_PREVIEW_FAILURE,
   CLEAR_FILTER_PREVIEW,
   SET_PREVIEW_LOADING,
-  ADD_FILTER,
-  REMOVE_FILTER,
   FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
   FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE,
 } = FilterBarTypes;
 
-
-const INITIAL_STATE = {};
+const INITIAL_STATE = {
+  previewByListID: {},
+  globalFilteredData: [],
+};
 
 let key, value;
 
 const FilterBarReducer = (state = INITIAL_STATE, action) => {
+  let listID;
+
   switch (action.type) {
-    case SET_FILTERS_AND_PREVIEW_STORE:
-      return {
-        ...state,
-        [action.payload.listID]: {
-          loading: false,
-          filters: [],
-          preview: {},
-        },
-      };
     case SET_PREVIEW_LOADING:
+      ({listID} = action.payload);
       return {
         ...state,
-        [action.payload.listID]: {
-          ...state[action.payload.listID],
-          loading: true,
+        previewByListID: {
+          ...state.previewByListID,
+          [listID]: {
+            ...state.previewByListID[listID],
+            loading: true,
+          },
         },
       };
     case FETCH_FILTER_PREVIEW_SUCCESS:
+      ({listID} = action.payload);
       return {
         ...state,
-        [action.payload.listID]: {
-          ...state[action.payload.listID],
-          loading: false,
-          preview: action.payload.data,
+        previewByListID: {
+          ...state.previewByListID,
+          [listID]: {
+            ...state.previewByListID[listID],
+            loading: false,
+            preview: action.payload.data,
+            error: "",
+          },
         },
       };
     case FETCH_FILTER_PREVIEW_FAILURE:
+      ({listID} = action.payload);
       return {
         ...state,
-        [action.payload.listID]: {
-          ...state[action.payload.listID],
-          loading: false,
-          preview: action.payload.error,
+        previewByListID: {
+          ...state.previewByListID,
+          [listID]: {
+            ...state.previewByListID[listID],
+            loading: false,
+            error: action.payload,
+          },
         },
       };
     case CLEAR_FILTER_PREVIEW:
+      ({listID} = action.payload);
       return {
         ...state,
-        [action.payload.listID]: {
-          ...state[action.payload.listID],
-          loading: false,
-          preview: [],
+        previewByListID: {
+          ...state.previewByListID,
+          [listID]: {
+            ...state.previewByListID[listID],
+            loading: false,
+            error: "",
+            preview: {},
+          },
         },
       };
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
-      if (action.payload.filters.length === 0) return {
-        ...state,
-        [MAIN_INPUT_ID]: {
-          ...state[MAIN_INPUT_ID],
-          filters: [],
-          todoData: []
-        }
-      }
+      if (action.payload.filters.length === 0)
+        return {
+          ...state,
+          globalFilteredData: [],
+        };
       return {
         ...state,
-        [MAIN_INPUT_ID]: {
-          ...state[MAIN_INPUT_ID],
-          todoData: action.payload.todos,
-        },
+        globalFilteredData: action.payload.todos.reduce((obj, filteredList) => {
+          return {
+            ...obj,
+            [filteredList._id]: filteredList.todos
+          }
+        },{}),
       };
     default:
       return state;

@@ -9,9 +9,8 @@ import SearchResultList from "../../components/searchResultList/searchResultList
 import {
   selectFilterPreview,
   selectFilterLoading,
-  selectActiveFiltersFromMainFilter,
 } from "../../redux/filter-bar/filter-bar.selectors";
-import { selectFilters } from "../../redux/filters/filters.selectors";
+import { selectFilters, selectGlobalFilters } from "../../redux/filters/filters.selectors";
 import {selectSorts} from "../../redux/sorts/sorts.selectors";
 
 import {
@@ -28,7 +27,6 @@ import {
 import {
   showFilterPreview,
   clearFilterPreview,
-  setFiltersAndPreviewStore,
 } from "../../redux/filter-bar/filter-bar.actions";
 
 import {
@@ -52,7 +50,6 @@ const FilterBar = ({
   removeFilter,
   showFilterPreview,
   clearFilterPreview,
-  setFiltersAndPreviewStore,
   fetchFilteredToDoS,
 }) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
@@ -79,10 +76,6 @@ const FilterBar = ({
       clearFilterPreview(listID);
     }
   }, [filterBarContent]);
-
-  useEffect(() => {
-    setFiltersAndPreviewStore(listID);
-  }, []);
 
   useEffect(() => {
     if (didMountRef.current) {
@@ -165,7 +158,7 @@ const FilterBar = ({
 
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
-  globalFilters: selectActiveFiltersFromMainFilter,
+  globalFilters: selectGlobalFilters,
   sorts: selectSorts,
   filterPreview: selectFilterPreview,
   loading: selectFilterLoading,
@@ -178,8 +171,6 @@ const mapDispatchToProps = (dispatch) => ({
   showFilterPreview: ({ listID, filters, word }) =>
     dispatch(showFilterPreview({ listID, filters, word })),
   clearFilterPreview: (listID) => dispatch(clearFilterPreview(listID)),
-  setFiltersAndPreviewStore: (listID) =>
-    dispatch(setFiltersAndPreviewStore(listID)),
   fetchFilteredToDoS: ({ listID, filters, sorts }) =>
     dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
 
