@@ -1,5 +1,6 @@
 import { ToDoListsActionTypes } from "../todo-lists-container/todo-lists-container.types";
 import { ToDoItemTypes } from "../todo-item/todo-item.types";
+import { FilterBarTypes } from "../filter-bar/filter-bar.types";
 
 const {
   FETCH_LISTS_SUCCESS,
@@ -10,6 +11,7 @@ const {
   REMOVE_TODO_FAILURE,
 } = ToDoListsActionTypes;
 const { UPDATE_TODO_SUCCESS, UPDATE_TODO_FAILURE } = ToDoItemTypes;
+const { FETCH_TODOS_SUCCESS, FETCH_TODOS_FAILURE } = FilterBarTypes;
 
 const INITIAL_STATE = {
   byID: {},
@@ -54,6 +56,28 @@ const TodoItemsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         error: action.payload,
       };
+
+    case FETCH_TODOS_SUCCESS:
+      const newToDosObj = action.payload.todos.reduce((todoObj, todo) => {
+        return {
+          ...todoObj,
+          [todo._id]: createToDoObj(todo),
+        };
+      }, {});
+      return {
+        ...state,
+        byID: {
+          ...state.byID,
+          ...newToDosObj,
+        },
+      };
+
+    case FETCH_TODOS_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
     case UPDATE_TODO_SUCCESS:
       ({ todoID, field, value } = action.payload);
       return {
@@ -92,17 +116,17 @@ const TodoItemsReducer = (state = INITIAL_STATE, action) => {
     case REMOVE_TODO_SUCCESS:
       ({ todoID } = action.payload);
       const { [todoID]: idToDelete, ...idsToKeep } = state.byID;
-     
+
       return {
         ...state,
-        byID: idsToKeep
+        byID: idsToKeep,
       };
 
     case REMOVE_TODO_FAILURE:
       return {
         ...state,
-        error: action.payload
-      }
+        error: action.payload,
+      };
 
     default:
       return state;

@@ -53,47 +53,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         error: action.payload,
       };
-    case ADD_TODO_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        todoLists: state.todoLists.map((list) => {
-          if (list._id === action.payload.listID) {
-            return {
-              ...list,
-              todos: [...list.todos, action.payload.todo],
-            };
-          } else return list;
-        }),
-      };
-    case ADD_TODO_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.error,
-      };
-    case REMOVE_TODO_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        todoLists: state.todoLists.map((list) => {
-          if (list._id === action.payload.listID) {
-            return {
-              ...list,
-              todos: list.todos.filter(
-                (item) => item._id !== action.payload.todoID
-              ),
-            };
-          }
-          return list;
-        }),
-      };
-    case REMOVE_TODO_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.error,
-      };
+
     case UPDATE_TODO_SUCCESS:
       return {
         ...state,
@@ -121,6 +81,10 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
     case FETCH_TODOS_FAILURE:
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
     case FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE:
+    case ADD_TODO_SUCCESS:
+    case ADD_TODO_FAILURE:
+    case REMOVE_TODO_SUCCESS:
+    case REMOVE_TODO_FAILURE:
       return {
         ...state,
         loading: false,
