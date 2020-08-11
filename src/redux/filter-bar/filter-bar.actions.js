@@ -1,5 +1,4 @@
 import { FilterBarTypes } from "./filter-bar.types";
-import { ToDoListTypes } from "../todo-list/todo-list.types";
 
 const {
   FETCH_FILTER_PREVIEW_START,
@@ -14,7 +13,8 @@ const {
   FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE,
   FETCH_TODOS_START,
   FETCH_TODOS_SUCCESS,
-  FETCH_TODOS_FAILURE
+  FETCH_TODOS_FAILURE,
+  UPDATE_SORTS
 } = FilterBarTypes;
 
 export const showFilterPreview = ({ listID, filters, word }) => ({
@@ -86,3 +86,4 @@ export const fetchToDoSFailure = ({ listID, error }) => ({
   type: FETCH_TODOS_FAILURE,
   payload: { listID, error },
 });
+

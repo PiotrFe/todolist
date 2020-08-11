@@ -15,11 +15,10 @@ import {
   removeToDo,
   updateToDo,
   dropToDo,
-  updateSorts
+  updateSorts,
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 import { fetchFilteredToDoS } from "../../redux/filter-bar/filter-bar.actions";
 
-// import { selectSorts } from "../../redux/todo-container/todo-container.selectors";
 import { selectTitle } from "../../redux/todo-list/todo-list.selectors";
 
 import {
@@ -27,7 +26,6 @@ import {
   selectDataFromMainFilter,
 } from "../../redux/filter-bar/filter-bar.selectors";
 
-import { DEFAULT_SORTS } from "../../constants/constants";
 import {
   generateCVSData,
   filterToDos,
@@ -42,17 +40,13 @@ const ToDoItemsContainer = ({
   listID,
   inCockpit = false,
   title,
-  filters = [],
   todoItems,
   mainInputFilteredData,
   addToDo,
   dropToDo,
-  fetchFilteredToDoS,
-  sorts = DEFAULT_SORTS,
   removeToDo,
-  updateSorts,
   updateToDo,
-  children,
+  updateSorts,
 }) => {
   const { DRAG, EDIT, REMOVE, SORT, UPDATE } = ActionTypes;
 
@@ -91,6 +85,10 @@ const ToDoItemsContainer = ({
   }, [JSON.stringify(mainInputFilteredData)]);
 
   // Methods
+  const handleUpdateSorts = (sorts, field) => {
+    updateSorts(listID, sorts, field);
+  };
+
   const toggleEditMode = () => {
     updateEditMode(!editMode);
   };
@@ -104,7 +102,6 @@ const ToDoItemsContainer = ({
     downloadCSV(CSVData, title);
   };
 
-  // HANDLING DRAG
   const toggleDrag = (isEnabled) => {
     toggleDragMode(isEnabled);
   };
@@ -125,21 +122,14 @@ const ToDoItemsContainer = ({
     >
       <div className="todo-items-container__header-group">
         <div className="todo-items-container__title">{title}</div>
-        {inCockpit ? (
-          children
-        ) : (
-          <NavTop
-            listID={listID}
-            actions={{
-              [DRAG]: toggleDrag,
-              [EDIT]: toggleEditMode,
-              [SORT]: updateSorts,
-            }}
-            sorts={sorts}
-            dragModeOn={dragModeOn}
-          />
-        )}
-
+        <NavTop
+          listID={listID}
+          actions={{
+            [DRAG]: toggleDrag,
+            [EDIT]: toggleEditMode,
+            [SORT]: handleUpdateSorts,
+          }}
+        />
         <FilterBar
           listID={listID}
           inCockpit={inCockpit}
@@ -165,14 +155,12 @@ const ToDoItemsContainer = ({
 
       <ToDoList
         listID={listID}
-        // todoItems={localView}
         actions={{
           [DRAG]: handleDragEnd,
           [REMOVE]: removeToDo,
           [UPDATE]: handleToDoUpdate,
         }}
         dragModeOn={dragModeOn}
-        // sorts={sorts}
       />
       {!inCockpit && editMode ? (
         <>
@@ -194,20 +182,20 @@ const ToDoItemsContainer = ({
 
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
-  // sorts: selectSorts,
   mainInputFilteredData: selectDataFromMainFilter,
-  title: selectTitle
+  title: selectTitle,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   addToDo: ({ listID, todo }) => dispatch(addToDo({ listID, todo })),
   dropToDo: ({ listID, from, to }) => dispatch(dropToDo({ listID, from, to })),
   removeToDo: ({ todoID, listID }) => dispatch(removeToDo({ todoID, listID })),
-  updateSorts: (listID, field) => dispatch(updateSorts({ listID, field })),
   updateToDo: ({ todoID, field, value }) =>
     dispatch(updateToDo({ todoID, field, value })),
   fetchFilteredToDoS: ({ listID, filters, sorts }) =>
     dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
+  updateSorts: (listID, sorts, field) =>
+    dispatch(updateSorts({ listID, sorts, field })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoItemsContainer);

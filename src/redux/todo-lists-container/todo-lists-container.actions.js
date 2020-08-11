@@ -18,7 +18,7 @@ const {
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILURE,
   DROP_TODO,
-  UPDATE_SORTS,
+  UPDATE_SORTS
 } = ToDoListsActionTypes;
 
 export const asyncActionStart = () => ({
@@ -104,7 +104,9 @@ export const dropToDo = ({ listID, from, to }) => ({
   payload: { listID, from, to },
 });
 
-export const updateSorts = ({ listID, field }) => ({
+export const updateSorts = ({ listID, sorts, field }) => ({
   type: UPDATE_SORTS,
-  payload: { listID, field },
+  payload: { listID, sorts, field },
 });
+
+

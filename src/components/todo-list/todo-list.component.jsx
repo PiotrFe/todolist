@@ -11,15 +11,15 @@ import ConditionalWrapper from "../utils/ConditionalWrapper.util";
 
 import {
   selectFilters,
-  selectSorts,
   selectTitle,
   selectTodos,
 } from "../../redux/todo-list/todo-list.selectors";
 
+import { selectSorts } from "../../redux/sorts/sorts.selectors";
+
 import {
   selectDataFromMainFilter,
 } from "../../redux/filter-bar/filter-bar.selectors";
-
 
 import { filterToDos } from "./todo-list.utils";
 

@@ -8,7 +8,7 @@ import TodoInput from "../todo-input/todo-input.component";
 import FilterCard from "../../components/filter-card/filter-card.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
 
-import {selectFilters} from "../../redux/filters/filters.selectors";
+import { selectFilters } from "../../redux/filters/filters.selectors";
 
 import {
   selectFilterPreview,
@@ -185,6 +185,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setFiltersAndPreviewStore(listID)),
   fetchFilteredToDoS: ({ listID, filters, sorts }) =>
     dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
+
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterBar);

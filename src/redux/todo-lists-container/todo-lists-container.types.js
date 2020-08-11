@@ -17,4 +17,5 @@ export const ToDoListsActionTypes = {
     UPDATE_TODO_FAILURE: "UPDATE_TODO_FAILURE",    
     DROP_TODO: "DROP_TODO",
     UPDATE_SORTS: "UPDATE_SORTS"
+
 }

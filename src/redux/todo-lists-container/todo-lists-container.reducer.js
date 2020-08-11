@@ -1,8 +1,7 @@
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
 import { ToDoListTypes } from "../todo-list/todo-list.types";
 import { FilterBarTypes } from "../filter-bar/filter-bar.types";
-import { updateSorts, reorderItems } from "./todo-lists-container.utils";
-import { DEFAULT_SORTS } from "../../constants/constants";
+import { reorderItems } from "./todo-lists-container.utils";
 
 const {
   ASYNC_ACTION_START,
@@ -22,7 +21,6 @@ const {
 const {
   FETCH_TODOS_SUCCESS,
   FETCH_TODOS_FAILURE,
-  UPDATE_SORTS,
 } = ToDoListTypes;
 
 const {
@@ -126,36 +124,6 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-      };
-    case UPDATE_SORTS:
-      return {
-        ...state,
-        loading: false,
-        todoLists: state.todoLists.map((list) => {
-          if (list._id === action.payload.listID) {
-            const { field } = action.payload;
-            switch (list.sorts[field]) {
-              case 0:
-                return {
-                  ...list,
-                  sorts: updateSorts(list.sorts, field, 1),
-                };
-              case 1:
-                return {
-                  ...list,
-                  sorts: updateSorts(list.sorts, field, -1),
-                };
-              case -1:
-                return {
-                  ...list,
-                  sorts: updateSorts(list.sorts, field, 0),
-                };
-              default:
-                return list;
-            }
-          }
-          return list;
-        }),
       };
 
     case DROP_TODO:
