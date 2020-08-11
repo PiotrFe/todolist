@@ -1,8 +1,15 @@
-import { ToDoListTypes } from "./todo-list.types";
+import { ToDoListsActionTypes } from "../todo-lists-container/todo-lists-container.types";
 import { FilterBarTypes } from "../filter-bar/filter-bar.types";
 import { DEFAULT_SORTS } from "../../constants/constants";
 
-const { FETCH_LISTS_SUCCESS, FETCH_LISTS_FAILURE } = ToDoListTypes;
+const {
+  FETCH_LISTS_SUCCESS,
+  FETCH_LISTS_FAILURE,
+  ADD_TODO_SUCCESS,
+  ADD_TODO_FAILURE,
+  REMOVE_TODO_SUCCESS,
+  REMOVE_TODO_FAILURE,
+} = ToDoListsActionTypes;
 const { FETCH_TODOS_SUCCESS, FETCH_TODOS_FAILURE } = FilterBarTypes;
 
 const INITIAL_STATE = {
@@ -12,6 +19,8 @@ const INITIAL_STATE = {
 };
 
 const ToDoListsReducer = (state = INITIAL_STATE, action) => {
+  let listID, todoID, todo;
+
   switch (action.type) {
     case FETCH_LISTS_SUCCESS:
       return {
@@ -52,6 +61,45 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         error: action.payload.error,
       };
+
+    case ADD_TODO_SUCCESS:
+      ({ listID, todo } = action.payload);
+      return {
+        ...state,
+        byID: {
+          ...state.byID,
+          [listID]: {
+            ...state.byID[listID],
+            todos: [...state.byID[listID].todos, todo._id],
+          },
+        },
+      };
+
+    case ADD_TODO_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case REMOVE_TODO_SUCCESS:
+      ({ listID, todoID } = action.payload);
+      return {
+        ...state,
+        byID: {
+          ...state.byID,
+          [listID]: {
+            ...state.byID[listID],
+            todos: state.byID[listID].todos.filter((id) => id !== todoID),
+          },
+        },
+      };
+
+    case REMOVE_TODO_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
     default:
       return state;
   }

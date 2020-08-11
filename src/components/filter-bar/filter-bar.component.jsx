@@ -2,24 +2,19 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 
-import "./filter-bar.styles.scss";
-
 import TodoInput from "../todo-input/todo-input.component";
 import FilterCard from "../../components/filter-card/filter-card.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
-
-import { selectFilters } from "../../redux/filters/filters.selectors";
 
 import {
   selectFilterPreview,
   selectFilterLoading,
   selectActiveFiltersFromMainFilter,
 } from "../../redux/filter-bar/filter-bar.selectors";
-
+import { selectFilters } from "../../redux/filters/filters.selectors";
 import {selectSorts} from "../../redux/sorts/sorts.selectors";
 
 import {
-  ActionTypes,
   FILTER_STATUS,
   MAIN_INPUT_ID,
 } from "../../constants/constants";
@@ -40,6 +35,8 @@ import {
   updateActiveFilters,
   clearActiveStatusFromFilters,
 } from "./filter-bar.utils";
+
+import "./filter-bar.styles.scss";
 
 const FilterBar = ({
   listID,
@@ -62,8 +59,6 @@ const FilterBar = ({
   const [filterMode, updateFilterMode] = useState(true);
   const [filterWord, updateFilterWord] = useState("");
   const [activeFilters, setActiveFilters] = useState([]);
-
-  const { CHANGE, REMOVE, SEARCH, SUBMIT } = ActionTypes;
 
   const didMountRef = useRef(false);
   const inputEl = useRef(null);

@@ -18,7 +18,6 @@ const ToDoItem = ({
   details,
   done,
   dueDate,
-  listID,
   owner,
   sorts,
   title,
@@ -56,7 +55,7 @@ const ToDoItem = ({
       </Dropdown.Item>
       <Dropdown.Item onSelect={handleToDoDone}>Done</Dropdown.Item>
       <Dropdown.Item>Edit</Dropdown.Item>
-      <Dropdown.Item onSelect={() => actions[REMOVE]({ listID, todoID: _id })}>
+      <Dropdown.Item onSelect={() => actions[REMOVE]({ todoID: _id })}>
         Remove
       </Dropdown.Item>
       <Dropdown.Menu title="Color" pullLeft>

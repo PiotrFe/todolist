@@ -88,6 +88,10 @@ const ToDoItemsContainer = ({
     updateSorts(listID, sorts, field);
   };
 
+  const handleToDoRemove = ({ todoID }) => {
+    removeToDo({ todoID, listID });
+  };
+
   const toggleEditMode = () => {
     updateEditMode(!editMode);
   };
@@ -156,7 +160,7 @@ const ToDoItemsContainer = ({
         listID={listID}
         actions={{
           [DRAG]: handleDragEnd,
-          [REMOVE]: removeToDo,
+          [REMOVE]: handleToDoRemove,
           [UPDATE]: handleToDoUpdate,
         }}
         dragModeOn={dragModeOn}

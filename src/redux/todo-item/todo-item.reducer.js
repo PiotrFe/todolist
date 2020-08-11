@@ -1,16 +1,37 @@
-import { ToDoListTypes } from "../todo-list/todo-list.types";
+import { ToDoListsActionTypes } from "../todo-lists-container/todo-lists-container.types";
 import { ToDoItemTypes } from "../todo-item/todo-item.types";
-import { DEFAULT_SORTS } from "../../constants/constants";
 
-const { FETCH_LISTS_SUCCESS, FETCH_LISTS_FAILURE } = ToDoListTypes;
-const { UPDATE_TODO_SUCCESS, UPDATE_TODO_FAILURE  } = ToDoItemTypes;
+const {
+  FETCH_LISTS_SUCCESS,
+  FETCH_LISTS_FAILURE,
+  ADD_TODO_SUCCESS,
+  ADD_TODO_FAILURE,
+  REMOVE_TODO_SUCCESS,
+  REMOVE_TODO_FAILURE,
+} = ToDoListsActionTypes;
+const { UPDATE_TODO_SUCCESS, UPDATE_TODO_FAILURE } = ToDoItemTypes;
 
 const INITIAL_STATE = {
   byID: {},
   error: "",
 };
 
+const createToDoObj = (todo) => ({
+  color: todo.color,
+  details: todo.details,
+  detailsDraft: todo.detailsDraft,
+  detailsVisible: todo.detailsVisible,
+  done: todo.done,
+  draft: todo.draft,
+  dueDate: todo.dueDate,
+  lists: todo.lists,
+  owner: todo.owner,
+  title: todo.title,
+});
+
 const TodoItemsReducer = (state = INITIAL_STATE, action) => {
+  let listID, todoID, todo, field, value;
+
   switch (action.type) {
     case FETCH_LISTS_SUCCESS:
       return {
@@ -19,18 +40,7 @@ const TodoItemsReducer = (state = INITIAL_STATE, action) => {
           const todos = list.todos.reduce((todoObj, todo) => {
             return {
               ...todoObj,
-              [todo._id]: {
-                color: todo.color,
-                details: todo.details,
-                detailsDraft: todo.detailsDraft,
-                detailsVisible: todo.detailsVisible,
-                done: todo.done,
-                draft: todo.draft,
-                dueDate: todo.dueDate,
-                lists: todo.lists,
-                owner: todo.owner,
-                title: todo.title,
-              },
+              [todo._id]: createToDoObj(todo),
             };
           }, {});
           return {
@@ -44,22 +54,54 @@ const TodoItemsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         error: action.payload,
       };
-      case UPDATE_TODO_SUCCESS:
-        return {
-          ...state,
-          byID: {
-              ...state.byID,
-              [action.payload.todoID]: {
-                  ...state.byID[action.payload.todoID],
-                  [action.payload.field]: action.payload.value
-              }
-          }
-        };
-      case UPDATE_TODO_FAILURE: {
-        return {
-          ...state,
-          error: action.payload,
-        };
+    case UPDATE_TODO_SUCCESS:
+      ({ todoID, field, value } = action.payload);
+      return {
+        ...state,
+        byID: {
+          ...state.byID,
+          [todoID]: {
+            ...state.byID[todoID],
+            [field]: value,
+          },
+        },
+      };
+    case UPDATE_TODO_FAILURE: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
+
+    case ADD_TODO_SUCCESS: {
+      ({ todo } = action.payload);
+      return {
+        ...state,
+        byID: {
+          ...state.byID,
+          [todo._id]: createToDoObj(todo),
+        },
+      };
+    }
+    case ADD_TODO_FAILURE:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
+    case REMOVE_TODO_SUCCESS:
+      ({ todoID } = action.payload);
+      const { [todoID]: idToDelete, ...idsToKeep } = state.byID;
+     
+      return {
+        ...state,
+        byID: idsToKeep
+      };
+
+    case REMOVE_TODO_FAILURE:
+      return {
+        ...state,
+        error: action.payload
       }
 
     default:

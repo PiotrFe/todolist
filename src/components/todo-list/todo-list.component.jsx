@@ -11,7 +11,6 @@ import ConditionalWrapper from "../utils/ConditionalWrapper.util";
 
 import {
   selectFilters,
-  selectTitle,
   selectTodos,
 } from "../../redux/todo-list/todo-list.selectors";
 
