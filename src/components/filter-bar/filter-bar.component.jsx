@@ -16,6 +16,8 @@ import {
   selectActiveFiltersFromMainFilter,
 } from "../../redux/filter-bar/filter-bar.selectors";
 
+import {selectSorts} from "../../redux/sorts/sorts.selectors";
+
 import {
   ActionTypes,
   FILTER_STATUS,
@@ -169,7 +171,7 @@ const FilterBar = ({
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
   globalFilters: selectActiveFiltersFromMainFilter,
-  // sorts: selectSorts,
+  sorts: selectSorts,
   filterPreview: selectFilterPreview,
   loading: selectFilterLoading,
 });

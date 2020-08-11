@@ -17,7 +17,6 @@ import {
   dropToDo,
   updateSorts,
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
-import { fetchFilteredToDoS } from "../../redux/filter-bar/filter-bar.actions";
 
 import { selectTitle } from "../../redux/todo-list/todo-list.selectors";
 
@@ -181,7 +180,6 @@ const ToDoItemsContainer = ({
 };
 
 const mapStateToProps = createStructuredSelector({
-  filters: selectFilters,
   mainInputFilteredData: selectDataFromMainFilter,
   title: selectTitle,
 });
@@ -192,8 +190,6 @@ const mapDispatchToProps = (dispatch) => ({
   removeToDo: ({ todoID, listID }) => dispatch(removeToDo({ todoID, listID })),
   updateToDo: ({ todoID, field, value }) =>
     dispatch(updateToDo({ todoID, field, value })),
-  fetchFilteredToDoS: ({ listID, filters, sorts }) =>
-    dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
   updateSorts: (listID, sorts, field) =>
     dispatch(updateSorts({ listID, sorts, field })),
 });

@@ -56,8 +56,6 @@ const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts, mainInputFilt
     } else mainInputFiltersChangedAfterRender.current = true;
   }, [JSON.stringify(mainInputFilteredData)]);
 
-  let baseProps;
-
   return (
     <>
       <ConditionalWrapper
@@ -96,7 +94,7 @@ const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts, mainInputFilt
                       sorts={sorts}
                     />
                   ) : (
-                    <ToDoItemSmall key={`${_id}_small`} {...baseProps} />
+                    <ToDoItemSmall key={`${_id}_small`} />
                   );
                 })}
           </div>
@@ -109,7 +107,6 @@ const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts, mainInputFilt
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
   sorts: selectSorts,
-  title: selectTitle,
   todoItems: selectTodos,
   mainInputFilteredData: selectDataFromMainFilter,
 });
