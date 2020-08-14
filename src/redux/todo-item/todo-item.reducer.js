@@ -11,7 +11,11 @@ const {
   REMOVE_TODO_FAILURE,
 } = ToDoListsActionTypes;
 const { UPDATE_TODO_SUCCESS, UPDATE_TODO_FAILURE } = ToDoItemTypes;
-const { FETCH_TODOS_SUCCESS, FETCH_TODOS_FAILURE } = FilterBarTypes;
+const {
+  FETCH_TODOS_SUCCESS,
+  FETCH_TODOS_FAILURE,
+  FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
+} = FilterBarTypes;
 
 const INITIAL_STATE = {
   byID: {},
@@ -128,6 +132,21 @@ const TodoItemsReducer = (state = INITIAL_STATE, action) => {
         error: action.payload,
       };
 
+    case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
+      const updatedTodos = action.payload.todos.reduce(
+        (obj, item) => ({
+          ...obj,
+          [item._id]: createToDoObj(item),
+        }),
+        {}
+      );
+      return {
+        ...state,
+        byID: {
+          ...state.byID,
+          ...updatedTodos,
+        },
+      };
     default:
       return state;
   }

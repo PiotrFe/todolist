@@ -16,6 +16,7 @@ const {
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILURE,
   DROP_TODO,
+  TOGGLE_ADD_LIST_MODE
 } = ToDoListsActionTypes;
 
 const {
@@ -32,6 +33,7 @@ const INITIAL_STATE = {
   todoLists: [],
   loading: false,
   error: null,
+  addListMode: false
 };
 
 const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
@@ -69,7 +71,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        todoLists: [{ ...action.payload }, ...state.todoLists],
+        todoLists: [action.payload._id, ...state.todoLists],
       };
     case ADD_LIST_FAILURE:
       return {
@@ -107,6 +109,12 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
           return list;
         }),
       };
+
+    case TOGGLE_ADD_LIST_MODE:
+      return {
+        ...state,
+        addListMode: !state.addListMode
+      }
 
     default:
       return state;

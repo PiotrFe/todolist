@@ -18,7 +18,9 @@ const Overlay = ({ children, show = true, onClick = null, opaque = true, withSpi
         onClick={onClick}
       >
         {withSpinner && <LoadingSpinner />}
+        <div className="overlay__children">
         {children}
+        </div>
       </div>,
       modalRoot
     )

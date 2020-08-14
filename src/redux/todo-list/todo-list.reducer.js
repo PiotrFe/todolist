@@ -3,6 +3,7 @@ import { FilterBarTypes } from "../filter-bar/filter-bar.types";
 import { DEFAULT_SORTS } from "../../constants/constants";
 
 const {
+  ADD_LIST_SUCCESS,
   FETCH_LISTS_SUCCESS,
   FETCH_LISTS_FAILURE,
   ADD_TODO_SUCCESS,
@@ -16,6 +17,13 @@ const INITIAL_STATE = {
   byID: {},
   allIDs: [],
   error: "",
+};
+
+const getListData = (list) => {
+  return {
+    title: list.title,
+    todos: list.todos,
+  };
 };
 
 const ToDoListsReducer = (state = INITIAL_STATE, action) => {
@@ -98,6 +106,17 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         error: action.payload,
+      };
+
+    case ADD_LIST_SUCCESS:
+      const { _id } = action.payload;
+      return {
+        ...state,
+        allIDs: [...state.allIDs, action.payload._id],
+        byID: {
+          ...state.byID,
+          [_id]: getListData(action.payload),
+        },
       };
 
     default:

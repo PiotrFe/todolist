@@ -4,6 +4,9 @@
     display: flex;
     flex-wrap: wrap;
 
+    position: sticky;
+    left: 0;
+
     padding: .7rem 0;
     min-height: 3rem;
     border-bottom: .5px solid $color-grey-dark-1;

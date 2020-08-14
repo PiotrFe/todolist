@@ -18,7 +18,8 @@ const {
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILURE,
   DROP_TODO,
-  UPDATE_SORTS
+  UPDATE_SORTS,
+  TOGGLE_ADD_LIST_MODE
 } = ToDoListsActionTypes;
 
 export const asyncActionStart = () => ({
@@ -108,5 +109,9 @@ export const updateSorts = ({ listID, sorts, field }) => ({
   type: UPDATE_SORTS,
   payload: { listID, sorts, field },
 });
+
+export const toggleAddListMode = () => ({
+  type: TOGGLE_ADD_LIST_MODE
+})
 
 

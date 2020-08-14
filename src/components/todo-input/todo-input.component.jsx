@@ -9,6 +9,7 @@ const TodoInput = React.forwardRef(
       placeholder = "",
       onChange = null,
       onSubmit = null,
+      onClick= null,
       disabled = false,
     },
     ref
@@ -38,6 +39,7 @@ const TodoInput = React.forwardRef(
             if (onChange) onChange(e.target.value);
             else updateInputVal(e.target.value);
           }}
+          onClick={onClick}
         />
       </form>
     );

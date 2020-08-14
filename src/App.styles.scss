@@ -11,7 +11,8 @@
   top: 0px;
   border: 3px solid orangered;
   overflow-x: auto; //scroll;
-  overflow-y: auto; //visible;
+  overflow-y: hidden;
+  flex-basis: 90%;
 
   &__right-side {
     // flex-basis: 70%

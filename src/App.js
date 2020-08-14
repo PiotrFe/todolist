@@ -6,7 +6,6 @@ import ToDoListsContainer from "./components/todo-lists-container/todo-lists-con
 import UserLogo from "./components/user-logo/user-logo.component";
 import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
 import FilterBar from "./components/filter-bar/filter-bar.component";
-import Input from "./components/todo-input/todo-input.component";
 
 import { MAIN_INPUT_ID } from "./constants/constants";
 
@@ -18,14 +17,12 @@ import {
   auth,
   createUserProfileDocument,
 } from "./firebase/firebase.utils";
-import { addList } from "./redux/todo-lists-container/todo-lists-container.actions";
 
 require("dotenv").config();
 
 function App() {
   const [currentUser, updateCurrentUser] = useState("");
   const [cockpitVisible, toggleCockpit] = useState(false);
-  const [addListMode, toggleAddListMode] = useState(false);
 
   const mainInputRef = useRef(null);
 
@@ -48,8 +45,6 @@ function App() {
     return () => unsubscribeFromAuth();
   }, []);
 
-
-
   return (
     <>
       <div className="app" id="app">
@@ -59,14 +54,18 @@ function App() {
             onClick={() => signOutUser()}
           />
         ) : null}
-          <Drawer title="Cockpit" show={cockpitVisible} toggleCockpit={() => toggleCockpit(!cockpitVisible)} >
-            <ToDoCockpit
-            />
-          </Drawer>
-          <NavSide 
+        <Drawer
+          title="Cockpit"
+          show={cockpitVisible}
+          toggleCockpit={() => toggleCockpit(!cockpitVisible)}
+        >
+          <ToDoCockpit />
+        </Drawer>
+        <div className="nav-side">
+          <NavSide
             toggleCockpit={() => toggleCockpit(!cockpitVisible)}
-            addList={() => toggleAddListMode(!addListMode)}
-            />
+          />
+        </div>
         <div className="app-main">
           <>
             <FilterBar
@@ -74,7 +73,6 @@ function App() {
               inCockpit={false}
               placeholder={"Type to search in all lists"}
             />
-            {addListMode && <Input placeholder="Please provide list title" />}
             <ToDoListsContainer />
           </>
         </div>
@@ -82,8 +80,8 @@ function App() {
       <div className="modal-root" id="modal-root"></div>
     </>
   );
-
-  // return <Dnd />
 }
+
+
 
 export default App;

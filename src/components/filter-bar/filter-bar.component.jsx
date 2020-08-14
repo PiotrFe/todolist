@@ -5,29 +5,30 @@ import { createStructuredSelector } from "reselect";
 import TodoInput from "../todo-input/todo-input.component";
 import FilterCard from "../../components/filter-card/filter-card.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
+import Overlay from "../../components/overlay/overlay.component";
 
 import {
   selectFilterPreview,
   selectFilterLoading,
 } from "../../redux/filter-bar/filter-bar.selectors";
-import { selectFilters, selectGlobalFilters } from "../../redux/filters/filters.selectors";
-import {selectSorts} from "../../redux/sorts/sorts.selectors";
-
 import {
-  FILTER_STATUS,
-  MAIN_INPUT_ID,
-} from "../../constants/constants";
+  selectFilters,
+  selectGlobalFilters,
+} from "../../redux/filters/filters.selectors";
+import { selectSorts } from "../../redux/sorts/sorts.selectors";
+import { selectAddListMode } from "../../redux/todo-lists-container/todo-lists-container.selectors";
+
+import { FILTER_STATUS, MAIN_INPUT_ID } from "../../constants/constants";
 
 import {
   addFilter,
   removeFilter,
   fetchFilteredToDoS,
-} from "../../redux/filter-bar/filter-bar.actions";
-
-import {
   showFilterPreview,
   clearFilterPreview,
 } from "../../redux/filter-bar/filter-bar.actions";
+
+import { toggleAddListMode, addList } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import {
   updateActiveFilters,
@@ -46,13 +47,17 @@ const FilterBar = ({
   loading,
   disabled,
   inCockpit,
+  addListMode,
+  addList,
   addFilter,
   removeFilter,
   showFilterPreview,
   clearFilterPreview,
   fetchFilteredToDoS,
+  toggleAddListMode,
 }) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
+  const [newListName, updateNewListName] = useState("");
   const [filterMode, updateFilterMode] = useState(true);
   const [filterWord, updateFilterWord] = useState("");
   const [activeFilters, setActiveFilters] = useState([]);
@@ -123,6 +128,23 @@ const FilterBar = ({
     removeFilter({ listID, filter });
   };
 
+  const handleAddList = () => {
+    toggleAddListMode();
+    updateNewListName("");
+    addList(newListName);
+  }
+
+  const customInput = (
+    <TodoInput
+      content={newListName}
+      onChange={(val) => updateNewListName(val)}
+      placeholder="Enter list name"
+      ref={inputEl}
+      onClick={(e) => e.stopPropagation()}
+      onSubmit={handleAddList}
+    />
+  );
+
   return (
     <>
       <div
@@ -134,16 +156,16 @@ const FilterBar = ({
         {activeFilters.map((item, idx) => (
           <FilterCard key={idx} item={item} remove={deleteFilter} />
         ))}
-        <TodoInput
-          onChange={updateFilterBar}
-          content={filterBarContent}
-          ref={inputEl}
-          placeholder={placeholder}
-          inCockpit={inCockpit}
-          disabled={disabled}
-        />
+          <TodoInput
+            onChange={updateFilterBar}
+            content={filterBarContent}
+            ref={inputEl}
+            placeholder={placeholder}
+            inCockpit={inCockpit}
+            disabled={disabled}
+          />
       </div>
-      {filterMode ? (
+      {filterMode && (
         <SearchResultList
           word={filterWord}
           preview={filterPreview}
@@ -151,7 +173,8 @@ const FilterBar = ({
           search={applyFilter}
           loading={loading}
         />
-      ) : null}
+      )}
+      {addListMode && <Overlay onClick={toggleAddListMode}>{customInput}</Overlay>}
     </>
   );
 };
@@ -162,6 +185,7 @@ const mapStateToProps = createStructuredSelector({
   sorts: selectSorts,
   filterPreview: selectFilterPreview,
   loading: selectFilterLoading,
+  addListMode: selectAddListMode,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -173,7 +197,8 @@ const mapDispatchToProps = (dispatch) => ({
   clearFilterPreview: (listID) => dispatch(clearFilterPreview(listID)),
   fetchFilteredToDoS: ({ listID, filters, sorts }) =>
     dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
-
+  toggleAddListMode: () => dispatch(toggleAddListMode()),
+  addList: (listTitle) => dispatch(addList(listTitle))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterBar);

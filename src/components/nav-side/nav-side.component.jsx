@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import {connect} from "react-redux";
+
 import { Sidenav, Toggle, Nav, Icon } from "rsuite";
 
-const NavSide = ({ toggleCockpit, addList }) => {
+import { toggleAddListMode } from "../../redux/todo-lists-container/todo-lists-container.actions"
+
+const NavSide = ({ toggleCockpit, toggleAddListMode }) => {
   const [expanded, handleToggle] = useState(true);
 
   return (
@@ -25,7 +29,7 @@ const NavSide = ({ toggleCockpit, addList }) => {
             </Nav.Item>
             <Nav.Item
               eventKey="2"
-              onClick={addList}
+              onClick={toggleAddListMode}
               icon={<Icon icon="plus" />}
             >
               New List
@@ -37,4 +41,8 @@ const NavSide = ({ toggleCockpit, addList }) => {
   );
 };
 
-export default NavSide;
+const mapDispatchToProps = dispatch => ({
+  toggleAddListMode: () => dispatch(toggleAddListMode())
+})
+
+export default connect(null, mapDispatchToProps)(NavSide)
