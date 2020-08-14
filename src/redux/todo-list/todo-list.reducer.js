@@ -11,7 +11,7 @@ const {
   REMOVE_TODO_SUCCESS,
   REMOVE_TODO_FAILURE,
 } = ToDoListsActionTypes;
-const { FETCH_TODOS_SUCCESS, FETCH_TODOS_FAILURE } = FilterBarTypes;
+const { FETCH_TODOS_SUCCESS, FETCH_TODOS_FAILURE, FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS } = FilterBarTypes;
 
 const INITIAL_STATE = {
   byID: {},
@@ -22,7 +22,7 @@ const INITIAL_STATE = {
 const getListData = (list) => {
   return {
     title: list.title,
-    todos: list.todos,
+    todos: list.todos.map(({_id}) => _id),
   };
 };
 
@@ -58,6 +58,7 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
         byID: {
           ...state.byID,
           [action.payload.listID]: {
+            ...state.byID[action.payload.listID],
             filters: action.payload.filters,
             todos: action.payload.todos.map(({ _id }) => _id),
             sorts: action.payload.sorts,
@@ -118,6 +119,20 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
           [_id]: getListData(action.payload),
         },
       };
+
+    case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
+        const listData = action.payload.data.reduce((agg, list) => ({
+          ...agg,
+          [list._id]: getListData(list)
+        }), {});
+
+        return {
+          ...state,
+          byID: {
+            ...state.byID,
+            ...listData
+          }
+        }
 
     default:
       return state;

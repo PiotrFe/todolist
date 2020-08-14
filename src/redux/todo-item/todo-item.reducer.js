@@ -35,6 +35,25 @@ const createToDoObj = (todo) => ({
   title: todo.title,
 });
 
+const extractToDosFromLists = (lists) => {
+  const updatedToDos = lists.reduce((agg, list) => {
+    const todosFromList = list.todos.reduce(
+      (obj, todo) => ({
+        ...obj,
+        [todo._id]: createToDoObj(todo),
+      }),
+      {}
+    );
+
+    return {
+      ...agg,
+      ...todosFromList,
+    };
+  }, {});
+
+  return updatedToDos;
+};
+
 const TodoItemsReducer = (state = INITIAL_STATE, action) => {
   let listID, todoID, todo, field, value;
 
@@ -133,18 +152,11 @@ const TodoItemsReducer = (state = INITIAL_STATE, action) => {
       };
 
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
-      const updatedTodos = action.payload.todos.reduce(
-        (obj, item) => ({
-          ...obj,
-          [item._id]: createToDoObj(item),
-        }),
-        {}
-      );
       return {
         ...state,
         byID: {
           ...state.byID,
-          ...updatedTodos,
+          ...extractToDosFromLists(action.payload.data),
         },
       };
     default:

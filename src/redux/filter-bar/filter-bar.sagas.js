@@ -50,12 +50,12 @@ export function* fetchFilteredToDos({ payload: { listID, filters, sorts } }) {
       body: JSON.stringify({ listID, filters, sorts }),
     });
 
-    const todos = yield data.json();
+    const json = yield data.json();
 
     if (listID === MAIN_INPUT_ID) {
-      yield put(fetchFilteredToDosMainInputSuccess({ todos, filters }));
+      yield put(fetchFilteredToDosMainInputSuccess({ data: json, filters }));
     } else {
-      yield put(fetchToDoSSuccess({ listID, todos, filters, sorts }));
+      yield put(fetchToDoSSuccess({ listID, todos: json, filters, sorts }));
     }
   } catch (error) {
     if (listID === MAIN_INPUT_ID) {
