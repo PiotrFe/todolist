@@ -87,7 +87,7 @@ const FilterBarReducer = (state = INITIAL_STATE, action) => {
         globalFilteredData: action.payload.data.reduce((obj, filteredList) => {
           return {
             ...obj,
-            [filteredList._id]: filteredList.todos
+            [filteredList._id]: filteredList.todos.map(item => item._id)
           }
         },{}),
       };

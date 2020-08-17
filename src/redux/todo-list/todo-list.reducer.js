@@ -11,7 +11,11 @@ const {
   REMOVE_TODO_SUCCESS,
   REMOVE_TODO_FAILURE,
 } = ToDoListsActionTypes;
-const { FETCH_TODOS_SUCCESS, FETCH_TODOS_FAILURE, FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS } = FilterBarTypes;
+const {
+  FETCH_TODOS_SUCCESS,
+  FETCH_TODOS_FAILURE,
+  FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
+} = FilterBarTypes;
 
 const INITIAL_STATE = {
   byID: {},
@@ -22,8 +26,17 @@ const INITIAL_STATE = {
 const getListData = (list) => {
   return {
     title: list.title,
-    todos: list.todos.map(({_id}) => _id),
+    todos: list.todos.map(({ _id }) => _id),
   };
+};
+
+const updateViewOnFilterChange = ({ filters = [], currentIDs, newItemIDs }) => {
+  if (filters.length === 0) return newItemIDs;
+  else
+    return [
+      ...currentIDs,
+      ...newItemIDs.filter((id) => !currentIDs.includes(id)),
+    ];
 };
 
 const ToDoListsReducer = (state = INITIAL_STATE, action) => {
@@ -34,13 +47,15 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         byID: action.payload.reduce((obj, list) => {
+          const ids = list.todos.map((item) => item._id);
           return {
             ...obj,
             [list._id]: {
               filters: [],
               sorts: DEFAULT_SORTS,
-              todos: list.todos.map((item) => item._id),
+              todos: ids,
               title: list.title,
+              localView: ids,
             },
           };
         }, {}),
@@ -53,14 +68,21 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
       };
 
     case FETCH_TODOS_SUCCESS:
+      const { listID, filters, todos } = action.payload;
+      const newItemIDs = todos.map(({ _id }) => _id);
       return {
         ...state,
         byID: {
           ...state.byID,
-          [action.payload.listID]: {
-            ...state.byID[action.payload.listID],
-            filters: action.payload.filters,
-            todos: action.payload.todos.map(({ _id }) => _id),
+          [listID]: {
+            ...state.byID[listID],
+            filters: filters,
+            todos: updateViewOnFilterChange({
+              filters,
+              currentIDs: state.byID[listID].todos,
+              newItemIDs,
+            }),
+            localView: newItemIDs,
             sorts: action.payload.sorts,
           },
         },
@@ -121,18 +143,38 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
       };
 
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
-        const listData = action.payload.data.reduce((agg, list) => ({
+      const filteredDataPerListID = action.payload.data.reduce(
+        (agg, list) => ({
           ...agg,
-          [list._id]: getListData(list)
-        }), {});
+          [list._id]: getListData(list),
+        }),
+        {}
+      );
 
-        return {
-          ...state,
-          byID: {
-            ...state.byID,
-            ...listData
-          }
-        }
+      const stateWithUpdatedItemIDs = Object.entries(state.byID).reduce(
+        (acc, [id, data]) => {
+          return {
+            ...acc,
+            [id]: {
+              ...data,
+              todos: updateViewOnFilterChange({
+                currentIDs: data.todos,
+                newItemIDs: filteredDataPerListID[id].todos,
+                filters: action.payload.filters,
+              }),
+            },
+          };
+        },
+        {}
+      );
+
+      return {
+        ...state,
+        byID: {
+          ...state.byID,
+          ...stateWithUpdatedItemIDs,
+        },
+      };
 
     default:
       return state;

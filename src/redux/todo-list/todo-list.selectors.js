@@ -24,5 +24,10 @@ export const selectTodos = createSelector(
     list => list?.todos
 )
 
+export const selectLocalView = createSelector(
+    [selectListByID],
+    list => list?.localView
+)
+
 
     

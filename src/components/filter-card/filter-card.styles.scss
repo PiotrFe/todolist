@@ -1,25 +1,30 @@
 .filter-card {
-    border: 1px solid blue;
-    margin: .5rem;
-    padding: .5rem;
-    font-size: 1.5rem;
-    background-color: black;
-    color: white;
+  border: 1px solid blue;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  background-color: black;
+  color: white;
 
-    &--highlighted {
-        opacity: 70%;
-    }
+  &--highlighted {
+    opacity: 70%;
+  }
 
-    &--disabled {
-        opacity: 70%;
-        background-color: lightgrey;
-        color: grey;
-    }
+  &--disabled {
+    opacity: 70%;
+    background-color: lightgrey;
+    color: grey;
+  }
 
-    &__button {
-        border: none;
-        background-color: transparent;
-        cursor: pointer;
-        padding: 0 .5rem;
-    }
+  &__button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0 0.5rem;
+  }
+
+  &--disabled > &__button,
+  &--highlighted > &__button {
+    cursor: default;
+  }
 }

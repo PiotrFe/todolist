@@ -12,11 +12,13 @@ import ConditionalWrapper from "../utils/ConditionalWrapper.util";
 import {
   selectFilters,
   selectTodos,
+  selectLocalView,
 } from "../../redux/todo-list/todo-list.selectors";
-
 import { selectSorts } from "../../redux/sorts/sorts.selectors";
-
-import {selectGlobalFilters} from "../../redux/filters/filters.selectors";
+import {
+  selectGlobalFilters,
+  selectGlobalFilteredData,
+} from "../../redux/filters/filters.selectors";
 
 import { filterToDos } from "./todo-list.utils";
 
@@ -24,34 +26,53 @@ import { ActionTypes } from "../../constants/constants";
 
 import "./todo-list.styles.scss";
 
-const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts, mainInputFilteredData = "", globalFilters }) => {
+const ToDoList = ({
+  listID,
+  todoItems,
+  localView,
+  actions,
+  dragModeOn,
+  sorts,
+  globalFilters,
+  globalFilteredData,
+}) => {
   const { DRAG, REMOVE, UPDATE } = ActionTypes;
 
   const [editedToDo, setEditedToDo] = useState(null);
-  const [localView, updateLocalView] = useState(todoItems);
+  const [visibleToDos, updateVisibleToDos] = useState(localView);
 
   const mainInputFiltersChangedAfterRender = useRef(false);
 
   const filterData = useCallback(() => {
-    return filterToDos({
-      mainSet: todoItems,
-      subSet: mainInputFilteredData.todos,
-    });
-  }, [JSON.stringify(todoItems)]);
+    // if there are global filters, filter todos against them and return a filtered array of ids
+    if (globalFilteredData.length) {
+      return filterToDos({
+        mainSet: todoItems,
+        subSet: globalFilteredData,
+      });
+    }
+
+    // otherwise return the latest local view
+    return localView;
+  }, [JSON.stringify(globalFilteredData), JSON.stringify(localView)]);
+
+  // useEffect(() => {
+  //   updateVisibleToDos(localView);
+  // }, [JSON.stringify(localView)]);
 
   useEffect(() => {
-    updateLocalView(filterData());
+    updateVisibleToDos(filterData());
   }, [filterData]);
 
-  useEffect(() => {
-    if (mainInputFiltersChangedAfterRender.current) {
-      if (globalFilters.length === 0) {
-        updateLocalView(todoItems);
-      } else {
-        updateLocalView(mainInputFilteredData.todos);
-      }
-    } else mainInputFiltersChangedAfterRender.current = true;
-  }, [JSON.stringify(mainInputFilteredData)]);
+  // useEffect(() => {
+  //   if (mainInputFiltersChangedAfterRender.current) {
+  //     if (globalFilters.length === 0) {
+  //       updateLocalView(todoItems);
+  //     } else {
+  //       updateLocalView(globalFilteredData);
+  //     }
+  //   } else mainInputFiltersChangedAfterRender.current = true;
+  // }, [JSON.stringify(globalFilteredData)]);
 
   return (
     <>
@@ -79,7 +100,7 @@ const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts, mainInputFilt
           <div className="todo-items">
             {!todoItems
               ? null
-              : todoItems.map((_id) => {
+              : visibleToDos.map((_id) => {
                   return !dragModeOn ? (
                     <ToDoItem
                       _id={_id}
@@ -103,10 +124,11 @@ const ToDoList = ({ listID, todoItems, actions, dragModeOn, sorts, mainInputFilt
 
 const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
+  localView: selectLocalView,
   globalFilters: selectGlobalFilters,
+  globalFilteredData: selectGlobalFilteredData,
   sorts: selectSorts,
   todoItems: selectTodos,
-  // mainInputFilteredData: selectDataFromMainFilter,
 });
 
 export default connect(mapStateToProps)(ToDoList);
