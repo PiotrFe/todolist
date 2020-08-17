@@ -39,8 +39,9 @@ const updateViewOnFilterChange = ({ filters = [], currentIDs, newItemIDs }) => {
     ];
 };
 
+// let listID = "", todoID = "", todo = {};
+
 const ToDoListsReducer = (state = INITIAL_STATE, action) => {
-  let listID, todoID, todo;
 
   switch (action.type) {
     case FETCH_LISTS_SUCCESS:
@@ -70,6 +71,7 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
     case FETCH_TODOS_SUCCESS:
       const { listID, filters, todos } = action.payload;
       const newItemIDs = todos.map(({ _id }) => _id);
+
       return {
         ...state,
         byID: {
@@ -94,14 +96,14 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
       };
 
     case ADD_TODO_SUCCESS:
-      ({ listID, todo } = action.payload);
       return {
         ...state,
         byID: {
           ...state.byID,
-          [listID]: {
-            ...state.byID[listID],
-            todos: [...state.byID[listID].todos, todo._id],
+          [action.payload.listID]: {
+            ...state.byID[action.payload.listID],
+            todos: [...state.byID[action.payload.listID].todos, action.payload.todo._id],
+            localView: [...state.byID[action.payload.listID].localView, action.payload.todo._id]
           },
         },
       };
@@ -113,14 +115,17 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
       };
 
     case REMOVE_TODO_SUCCESS:
-      ({ listID, todoID } = action.payload);
+      debugger;
+      const currentIDsAll = state.byID[action.payload.listID].todos;
+      const currentIDsVisible = state.byID[action.payload.listID].localView;
       return {
         ...state,
         byID: {
           ...state.byID,
-          [listID]: {
-            ...state.byID[listID],
-            todos: state.byID[listID].todos.filter((id) => id !== todoID),
+          [action.payload.listID]: {
+            ...state.byID[action.payload.listID],
+            todos: currentIDsAll.filter((id) => id !== action.payload.todoID),
+            localView: currentIDsVisible.filter(id => id !== action.payload.todoID)
           },
         },
       };
