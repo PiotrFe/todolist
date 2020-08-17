@@ -98,7 +98,7 @@ const ToDoList = ({
           )}
         >
           <div className="todo-items">
-            {!todoItems
+            {!visibleToDos
               ? null
               : visibleToDos.map((_id) => {
                   return !dragModeOn ? (

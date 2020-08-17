@@ -23,10 +23,12 @@ const INITIAL_STATE = {
   error: "",
 };
 
-const getListData = (list) => {
+const createListObject = (list) => {
+  const ids = list.todos.map(({ _id }) => _id);
   return {
     title: list.title,
-    todos: list.todos.map(({ _id }) => _id),
+    todos: ids,
+    localView: ids
   };
 };
 
@@ -115,7 +117,6 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
       };
 
     case REMOVE_TODO_SUCCESS:
-      debugger;
       const currentIDsAll = state.byID[action.payload.listID].todos;
       const currentIDsVisible = state.byID[action.payload.listID].localView;
       return {
@@ -143,7 +144,7 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
         allIDs: [...state.allIDs, action.payload._id],
         byID: {
           ...state.byID,
-          [_id]: getListData(action.payload),
+          [_id]: createListObject(action.payload),
         },
       };
 
@@ -151,7 +152,7 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
       const filteredDataPerListID = action.payload.data.reduce(
         (agg, list) => ({
           ...agg,
-          [list._id]: getListData(list),
+          [list._id]: createListObject(list),
         }),
         {}
       );
