@@ -1,6 +1,12 @@
 import { createSelector } from "reselect";
 
+const selectToDoItems = (state) => state.todoItems.byID;
 const selectTodoByID = (state, props) => state.todoItems.byID[props._id];
+
+export const selectToDos = createSelector(
+  selectToDoItems,
+  items => items
+)
 
 export const selectColor = createSelector(
   [selectTodoByID],
