@@ -3,7 +3,7 @@ import { Drawer } from "rsuite";
 
 export default ({
   children,
-  toggleCockpit,
+  onHide,
   size = "xs",
   show = true,
   placement = "left",
@@ -13,7 +13,7 @@ export default ({
     size={size}
     placement={placement}
     show={show}
-    onHide={() => toggleCockpit()}
+    onHide={() => onHide()}
   >
     <Drawer.Header>
       <Drawer.Title>{title}</Drawer.Title>

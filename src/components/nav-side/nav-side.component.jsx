@@ -5,7 +5,7 @@ import { Sidenav, Toggle, Nav, Icon } from "rsuite";
 
 import { toggleAddListMode } from "../../redux/todo-lists-container/todo-lists-container.actions"
 
-const NavSide = ({ toggleCockpit, toggleAddListMode }) => {
+const NavSide = ({ toggleCockpit, toggleAddListMode, toggleReports }) => {
   const [expanded, handleToggle] = useState(true);
 
   return (
@@ -25,7 +25,7 @@ const NavSide = ({ toggleCockpit, toggleAddListMode }) => {
               onClick={toggleCockpit}
               icon={<Icon icon="dashboard" />}
             >
-              Cockit
+              Cockpit
             </Nav.Item>
             <Nav.Item
               eventKey="2"
@@ -33,6 +33,13 @@ const NavSide = ({ toggleCockpit, toggleAddListMode }) => {
               icon={<Icon icon="plus" />}
             >
               New List
+            </Nav.Item>
+            <Nav.Item
+              eventKey="2"
+              onClick={toggleReports}
+              icon={<Icon icon="bar-chart" />}
+            >
+              Reports
             </Nav.Item>
           </Nav>
         </Sidenav.Body>

@@ -6,6 +6,7 @@ import ToDoListsContainer from "./components/todo-lists-container/todo-lists-con
 import UserLogo from "./components/user-logo/user-logo.component";
 import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
 import FilterBar from "./components/filter-bar/filter-bar.component";
+import ReportSection from "./components/report/report.component";
 
 import { MAIN_INPUT_ID } from "./constants/constants";
 
@@ -23,8 +24,36 @@ require("dotenv").config();
 function App() {
   const [currentUser, updateCurrentUser] = useState("");
   const [cockpitVisible, toggleCockpit] = useState(false);
+  const [reportsVisible, toggleReports] = useState(true);
+  const [drawerCompoment, updateDrawerComponent] = useState(null);
 
-  const mainInputRef = useRef(null);
+  useEffect(() => {
+    let drawer;
+
+    if (cockpitVisible) {
+      drawer = (
+        <Drawer
+          title="Cockpit"
+          show={cockpitVisible}
+          onHide={() => toggleCockpit(!cockpitVisible)}
+        >
+          <ToDoCockpit />
+        </Drawer>
+      );
+    } else if (reportsVisible) {
+      drawer = (
+        <Drawer
+          title="Reports"
+          show={reportsVisible}
+          onHide={() => toggleReports(!reportsVisible)}
+        >
+          <ReportSection />
+        </Drawer>
+      );
+    } else drawer = null;
+
+    updateDrawerComponent(drawer);
+  }, [cockpitVisible, reportsVisible]);
 
   useEffect(() => {
     const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
@@ -54,17 +83,9 @@ function App() {
             onClick={() => signOutUser()}
           />
         ) : null}
-        <Drawer
-          title="Cockpit"
-          show={cockpitVisible}
-          toggleCockpit={() => toggleCockpit(!cockpitVisible)}
-        >
-          <ToDoCockpit />
-        </Drawer>
+        {drawerCompoment}
         <div className="nav-side">
-          <NavSide
-            toggleCockpit={() => toggleCockpit(!cockpitVisible)}
-          />
+          <NavSide toggleCockpit={() => toggleCockpit(!cockpitVisible)} toggleReports={() => toggleReports(!reportsVisible)} />
         </div>
         <div className="app-main">
           <>
@@ -81,7 +102,5 @@ function App() {
     </>
   );
 }
-
-
 
 export default App;
