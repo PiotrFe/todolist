@@ -21,7 +21,6 @@ import {
 import { selectTitle } from "../../redux/todo-list/todo-list.selectors";
 
 import {
-  selectFilters,
   selectDataFromMainFilter,
 } from "../../redux/filter-bar/filter-bar.selectors";
 

@@ -21,20 +21,8 @@ const ToDoListsContainer = ({ todoLists, loading, fetchLists }) => {
     fetchLists();
   }, []);
 
-  const [addListMode, toggleAddListMode] = useState(false);
-
-  const handleCreateList = (listName) => {
-    addList(listName);
-  };
-
   return (
     <div className="todo-list-container">
-      {addListMode && (
-        <Input
-          placeholder="Please provide list title"
-          onSubmit={(listName) => handleCreateList(listName)}
-        />
-      )}
       {todoLists.map((_id) => (
         <ToDoItemsContainer key={_id} listID={_id} />
       ))}

@@ -100,19 +100,19 @@ const ToDoItem = ({
 
             <div className="todo-item__details todo-item__details--front">
               <div
-                className={`todo-item__duedate todo-item__duedate--front ${
-                  sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null
-                }`}
+                className={`todo-item__duedate todo-item__duedate--front`}
               >
-                Due date: <span>{formattedDate}</span>
+                Due date: <span className={`${
+                  sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null
+                }`}>{formattedDate}</span>
               </div>
               <div
-                className={`todo-item__owner todo-item__owner--front ${
-                  sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null
-                }`}
+                className={`todo-item__owner todo-item__owner--front`}
               >
                 Owner:
-                <span>{owner}</span>
+                <span className={`${
+                  sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null
+                }`}>{owner}</span>
               </div>
             </div>
           </div>

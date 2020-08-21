@@ -56,23 +56,9 @@ const ToDoList = ({
     return localView;
   }, [JSON.stringify(globalFilteredData), JSON.stringify(localView)]);
 
-  // useEffect(() => {
-  //   updateVisibleToDos(localView);
-  // }, [JSON.stringify(localView)]);
-
   useEffect(() => {
     updateVisibleToDos(filterData());
   }, [filterData]);
-
-  // useEffect(() => {
-  //   if (mainInputFiltersChangedAfterRender.current) {
-  //     if (globalFilters.length === 0) {
-  //       updateLocalView(todoItems);
-  //     } else {
-  //       updateLocalView(globalFilteredData);
-  //     }
-  //   } else mainInputFiltersChangedAfterRender.current = true;
-  // }, [JSON.stringify(globalFilteredData)]);
 
   return (
     <>

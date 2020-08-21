@@ -6,15 +6,16 @@
     width: 100%;
     display: flex;
     padding: 0.5rem;
+    background-color: $color-white;
   }
 
   &__search-field {
     font-size: 1.5rem;
     font-family: inherit;
-    padding: 0.7rem;
+    padding: 0.5rem;
     border: none;
     width: 100%;
-    border: 2px solid red;
+    background-color: $color-white;
 
     &:focus {
       outline: none;
