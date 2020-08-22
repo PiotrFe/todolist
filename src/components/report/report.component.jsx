@@ -12,19 +12,21 @@ import { sumItemsPerUser, sumItemCategories } from "./report.utils";
 
 import "./report.styles.scss";
 
-const localData = {
-  done: 5,
-  pending: 5,
-};
-
 const ReportSection = ({ todos }) => {
   const items = Object.values(todos);
 
   return (
-    <>
-      <ChartWrapper chart={PieChart} data={sumItemCategories(items)} />
-      <ChartWrapper chart={HorizontalBarChart} data={sumItemsPerUser(items)} />
-    </>
+    <div className="report">
+      {items.length ? (
+        <>
+          <ChartWrapper chart={PieChart} data={sumItemCategories(items)} />
+          <ChartWrapper
+            chart={HorizontalBarChart}
+            data={sumItemsPerUser(items)}
+          />
+        </>
+      ) : <div>No data to report</div>}
+    </div>
   );
 };
 

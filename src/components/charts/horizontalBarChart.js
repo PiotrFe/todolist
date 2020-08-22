@@ -39,7 +39,6 @@ class HorizontalBarChart {
       .scaleLinear()
       .domain([0, d3.max(vis.data, (d) => d.items)])
       .range([0, WIDTH])
-      
 
     const y = d3
       .scaleBand()

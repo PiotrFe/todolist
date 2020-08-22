@@ -22,7 +22,6 @@ export const sumItemsPerUser = (data) => {
 export const sumItemCategories = (data) => {
   const obj = data.reduce(
     (acc, { done }) => {
-        debugger;
       if (done) {
         return {
           ...acc,
