@@ -1,5 +1,4 @@
 import * as d3 from "d3";
-import { schemeDark2 } from "d3";
 
 const MARGIN = { TOP: 30, BOTTOM: 50, LEFT: 50, RIGHT: 30 };
 const WIDTH = 300 - MARGIN.LEFT - MARGIN.RIGHT;
@@ -13,17 +12,17 @@ class HorizontalBarChart {
     vis.svg = d3
       .select(element)
       .append("svg")
-      .attr("width", WIDTH + MARGIN.LEFT + MARGIN.RIGHT)
-      .attr("height", HEIGHT + MARGIN.TOP + MARGIN.BOTTOM)
+        .attr("width", WIDTH + MARGIN.LEFT + MARGIN.RIGHT)
+        .attr("height", HEIGHT + MARGIN.TOP + MARGIN.BOTTOM)
       .append("g")
-      .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
+        .attr("transform", `translate(${MARGIN.LEFT}, ${MARGIN.TOP})`);
 
     vis.xLabel = vis.svg
       .append("text")
-      .attr("x", WIDTH / 2)
-      .attr("y", HEIGHT + 40)
-      .attr("text-anchor", "middle")
-      .text("Items per user");
+        .attr("x", WIDTH / 2)
+        .attr("y", HEIGHT + 40)
+        .attr("text-anchor", "middle")
+        .text("Items per user");
 
     vis.xAxisGroup = vis.svg
       .append("g")
