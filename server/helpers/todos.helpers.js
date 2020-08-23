@@ -178,26 +178,10 @@ exports.resultsPreview = async (req, res) => {
 
   // executing query and sending results
   const queryData = await query.exec();
-  // console.log(JSON.stringify([queryData].flat()));
-  // debugger;
   const todoData = queryData ? [queryData].flat() : [];
 
   res.json(todoData);
 
-  // query = db.ToDo.find({ $or: filterArray }).select({
-  //   name: 1,
-  //   owner: 1,
-  //   details: 1,
-  //   _id: 0,
-  // });
-
-  // executing query
-  // query
-  //   .exec()
-  //   .then((todos) => {
-  //     res.json(todos);
-  //   })
-  //   .catch((err) => res.send(err));
 };
 
 exports.addList = async (req, res) => {
@@ -219,6 +203,9 @@ exports.removeList = async (req, res) => {
 
   try {
     const deletedList = await db.ToDoList.findByIdAndRemove(listID);
+    const todosToDelete = deletedList.todos.map(objID => objID.toString());
+    const deletedToDos = await db.ToDo.deleteMany({ _id: { $in: todosToDelete} });
+
     res.json(deletedList._id);
   } catch (err) {
     res.json(err);

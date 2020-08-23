@@ -9,6 +9,7 @@ const {
   ADD_TODO_FAILURE,
   REMOVE_TODO_SUCCESS,
   REMOVE_TODO_FAILURE,
+  REMOVE_LIST_SUCCESS,
 } = ToDoListsActionTypes;
 const { UPDATE_TODO_SUCCESS, UPDATE_TODO_FAILURE } = ToDoItemTypes;
 const {
@@ -53,6 +54,22 @@ const extractToDosFromLists = (lists) => {
 
   return updatedToDos;
 };
+
+const filterToDosByListID = ({todos, listID}) => {
+  let updatedToDoList = {};
+  
+  for (const todoID in todos) {
+    const todo = todos[todoID];
+    if (!todo.lists.includes(listID)) {
+      updatedToDoList = {
+        ...updatedToDoList,
+        [todoID]: todo
+      };
+    }
+  }
+
+  return updatedToDoList;
+}
 
 const TodoItemsReducer = (state = INITIAL_STATE, action) => {
   let listID, todoID, todo, field, value;
@@ -159,6 +176,13 @@ const TodoItemsReducer = (state = INITIAL_STATE, action) => {
           ...extractToDosFromLists(action.payload.data),
         },
       };
+
+    case REMOVE_LIST_SUCCESS:
+      return {
+        ...state,
+        byID: filterToDosByListID({todos: state.byID, listID: action.payload})
+      };
+
     default:
       return state;
   }
