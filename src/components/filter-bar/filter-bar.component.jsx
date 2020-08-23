@@ -132,20 +132,20 @@ const FilterBar = ({
           inputEl.current.focus();
         }}
       >
-        <div className="todo-input-wrapper">
-          <TodoInput
-            onChange={updateFilterBar}
-            content={filterBarContent}
-            ref={inputEl}
-            placeholder={placeholder}
-            inCockpit={inCockpit}
-            disabled={disabled}
-          />
-          <Icon icon="close-circle" onClick={() => clearFilters({listID})} />
-        </div>
         {activeFilters.map((item, idx) => (
           <FilterCard key={idx} item={item} remove={deleteFilter} />
         ))}
+        <TodoInput
+          onChange={updateFilterBar}
+          content={filterBarContent}
+          ref={inputEl}
+          placeholder={placeholder}
+          inCockpit={inCockpit}
+          disabled={disabled}
+        />
+        <div className="clear-filters-icon">
+          <Icon icon="close-circle" onClick={() => clearFilters({ listID })} />
+        </div>
       </div>
       {filterMode && (
         <SearchResultList

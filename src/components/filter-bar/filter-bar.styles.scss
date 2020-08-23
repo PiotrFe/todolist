@@ -10,9 +10,14 @@
     background-color: $color-white;
 }
 
-.todo-input-wrapper {
-    display: flex;
-    align-items: center;
-}
+// .todo-input-wrapper {
+//     display: flex;
+//     align-items: center;
+// }
 
+.clear-filters-icon {
+    position: absolute;
+    right: .2rem;
+    top: .1rem;
+}
 
