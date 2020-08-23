@@ -1,16 +1,16 @@
 import { FilterTypes } from "./filter.types";
 
-const { ADD_FILTER, REMOVE_FILTER } = FilterTypes;
+const { ADD_FILTER, REMOVE_FILTER, CLEAR_FILTERS } = FilterTypes;
 
 const INITIAL_STATE = {
   byID: {},
 };
 
-const returnArr = obj => {
-    if (Array.isArray(obj)) {
-        return obj;
-    } else return [];
-}
+const returnArr = (obj) => {
+  if (Array.isArray(obj)) {
+    return obj;
+  } else return [];
+};
 
 const FiltersReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -19,8 +19,7 @@ const FiltersReducer = (state = INITIAL_STATE, action) => {
         ...state,
         byID: {
           ...state.byID,
-          [action.payload.listID]: 
-           [
+          [action.payload.listID]: [
             ...returnArr(state.byID[action.payload.listID]),
             action.payload.filter,
           ],
@@ -41,6 +40,17 @@ const FiltersReducer = (state = INITIAL_STATE, action) => {
               );
             }
           ),
+        },
+      };
+
+    case CLEAR_FILTERS:
+      const { listID } = action.payload;
+      const { [listID]: deleted, ...remainingFilters } = state.byID;
+
+      return {
+        ...state,
+        byID: {
+          ...remainingFilters,
         },
       };
     default:

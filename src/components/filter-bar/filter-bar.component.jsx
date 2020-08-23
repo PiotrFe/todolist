@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 
+import { Icon } from "rsuite";
 import TodoInput from "../todo-input/todo-input.component";
 import FilterCard from "../../components/filter-card/filter-card.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
@@ -24,6 +25,7 @@ import {
   fetchFilteredToDoS,
   showFilterPreview,
   clearFilterPreview,
+  clearFilters,
 } from "../../redux/filter-bar/filter-bar.actions";
 
 import {
@@ -45,6 +47,7 @@ const FilterBar = ({
   inCockpit,
   addFilter,
   removeFilter,
+  clearFilters,
   showFilterPreview,
   clearFilterPreview,
   fetchFilteredToDoS,
@@ -127,17 +130,19 @@ const FilterBar = ({
         className="filter-bar"
         onClick={() => {
           inputEl.current.focus();
-          
         }}
       >
-        <TodoInput
-          onChange={updateFilterBar}
-          content={filterBarContent}
-          ref={inputEl}
-          placeholder={placeholder}
-          inCockpit={inCockpit}
-          disabled={disabled}
-        />
+        <div className="todo-input-wrapper">
+          <TodoInput
+            onChange={updateFilterBar}
+            content={filterBarContent}
+            ref={inputEl}
+            placeholder={placeholder}
+            inCockpit={inCockpit}
+            disabled={disabled}
+          />
+          <Icon icon="close-circle" onClick={() => clearFilters({listID})} />
+        </div>
         {activeFilters.map((item, idx) => (
           <FilterCard key={idx} item={item} remove={deleteFilter} />
         ))}
@@ -167,6 +172,7 @@ const mapDispatchToProps = (dispatch) => ({
   addFilter: ({ listID, filter }) => dispatch(addFilter({ listID, filter })),
   removeFilter: ({ listID, filter }) =>
     dispatch(removeFilter({ listID, filter })),
+  clearFilters: ({ listID }) => dispatch(clearFilters({ listID })),
   showFilterPreview: ({ listID, filters, word }) =>
     dispatch(showFilterPreview({ listID, filters, word })),
   clearFilterPreview: (listID) => dispatch(clearFilterPreview(listID)),
