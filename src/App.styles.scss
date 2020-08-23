@@ -1,7 +1,6 @@
 .app {
   width: 100vw;
   height: 100vh;
-
   display: flex;
 
 }
@@ -14,7 +13,4 @@
   overflow-y: hidden;
   flex-basis: 90%;
 
-  &__right-side {
-    // flex-basis: 70%
-  }
 }

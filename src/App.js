@@ -10,7 +10,7 @@ import ReportSection from "./components/report/report.component";
 
 import { MAIN_INPUT_ID } from "./constants/constants";
 
-import "rsuite/dist/styles/rsuite-default.css";
+import 'rsuite/lib/styles/index.less';
 import "./App.styles.scss";
 
 import {
