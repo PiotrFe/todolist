@@ -20,12 +20,12 @@
 
   &__field--sorted {
     background-image: $sorted-item-background;
-    // color: $color-grey-dark-1;
   }
 
   &__icons {
     position: relative;
     top: 0;
+    right: 2.2rem;
     z-index: 11;
     order: 1;
   }

@@ -1,15 +1,26 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
-import { Dropdown, Icon, IconButton } from "rsuite";
+import { Dropdown, Icon } from "rsuite";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 
-import { selectTitle, selectColor, selectDetails, selectDone, selectDueDate, selectListIDs, selectOwner } from "../../redux/todo-item/todo-item.selectors";
+import {
+  selectTitle,
+  selectColor,
+  selectDetails,
+  selectDone,
+  selectDueDate,
+  selectListIDs,
+  selectOwner,
+} from "../../redux/todo-item/todo-item.selectors";
 
-import { ActionTypes, ToDoFields, ColorPickerColors } from "../../constants/constants";
+import {
+  ActionTypes,
+  ToDoFields,
+  ColorPickerColors,
+} from "../../constants/constants";
 
 import "./todo-item.styles.scss";
-
 
 const ToDoItem = ({
   _id,
@@ -45,28 +56,34 @@ const ToDoItem = ({
     <Dropdown
       placement="leftStart"
       renderTitle={() => {
-        return (
-          <IconButton appearance="primary" icon={<Icon icon="more" />} circle />
-        );
+        return <Icon icon="more" />;
       }}
     >
-      <Dropdown.Item onSelect={() => toggleDetailsVisible(!detailsVisible)}>
-        More info
-      </Dropdown.Item>
-      <Dropdown.Item onSelect={handleToDoDone}>Done</Dropdown.Item>
-      <Dropdown.Item>Edit</Dropdown.Item>
-      <Dropdown.Item onSelect={() => actions[REMOVE]({ todoID: _id })}>
-        Remove
-      </Dropdown.Item>
       <Dropdown.Menu title="Color" pullLeft>
         {Object.values(ColorPickerColors).map((color) => (
           <Dropdown.Item
             key={`${_id}_${color}`}
-            style={{ "backgroundColor": `${color}` }}
+            style={{ backgroundColor: `${color}` }}
             onSelect={() => handleColorChange(color)}
           ></Dropdown.Item>
         ))}
       </Dropdown.Menu>
+      <Dropdown.Item
+        icon={<Icon icon="detail" />}
+        onSelect={() => toggleDetailsVisible(!detailsVisible)}
+      >
+        More info
+      </Dropdown.Item>
+      <Dropdown.Item icon={<Icon icon="check" />} onSelect={handleToDoDone}>
+        Done
+      </Dropdown.Item>
+      <Dropdown.Item icon={<Icon icon="edit2" />}>Edit</Dropdown.Item>
+      <Dropdown.Item
+        icon={<Icon icon="trash2" />}
+        onSelect={() => actions[REMOVE]({ todoID: _id })}
+      >
+        Remove
+      </Dropdown.Item>
     </Dropdown>
   );
 
@@ -99,20 +116,25 @@ const ToDoItem = ({
             </div>
 
             <div className="todo-item__details todo-item__details--front">
-              <div
-                className={`todo-item__duedate todo-item__duedate--front`}
-              >
-                Due date: <span className={`${
-                  sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null
-                }`}>{formattedDate}</span>
+              <div className={`todo-item__duedate todo-item__duedate--front`}>
+                Due date:{" "}
+                <span
+                  className={`${
+                    sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null
+                  }`}
+                >
+                  {formattedDate}
+                </span>
               </div>
-              <div
-                className={`todo-item__owner todo-item__owner--front`}
-              >
+              <div className={`todo-item__owner todo-item__owner--front`}>
                 Owner:
-                <span className={`${
-                  sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null
-                }`}>{owner}</span>
+                <span
+                  className={`${
+                    sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null
+                  }`}
+                >
+                  {owner}
+                </span>
               </div>
             </div>
           </div>
@@ -173,7 +195,7 @@ const mapStateToProps = createStructuredSelector({
   dueDate: selectDueDate,
   color: selectColor,
   details: selectDetails,
-  done: selectDone
-})
+  done: selectDone,
+});
 
 export default connect(mapStateToProps)(ToDoItem);

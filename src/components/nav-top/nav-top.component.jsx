@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 
 import Icon from "../icon/icon.component";
+// import { SortAscendingOutlined } from "@ant-design/icons";
 
 import { IconTypes } from "../icon/icon.types";
 
@@ -37,6 +38,7 @@ const NavTop = ({ listID, actions, sorts }) => {
             onClick={() => actions[SORT](sorts, TITLE)}
             size={Sizes.SMALL}
           />
+          {/* <SortAscendingOutlined /> */}
         </div>
         <div
           className={`header-top__item-box ${
