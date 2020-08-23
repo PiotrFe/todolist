@@ -14,6 +14,8 @@ import {
   updateToDoFailure,
   addListSuccess,
   addListFailure,
+  removeListSuccess,
+  removeListFailure,
 } from "./todo-lists-container.actions";
 
 export function* fetchLists() {
@@ -112,6 +114,25 @@ export function* addList({ payload: { title } }) {
   }
 }
 
+export function* removeList({ payload: listID }) {
+  yield put(asyncActionStart());
+
+  try {
+    const res = yield fetch(`api/todos/lists/${listID}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const deletedListID = yield res.json();
+
+    yield put(removeListSuccess(deletedListID));
+  } catch (error) {
+    yield put(removeListFailure(error));
+  }
+}
+
 export function* onFetchLists() {
   yield takeLatest(ToDoListsActionTypes.FETCH_LISTS_START, fetchLists);
 }
@@ -128,9 +149,12 @@ export function* onToDoUpdate() {
   yield takeLatest(ToDoListsActionTypes.UPDATE_TODO_START, updateToDo);
 }
 
-
 export function* onAddList() {
   yield takeLatest(ToDoListsActionTypes.ADD_LIST_START, addList);
+}
+
+export function* onRemoveList() {
+  yield takeLatest(ToDoListsActionTypes.REMOVE_LIST_START, removeList);
 }
 
 export function* todoListsContainerSaga() {
@@ -140,5 +164,6 @@ export function* todoListsContainerSaga() {
     call(onToDoRemove),
     call(onToDoUpdate),
     call(onAddList),
+    call(onRemoveList),
   ]);
 }

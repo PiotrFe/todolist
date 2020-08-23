@@ -2,15 +2,16 @@
   width: 100vw;
   height: 100vh;
   display: flex;
-
 }
 
 .app-main {
   height: 100%;
   top: 0px;
-  border: 3px solid orangered;
-  overflow-x: auto; //scroll;
+  overflow-x: auto;
   overflow-y: hidden;
-  flex-basis: 90%;
+  flex-basis: 100%;
+}
 
+.filter-bar-main {
+  padding-bottom: 2rem;
 }

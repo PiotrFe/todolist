@@ -127,6 +127,7 @@ const FilterBar = ({
         className="filter-bar"
         onClick={() => {
           inputEl.current.focus();
+          
         }}
       >
         <TodoInput

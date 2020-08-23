@@ -12,6 +12,9 @@ router.route("/filters")
 router.route("/lists")
     .post(helpers.addList);
 
+router.route("/lists/:listID")
+    .post(helpers.removeList)
+
 router.route("/preview/:listId")
     .post(helpers.resultsPreview);
 

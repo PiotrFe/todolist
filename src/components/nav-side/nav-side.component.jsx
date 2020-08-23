@@ -49,7 +49,7 @@ const NavSide = ({
           />
         </Overlay>
       )}
-      <div style={{ width: 250 }}>
+      <div>
         <Toggle onChange={() => handleToggle(!expanded)} checked={expanded} />
         <hr />
         <Sidenav

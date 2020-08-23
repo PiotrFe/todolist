@@ -116,7 +116,7 @@ exports.filterTodos = async (req, res) => {
   } else {
     query = db.ToDoList.findById(listID);
   }
-  
+
   populateObj.path = "todos";
 
   if (filters.length) {
@@ -124,7 +124,7 @@ exports.filterTodos = async (req, res) => {
   }
 
   if (Object.keys(sortObj).length) {
-    populateObj.options = {sort: sortObj}
+    populateObj.options = { sort: sortObj };
   }
 
   query.populate(populateObj).collation({ locale: "en" });
@@ -139,7 +139,6 @@ exports.filterTodos = async (req, res) => {
     } else {
       res.json(filteredList.todos);
     }
-    
   } catch (error) {
     res.json(error);
   }
@@ -157,14 +156,14 @@ exports.resultsPreview = async (req, res) => {
   }
 
   // building query
-  let query; 
+  let query;
 
   if (listID === "MAIN_INPUT_ID") {
     query = db.ToDoList.find({});
   } else {
-    query = db.ToDoList.findById(listID)
+    query = db.ToDoList.findById(listID);
   }
-  
+
   query.populate({
     path: "todos",
     match: { $or: filterArray },
@@ -210,6 +209,17 @@ exports.addList = async (req, res) => {
   try {
     const savedList = await newList.save();
     res.json(savedList);
+  } catch (err) {
+    res.json(err);
+  }
+};
+
+exports.removeList = async (req, res) => {
+  const {listID} = req.params;
+
+  try {
+    const deletedList = await db.ToDoList.findByIdAndRemove(listID);
+    res.json(deletedList._id);
   } catch (err) {
     res.json(err);
   }

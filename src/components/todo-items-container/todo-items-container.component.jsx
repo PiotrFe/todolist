@@ -6,7 +6,7 @@ import NavTop from "../../components/nav-top/nav-top.component";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
 import ToDoList from "../../components/todo-list/todo-list.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
-import { Toggle, Button } from "rsuite";
+import { Toggle, Button, IconButton, Icon } from "rsuite";
 
 import { ActionTypes } from "../../constants/constants";
 
@@ -16,6 +16,7 @@ import {
   updateToDo,
   dropToDo,
   updateSorts,
+  removeList
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import { selectTitle } from "../../redux/todo-list/todo-list.selectors";
@@ -45,6 +46,7 @@ const ToDoItemsContainer = ({
   removeToDo,
   updateToDo,
   updateSorts,
+  removeList
 }) => {
   const { DRAG, EDIT, REMOVE, SORT, UPDATE } = ActionTypes;
 
@@ -104,6 +106,10 @@ const ToDoItemsContainer = ({
     downloadCSV(CSVData, title);
   };
 
+  const handleRemoveList = () => {
+    removeList(listID);
+  }
+
   const toggleDrag = (isEnabled) => {
     toggleDragMode(isEnabled);
   };
@@ -146,12 +152,14 @@ const ToDoItemsContainer = ({
             unCheckedChildren="Sort"
             onChange={toggleDrag}
           />
-          <Button side="md" onClick={(listID, toggleEditMode)}>
+          <Button size="sm" color="cyan" appearance="default" onClick={(listID, toggleEditMode)}>
+
             Add
           </Button>
-          <Button side="md" onClick={handleCSVDownload}>
+          <Button size="sm" color="cyan" appearance="default" onClick={handleCSVDownload}>
             Download
           </Button>
+          <IconButton icon={<Icon icon="trash2" />} color="cyan" size="sm" onClick={handleRemoveList}/>
         </div>
       </div>
 
@@ -195,6 +203,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateToDo({ todoID, field, value })),
   updateSorts: (listID, sorts, field) =>
     dispatch(updateSorts({ listID, sorts, field })),
+    removeList: (listID) => dispatch(removeList(listID))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoItemsContainer);

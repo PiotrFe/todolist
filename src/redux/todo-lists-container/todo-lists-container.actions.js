@@ -19,7 +19,10 @@ const {
   UPDATE_TODO_FAILURE,
   DROP_TODO,
   UPDATE_SORTS,
-  TOGGLE_ADD_LIST_MODE
+  TOGGLE_ADD_LIST_MODE,
+  REMOVE_LIST_START,
+  REMOVE_LIST_SUCCESS,
+  REMOVE_LIST_FAILURE,
 } = ToDoListsActionTypes;
 
 export const asyncActionStart = () => ({
@@ -111,7 +114,20 @@ export const updateSorts = ({ listID, sorts, field }) => ({
 });
 
 export const toggleAddListMode = () => ({
-  type: TOGGLE_ADD_LIST_MODE
-})
+  type: TOGGLE_ADD_LIST_MODE,
+});
 
+export const removeList = (listID) => ({
+  type: REMOVE_LIST_START,
+  payload: listID,
+});
 
+export const removeListSuccess = (listID) => ({
+  type: REMOVE_LIST_SUCCESS,
+  payload: listID,
+});
+
+export const removeListFailure = (error) => ({
+  type: REMOVE_LIST_FAILURE,
+  payload: error,
+});

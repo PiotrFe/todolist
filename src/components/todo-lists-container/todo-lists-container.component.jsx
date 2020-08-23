@@ -12,7 +12,6 @@ import {
 } from "../../redux/todo-lists-container/todo-lists-container.selectors";
 
 import { fetchLists } from "../../redux/todo-lists-container/todo-lists-container.actions";
-import { addList } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import "./todo-lists-container.styles.scss";
 

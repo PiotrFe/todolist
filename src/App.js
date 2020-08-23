@@ -10,7 +10,7 @@ import ReportSection from "./components/report/report.component";
 
 import { MAIN_INPUT_ID } from "./constants/constants";
 
-import 'rsuite/lib/styles/index.less';
+import "rsuite/lib/styles/index.less";
 import "./App.styles.scss";
 
 import {
@@ -85,7 +85,10 @@ function App() {
         ) : null}
         {drawerCompoment}
         <div className="nav-side">
-          <NavSide toggleCockpit={() => toggleCockpit(!cockpitVisible)} toggleReports={() => toggleReports(!reportsVisible)} />
+          <NavSide
+            toggleCockpit={() => toggleCockpit(!cockpitVisible)}
+            toggleReports={() => toggleReports(!reportsVisible)}
+          />
         </div>
         <div className="app-main">
           <>

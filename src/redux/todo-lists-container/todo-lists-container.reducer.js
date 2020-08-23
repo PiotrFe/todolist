@@ -16,7 +16,9 @@ const {
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILURE,
   DROP_TODO,
-  TOGGLE_ADD_LIST_MODE
+  TOGGLE_ADD_LIST_MODE,
+  REMOVE_LIST_SUCCESS,
+  REMOVE_LIST_FAILURE
 } = ToDoListsActionTypes;
 
 const {
@@ -79,6 +81,20 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false,
         error: action.payload,
       };
+
+    case REMOVE_LIST_SUCCESS: 
+      return {
+        ...state,
+        loading: false,
+        todoLists: state.todoLists.filter(id => id !== action.payload)
+      }
+
+    case REMOVE_LIST_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload
+      }
     case FETCH_TODOS_SUCCESS:
     case FETCH_TODOS_FAILURE:
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:

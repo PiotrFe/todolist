@@ -4,6 +4,7 @@ import { DEFAULT_SORTS } from "../../constants/constants";
 
 const {
   ADD_LIST_SUCCESS,
+  REMOVE_LIST_SUCCESS,
   FETCH_LISTS_SUCCESS,
   FETCH_LISTS_FAILURE,
   ADD_TODO_SUCCESS,
@@ -147,6 +148,18 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
           [_id]: createListObject(action.payload),
         },
       };
+
+    case REMOVE_LIST_SUCCESS:
+      const removedListID = action.payload;
+      const { [removedListID]: deleted, ...remainingLists } = state.byID;
+
+      return {
+        ...state,
+        allIDs: state.allIDs.filter(id => id !== removedListID),
+        byID: {
+          ...remainingLists
+        }
+      }
 
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
       const filteredDataPerListID = action.payload.data.reduce(
