@@ -6,7 +6,7 @@ import NavTop from "../../components/nav-top/nav-top.component";
 import FilterBar from "../../components/filter-bar/filter-bar.component";
 import ToDoList from "../../components/todo-list/todo-list.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
-import { Toggle, Button, IconButton, Icon } from "rsuite";
+import ButtonBar from "../../components/button-bar/button-bar.component";
 
 import { ActionTypes } from "../../constants/constants";
 
@@ -16,14 +16,16 @@ import {
   updateToDo,
   dropToDo,
   updateSorts,
-  removeList
+  removeList,
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import { selectTitle } from "../../redux/todo-list/todo-list.selectors";
+import { selectFilters } from "../../redux/filters/filters.selectors";
+import { selectSorts } from "../../redux/sorts/sorts.selectors";
 
-import {
-  selectDataFromMainFilter,
-} from "../../redux/filter-bar/filter-bar.selectors";
+import { fetchFilteredToDoS } from "../../redux/filter-bar/filter-bar.actions";
+
+import { selectDataFromMainFilter } from "../../redux/filter-bar/filter-bar.selectors";
 
 import {
   generateCVSData,
@@ -41,12 +43,15 @@ const ToDoItemsContainer = ({
   title,
   todoItems,
   mainInputFilteredData,
+  filters,
+  sorts,
   addToDo,
   dropToDo,
   removeToDo,
   updateToDo,
   updateSorts,
-  removeList
+  removeList,
+  fetchFilteredToDoS
 }) => {
   const { DRAG, EDIT, REMOVE, SORT, UPDATE } = ActionTypes;
 
@@ -102,13 +107,15 @@ const ToDoItemsContainer = ({
   };
 
   const handleCSVDownload = () => {
+    debugger;
     const CSVData = generateCVSData({ localView, title });
     downloadCSV(CSVData, title);
   };
 
   const handleRemoveList = () => {
+    debugger;
     removeList(listID);
-  }
+  };
 
   const toggleDrag = (isEnabled) => {
     toggleDragMode(isEnabled);
@@ -120,6 +127,11 @@ const ToDoItemsContainer = ({
       dropToDo({ listID, from, to });
     }
   };
+
+  const handleRefreshView = () => {
+    console.log("click!");
+    fetchFilteredToDoS({listID, filters, sorts});
+  }
 
   // if component is rendered in cockpit, it gets a custom NavTob; otherwise gets a default one
   return (
@@ -146,20 +158,15 @@ const ToDoItemsContainer = ({
         />
 
         <div className="header-top__action-icons">
-          <Toggle
-            size="md"
-            checkedChildren="Ready"
-            unCheckedChildren="Sort"
-            onChange={toggleDrag}
+          <ButtonBar
+            actions={{
+              toggleDrag,
+              toggleEditMode,
+              handleCSVDownload,
+              handleRemoveList,
+              handleRefreshView
+            }}
           />
-          <Button size="sm" color="cyan" appearance="default" onClick={(listID, toggleEditMode)}>
-
-            Add
-          </Button>
-          <Button size="sm" color="cyan" appearance="default" onClick={handleCSVDownload}>
-            Download
-          </Button>
-          <IconButton icon={<Icon icon="trash2" />} color="cyan" size="sm" onClick={handleRemoveList}/>
         </div>
       </div>
 
@@ -193,6 +200,8 @@ const ToDoItemsContainer = ({
 const mapStateToProps = createStructuredSelector({
   mainInputFilteredData: selectDataFromMainFilter,
   title: selectTitle,
+  filters: selectFilters,
+  sorts: selectSorts,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -203,7 +212,9 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(updateToDo({ todoID, field, value })),
   updateSorts: (listID, sorts, field) =>
     dispatch(updateSorts({ listID, sorts, field })),
-    removeList: (listID) => dispatch(removeList(listID))
+  fetchFilteredToDoS: ({ listID, filters, sorts }) =>
+    dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
+  removeList: (listID) => dispatch(removeList(listID)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoItemsContainer);

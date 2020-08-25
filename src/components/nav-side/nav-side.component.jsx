@@ -20,7 +20,6 @@ const NavSide = ({
   addListMode,
   addList,
 }) => {
-  const [expanded, handleToggle] = useState(true);
   const [newListName, updateNewListName] = useState("");
 
   const inputEl = useRef(null);
@@ -50,10 +49,8 @@ const NavSide = ({
         </Overlay>
       )}
       <div>
-        <Toggle onChange={() => handleToggle(!expanded)} checked={expanded} />
-        <hr />
         <Sidenav
-          expanded={expanded}
+          expanded={false}
           defaultOpenKeys={["3", "4"]}
           activeKey={null}
           onSelect={null}
