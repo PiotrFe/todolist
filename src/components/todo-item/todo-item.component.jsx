@@ -87,6 +87,8 @@ const ToDoItem = ({
     </Dropdown>
   );
 
+  debugger;
+
   return (
     <div className="todo-container">
       <div className="todo-item__icons">{dropDown}</div>

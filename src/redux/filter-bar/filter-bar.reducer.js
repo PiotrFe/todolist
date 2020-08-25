@@ -3,21 +3,15 @@ import { FilterBarTypes } from "./filter-bar.types";
 import { MAIN_INPUT_ID } from "../../constants/constants";
 
 const {
-  SET_FILTERS_AND_PREVIEW_STORE,
   FETCH_FILTER_PREVIEW_SUCCESS,
   FETCH_FILTER_PREVIEW_FAILURE,
   CLEAR_FILTER_PREVIEW,
   SET_PREVIEW_LOADING,
-  FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
-  FETCH_FILTERED_TODOS_MAIN_INPUT_FAILURE,
 } = FilterBarTypes;
 
 const INITIAL_STATE = {
   previewByListID: {},
-  globalFilteredData: [],
 };
-
-let key, value;
 
 const FilterBarReducer = (state = INITIAL_STATE, action) => {
   let listID;
@@ -75,21 +69,6 @@ const FilterBarReducer = (state = INITIAL_STATE, action) => {
             preview: {},
           },
         },
-      };
-    case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
-      if (action.payload.filters.length === 0)
-        return {
-          ...state,
-          globalFilteredData: [],
-        };
-      return {
-        ...state,
-        globalFilteredData: action.payload.data.reduce((obj, filteredList) => {
-          return {
-            ...obj,
-            [filteredList._id]: filteredList.todos.map(item => item._id)
-          }
-        },{}),
       };
     default:
       return state;

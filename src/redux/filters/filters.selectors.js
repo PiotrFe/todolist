@@ -26,3 +26,11 @@ export const selectGlobalFilteredData = createSelector(
         else return []
     }
 );
+
+export const selectGlobalFiltersCount = createSelector(
+    selectFiltersFromMainSearchBar,
+    filters => {
+        if (filters) return filters.length;
+        else return 0;
+    }
+)

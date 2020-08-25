@@ -20,7 +20,7 @@ import {
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import { selectTitle } from "../../redux/todo-list/todo-list.selectors";
-import { selectFilters } from "../../redux/filters/filters.selectors";
+import { selectFilters, selectGlobalFiltersCount } from "../../redux/filters/filters.selectors";
 import { selectSorts } from "../../redux/sorts/sorts.selectors";
 
 import { fetchFilteredToDoS } from "../../redux/filter-bar/filter-bar.actions";
@@ -41,9 +41,8 @@ const ToDoItemsContainer = ({
   listID,
   inCockpit = false,
   title,
-  todoItems,
-  mainInputFilteredData,
   filters,
+  globalFiltersCount,
   sorts,
   addToDo,
   dropToDo,
@@ -58,36 +57,20 @@ const ToDoItemsContainer = ({
   // Local state
   const [editMode, updateEditMode] = useState(false);
   const [dragModeOn, toggleDragMode] = useState(false);
-  const [localView, updateLocalView] = useState(todoItems);
   const [inputDisabled, toggleInputDisabled] = useState(false);
 
   const didMount = useRef(false);
   const mainInputFiltersChangedAfterRender = useRef(false);
 
-  // Callbacks
-  const filterData = useCallback(() => {
-    return filterToDos({
-      mainSet: todoItems,
-      subSet: mainInputFilteredData.todos,
-    });
-  }, [JSON.stringify(todoItems)]);
-
-  // Effects
-  useEffect(() => {
-    updateLocalView(filterData());
-  }, [filterData]);
-
   useEffect(() => {
     if (mainInputFiltersChangedAfterRender.current) {
-      if (mainInputFilteredData.length === 0) {
-        updateLocalView(todoItems);
+      if (globalFiltersCount === 0) {
         toggleInputDisabled(false);
       } else {
-        updateLocalView(mainInputFilteredData.todos);
         toggleInputDisabled(true);
       }
     } else mainInputFiltersChangedAfterRender.current = true;
-  }, [JSON.stringify(mainInputFilteredData)]);
+  }, [JSON.stringify(globalFiltersCount)]);
 
   // Methods
   const handleUpdateSorts = (sorts, field) => {
@@ -107,13 +90,12 @@ const ToDoItemsContainer = ({
   };
 
   const handleCSVDownload = () => {
-    debugger;
-    const CSVData = generateCVSData({ localView, title });
-    downloadCSV(CSVData, title);
+    // debugger;
+    // const CSVData = generateCVSData({ localView, title });
+    // downloadCSV(CSVData, title);
   };
 
   const handleRemoveList = () => {
-    debugger;
     removeList(listID);
   };
 
@@ -198,10 +180,10 @@ const ToDoItemsContainer = ({
 };
 
 const mapStateToProps = createStructuredSelector({
-  mainInputFilteredData: selectDataFromMainFilter,
   title: selectTitle,
   filters: selectFilters,
   sorts: selectSorts,
+  globalFiltersCount: selectGlobalFiltersCount
 });
 
 const mapDispatchToProps = (dispatch) => ({

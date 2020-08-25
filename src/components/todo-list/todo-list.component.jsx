@@ -10,17 +10,14 @@ import ToDoItemEditable from "../todo-item-editable/todo-item-editable.component
 import ConditionalWrapper from "../utils/ConditionalWrapper.util";
 
 import {
-  selectFilters,
-  selectTodos,
-  selectLocalView,
+  selectAllItems,
+  selectItemsFilteredLocally,
+  selectItemsFilteredGlobally,
 } from "../../redux/todo-list/todo-list.selectors";
-import { selectSorts } from "../../redux/sorts/sorts.selectors";
-import {
-  selectGlobalFilters,
-  selectGlobalFilteredData,
-} from "../../redux/filters/filters.selectors";
 
-import { filterToDos } from "./todo-list.utils";
+import { selectSorts } from "../../redux/sorts/sorts.selectors";
+
+import { selectGlobalFiltersCount } from "../../redux/filters/filters.selectors";
 
 import { ActionTypes } from "../../constants/constants";
 
@@ -28,37 +25,28 @@ import "./todo-list.styles.scss";
 
 const ToDoList = ({
   listID,
-  todoItems,
-  localView,
+  todoItemsFilteredLocally,
+  todoItemsFilteredGlobally,
+  globalFiltersCount,
   actions,
   dragModeOn,
   sorts,
-  globalFilters,
-  globalFilteredData,
 }) => {
   const { DRAG, REMOVE, UPDATE } = ActionTypes;
 
   const [editedToDo, setEditedToDo] = useState(null);
-  const [visibleToDos, updateVisibleToDos] = useState(localView);
-
-  const mainInputFiltersChangedAfterRender = useRef(false);
-
-  const filterData = useCallback(() => {
-    // if there are global filters, filter todos against them and return a filtered array of ids
-    if (globalFilteredData.length) {
-      return filterToDos({
-        mainSet: todoItems,
-        subSet: globalFilteredData,
-      });
-    }
-
-    // otherwise return the latest local view
-    return localView;
-  }, [JSON.stringify(globalFilteredData), JSON.stringify(localView)]);
+  const [visibleToDos, updateVisibleToDos] = useState(null);
 
   useEffect(() => {
-    updateVisibleToDos(filterData());
-  }, [filterData]);
+    if (globalFiltersCount > 0) {
+      updateVisibleToDos(todoItemsFilteredGlobally);
+    } else updateVisibleToDos(todoItemsFilteredLocally);
+  }, [
+    JSON.stringify(todoItemsFilteredGlobally),
+    JSON.stringify(todoItemsFilteredLocally),
+    globalFiltersCount,
+  ]);
+
 
   return (
     <>
@@ -109,12 +97,11 @@ const ToDoList = ({
 };
 
 const mapStateToProps = createStructuredSelector({
-  filters: selectFilters,
-  localView: selectLocalView,
-  globalFilters: selectGlobalFilters,
-  globalFilteredData: selectGlobalFilteredData,
-  sorts: selectSorts,
-  todoItems: selectTodos,
+  todoItems: selectAllItems,
+  todoItemsFilteredLocally: selectItemsFilteredLocally,
+  todoItemsFilteredGlobally: selectItemsFilteredGlobally,
+  globalFiltersCount: selectGlobalFiltersCount,
+  sorts: selectSorts
 });
 
 export default connect(mapStateToProps)(ToDoList);

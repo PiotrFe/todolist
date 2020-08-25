@@ -19,14 +19,19 @@ export const selectTitle = createSelector(
     list => list?.title
 )
 
-export const selectTodos = createSelector(
+export const selectAllItems = createSelector(
     [selectListByID],
-    list => list?.todos
+    list => list?.allItems
 )
 
-export const selectLocalView = createSelector(
+export const selectItemsFilteredLocally = createSelector(
     [selectListByID],
-    list => list?.localView
+    list => list?.itemsFilteredLocally
+)
+
+export const selectItemsFilteredGlobally = createSelector(
+    [selectListByID],
+    list => list?.itemsFilteredGlobally
 )
 
 
