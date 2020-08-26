@@ -36,7 +36,7 @@ const ToDoModal = ({ listID, actions, todoID = null, content = null }) => {
       _id: todoID
     }
 
-    actions[ActionTypes.SUBMIT]({ todo });
+    actions[ActionTypes.SUBMIT]({listID, todo });
   };
 
   const cancelAction = () => {

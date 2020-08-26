@@ -32,7 +32,6 @@ const createListObject = (list) => {
     allItems: ids,
     itemsFilteredLocally: ids,
     itemsFilteredGlobally: ids,
-    visibleItems: ids,
   };
 };
 
