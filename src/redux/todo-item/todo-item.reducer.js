@@ -10,6 +10,8 @@ const {
   REMOVE_TODO_SUCCESS,
   REMOVE_TODO_FAILURE,
   REMOVE_LIST_SUCCESS,
+  REPLACE_TODO_SUCCESS,
+  REPLACE_TODO_FAILURE
 } = ToDoListsActionTypes;
 const { UPDATE_TODO_SUCCESS, UPDATE_TODO_FAILURE } = ToDoItemTypes;
 const {
@@ -182,6 +184,39 @@ const TodoItemsReducer = (state = INITIAL_STATE, action) => {
         ...state,
         byID: filterToDosByListID({todos: state.byID, listID: action.payload})
       };
+
+      case UPDATE_TODO_SUCCESS: 
+        return {
+          ...state,
+          byID: {
+            ...state.byID,
+            [action.payload.todoID]: {
+              ...state.byID[action.payload.todoID],
+              [action.payload.field]: [action.payload.value]
+            }
+          }
+        }
+
+      case UPDATE_TODO_FAILURE:
+        return {
+          ...state,
+          error: action.payload
+        }
+
+      case REPLACE_TODO_SUCCESS:
+        return {
+          ...state,
+          byID: {
+            ...state.byID,
+            [action.payload.todo._id]: createToDoObj(action.payload.todo)
+        }
+      }
+
+      case REPLACE_TODO_FAILURE:
+        return {
+          ...state,
+          error: action.payload
+        }
 
     default:
       return state;

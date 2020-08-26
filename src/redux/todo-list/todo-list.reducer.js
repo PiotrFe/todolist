@@ -107,11 +107,15 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
           [action.payload.listID]: {
             ...state.byID[action.payload.listID],
             allItems: [
-              ...state.byID[action.payload.listID].todos,
+              ...state.byID[action.payload.listID].allItems,
               action.payload.todo._id,
             ],
             itemsFilteredLocally: [
-              ...state.byID[action.payload.listID].localView,
+              ...state.byID[action.payload.listID].itemsFilteredLocally,
+              action.payload.todo._id,
+            ],
+            itemsFilteredGlobally: [
+              ...state.byID[action.payload.listID].itemsFilteredGlobally,
               action.payload.todo._id,
             ],
           },
@@ -125,8 +129,9 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
       };
 
     case REMOVE_TODO_SUCCESS:
-      const currentIDsAll = state.byID[action.payload.listID].todos;
-      const currentIDsVisible = state.byID[action.payload.listID].localView;
+      const currentIDsAll = state.byID[action.payload.listID].allItems;
+      const currentIDsFilteredLocally = state.byID[action.payload.listID].itemsFilteredLocally;
+      const currentIDsFilteredGlobally = state.byID[action.payload.listID].itemsFilteredGlobally;
       return {
         ...state,
         byID: {
@@ -136,7 +141,10 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
             allItems: currentIDsAll.filter(
               (id) => id !== action.payload.todoID
             ),
-            itemsFilteredLocally: currentIDsVisible.filter(
+            itemsFilteredLocally: currentIDsFilteredLocally.filter(
+              (id) => id !== action.payload.todoID
+            ),
+            itemsFilteredGlobally: currentIDsFilteredGlobally.filter(
               (id) => id !== action.payload.todoID
             ),
           },

@@ -18,7 +18,9 @@ const {
   DROP_TODO,
   TOGGLE_ADD_LIST_MODE,
   REMOVE_LIST_SUCCESS,
-  REMOVE_LIST_FAILURE
+  REMOVE_LIST_FAILURE, 
+  REPLACE_TODO_SUCCESS,
+  REPLACE_TODO_FAILURE
 } = ToDoListsActionTypes;
 
 const {
@@ -103,6 +105,8 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
     case ADD_TODO_FAILURE:
     case REMOVE_TODO_SUCCESS:
     case REMOVE_TODO_FAILURE:
+    case REPLACE_TODO_SUCCESS:
+    case REPLACE_TODO_FAILURE:
       return {
         ...state,
         loading: false,

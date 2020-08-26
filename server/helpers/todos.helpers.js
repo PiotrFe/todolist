@@ -53,7 +53,9 @@ exports.removeTodo = async (req, res) => {
 };
 
 exports.updateTodo = (req, res) => {
-  db.ToDo.findOneAndUpdate({ _id: req.params.todoId }, req.body, {
+  const todoID = req.body._id
+ 
+  db.ToDo.findOneAndUpdate({ _id: todoID }, req.body, {
     new: true,
     useFindAndModify: false,
   })

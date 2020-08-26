@@ -1,9 +1,11 @@
 import { createSelector } from "reselect";
+import { MAIN_INPUT_ID } from "../../constants/constants";
 
 const selectToDoItems = (state) => state.todoItems.byID;
 const selectToDoItemsSubset = (state, props) => {
-  const list = state.todoLists.byID[props.listID]
-  const idArray = props.globalFiltersCount > 0 ? list.itemsFilteredGlobally : list.itemsFilteredLocally;
+  const list = state.todoLists.byID[props.listID];
+  const globalFiltersCount = state.filters.byID[MAIN_INPUT_ID]?.length;
+  const idArray = globalFiltersCount > 0 ? list.itemsFilteredGlobally : list.itemsFilteredLocally;
   const allItems = state.todoItems.byID;
   let itemSubset = [];
 

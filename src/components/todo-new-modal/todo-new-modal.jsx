@@ -7,14 +7,14 @@ import { parseDate } from "../utils/utils";
 
 import "./todo-new-modal.scss";
 
-const ToDoModal = ({listID, actions, content = null }) => {
+const ToDoModal = ({ listID, actions, todoID = null, content = null }) => {
   const today = new Date();
   const MAX_LENGTH = 250;
 
-  const [title, updateTitle] = useState("");
-  const [dueDate, updateDueDate] = useState(new Date());
-  const [owner, updateOwner] = useState("");
-  const [details, updateDetails] = useState("");
+  const [title, updateTitle] = useState(content?.title || "");
+  const [dueDate, updateDueDate] = useState(content?.dueDate || new Date());
+  const [owner, updateOwner] = useState(content?.owner || "");
+  const [details, updateDetails] = useState(content?.details || "");
   const [detailsLength, updateDetailsLength] = useState(0);
 
   const handleToDo = () => {
@@ -28,11 +28,15 @@ const ToDoModal = ({listID, actions, content = null }) => {
       done: false,
       editMode: false,
       detailsVisible: false,
-      color: ""
+      color: "",
     };
 
-   actions[ActionTypes.SUBMIT]({listID, todo});
-    
+    if (todoID) todo = {
+      ...todo,
+      _id: todoID
+    }
+
+    actions[ActionTypes.SUBMIT]({ todo });
   };
 
   const cancelAction = () => {

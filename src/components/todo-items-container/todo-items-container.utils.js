@@ -10,7 +10,6 @@ export const generateCVSData = ({ visibleItems, title }) => {
     "__v",
   ];
 
-  debugger;
 
   if (visibleItems.length === 0) {
     alert(

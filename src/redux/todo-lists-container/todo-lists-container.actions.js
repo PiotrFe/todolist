@@ -23,6 +23,9 @@ const {
   REMOVE_LIST_START,
   REMOVE_LIST_SUCCESS,
   REMOVE_LIST_FAILURE,
+  REPLACE_TODO_START,
+  REPLACE_TODO_SUCCESS,
+  REPLACE_TODO_FAILURE,
 } = ToDoListsActionTypes;
 
 export const asyncActionStart = () => ({
@@ -130,4 +133,19 @@ export const removeListSuccess = (listID) => ({
 export const removeListFailure = (error) => ({
   type: REMOVE_LIST_FAILURE,
   payload: error,
+});
+
+export const replaceToDo = ({ listID, todo }) => ({
+  type: REPLACE_TODO_START,
+  payload: { listID, todo },
+});
+
+export const replaceToDoSuccess = ({ todo }) => ({
+  type: REPLACE_TODO_SUCCESS,
+  payload: { todo },
+});
+
+export const replaceToDoFailure = ({ error }) => ({
+  type: REPLACE_TODO_FAILURE,
+  payload: { error },
 });

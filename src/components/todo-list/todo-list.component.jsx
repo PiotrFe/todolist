@@ -32,7 +32,7 @@ const ToDoList = ({
   dragModeOn,
   sorts,
 }) => {
-  const { DRAG, REMOVE, UPDATE } = ActionTypes;
+  const { DRAG, REMOVE, UPDATE, EDIT } = ActionTypes;
 
   const [editedToDo, setEditedToDo] = useState(null);
   const [visibleToDos, updateVisibleToDos] = useState(null);
@@ -83,6 +83,7 @@ const ToDoList = ({
                       actions={{
                         [REMOVE]: actions[REMOVE],
                         [UPDATE]: actions[UPDATE],
+                        [EDIT]: actions[EDIT]
                       }}
                       sorts={sorts}
                     />

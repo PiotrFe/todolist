@@ -36,7 +36,7 @@ const ToDoItem = ({
   const [editMode, toggleEditMode] = useState(false);
   const [detailsVisible, toggleDetailsVisible] = useState(false);
 
-  const { DONE, EDIT, REMOVE, UPDATE } = ActionTypes;
+  const { DONE, SUBMIT, EDIT, REMOVE, UPDATE, CANCEL } = ActionTypes;
   const { TITLE, DUE_DATE, OWNER, COLOR } = ToDoFields;
 
   const date = new Date(dueDate);
@@ -77,7 +77,12 @@ const ToDoItem = ({
       <Dropdown.Item icon={<Icon icon="check" />} onSelect={handleToDoDone}>
         Done
       </Dropdown.Item>
-      <Dropdown.Item icon={<Icon icon="edit2" />}>Edit</Dropdown.Item>
+      <Dropdown.Item
+        icon={<Icon icon="edit2" />}
+        onSelect={() => toggleEditMode(!editMode)}
+      >
+        Edit
+      </Dropdown.Item>
       <Dropdown.Item
         icon={<Icon icon="trash2" />}
         onSelect={() => actions[REMOVE]({ todoID: _id })}
@@ -175,13 +180,19 @@ const ToDoItem = ({
       </div>
       {editMode && (
         <ToDoModal
-          id={_id}
+          todoID={_id}
           actions={{
-            [ActionTypes.CANCEL]: toggleEditMode,
-            [ActionTypes.EDIT]: actions[UPDATE],
-            [ActionTypes.SUBMIT]: ({ listID: id, todo }) => {
-              toggleEditMode(!editMode);
+            [CANCEL]: () => toggleEditMode(false),
+            [SUBMIT]: ({ todo }) => {
+              toggleEditMode(false);
+              actions[EDIT]({ todo });
             },
+          }}
+          content={{
+            title,
+            owner,
+            dueDate,
+            details,
           }}
         />
       )}

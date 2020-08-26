@@ -17,11 +17,10 @@ import {
   dropToDo,
   updateSorts,
   removeList,
+  replaceToDo,
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
-import {
-  selectTitle,
-} from "../../redux/todo-list/todo-list.selectors";
+import { selectTitle } from "../../redux/todo-list/todo-list.selectors";
 import {
   selectFilters,
   selectGlobalFiltersCount,
@@ -47,6 +46,7 @@ const ToDoItemsContainer = ({
   filters,
   globalFiltersCount,
   sorts,
+  visibleItems,
   addToDo,
   dropToDo,
   removeToDo,
@@ -54,7 +54,7 @@ const ToDoItemsContainer = ({
   updateSorts,
   removeList,
   fetchFilteredToDoS,
-  visibleItems
+  replaceToDo,
 }) => {
   const { DRAG, EDIT, REMOVE, SORT, UPDATE } = ActionTypes;
 
@@ -91,6 +91,10 @@ const ToDoItemsContainer = ({
 
   const handleToDoUpdate = ({ todoID, field, value }) => {
     updateToDo({ todoID, field, value });
+  };
+
+  const handleToDoEdit = ({todo }) => {
+    replaceToDo({ listID, todo });
   };
 
   const handleCSVDownload = () => {
@@ -161,6 +165,7 @@ const ToDoItemsContainer = ({
           [DRAG]: handleDragEnd,
           [REMOVE]: handleToDoRemove,
           [UPDATE]: handleToDoUpdate,
+          [EDIT]: handleToDoEdit,
         }}
         dragModeOn={dragModeOn}
       />
@@ -187,7 +192,7 @@ const mapStateToProps = createStructuredSelector({
   filters: selectFilters,
   sorts: selectSorts,
   globalFiltersCount: selectGlobalFiltersCount,
-  visibleItems: selectVisibleItems
+  visibleItems: selectVisibleItems,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -201,6 +206,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchFilteredToDoS: ({ listID, filters, sorts }) =>
     dispatch(fetchFilteredToDoS({ listID, filters, sorts })),
   removeList: (listID) => dispatch(removeList(listID)),
+  replaceToDo: ({ listID, todo }) => dispatch(replaceToDo({ listID, todo })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoItemsContainer);
