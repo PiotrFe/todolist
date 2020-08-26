@@ -40,13 +40,14 @@ const ToDoList = ({
   useEffect(() => {
     if (globalFiltersCount > 0) {
       updateVisibleToDos(todoItemsFilteredGlobally);
-    } else updateVisibleToDos(todoItemsFilteredLocally);
+    } else {
+      updateVisibleToDos(todoItemsFilteredLocally);
+    }
   }, [
     JSON.stringify(todoItemsFilteredGlobally),
     JSON.stringify(todoItemsFilteredLocally),
     globalFiltersCount,
   ]);
-
 
   return (
     <>
@@ -101,7 +102,7 @@ const mapStateToProps = createStructuredSelector({
   todoItemsFilteredLocally: selectItemsFilteredLocally,
   todoItemsFilteredGlobally: selectItemsFilteredGlobally,
   globalFiltersCount: selectGlobalFiltersCount,
-  sorts: selectSorts
+  sorts: selectSorts,
 });
 
 export default connect(mapStateToProps)(ToDoList);

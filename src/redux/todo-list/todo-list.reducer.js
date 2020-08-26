@@ -18,6 +18,7 @@ const {
   FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
 } = FilterBarTypes;
 
+
 const INITIAL_STATE = {
   byID: {},
   allIDs: [],
@@ -30,7 +31,8 @@ const createListObject = (list) => {
     title: list.title,
     allItems: ids,
     itemsFilteredLocally: ids,
-    itemsFilteredGlobally: ids
+    itemsFilteredGlobally: ids,
+    visibleItems: ids,
   };
 };
 
@@ -58,7 +60,7 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
               allItems: ids,
               title: list.title,
               itemsFilteredLocally: ids,
-              itemsFilteredGlobally: ids
+              itemsFilteredGlobally: ids,
             },
           };
         }, {}),
@@ -104,8 +106,14 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
           ...state.byID,
           [action.payload.listID]: {
             ...state.byID[action.payload.listID],
-            allItems: [...state.byID[action.payload.listID].todos, action.payload.todo._id],
-            itemsFilteredLocally: [...state.byID[action.payload.listID].localView, action.payload.todo._id]
+            allItems: [
+              ...state.byID[action.payload.listID].todos,
+              action.payload.todo._id,
+            ],
+            itemsFilteredLocally: [
+              ...state.byID[action.payload.listID].localView,
+              action.payload.todo._id,
+            ],
           },
         },
       };
@@ -125,8 +133,12 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
           ...state.byID,
           [action.payload.listID]: {
             ...state.byID[action.payload.listID],
-            allItems: currentIDsAll.filter((id) => id !== action.payload.todoID),
-            itemsFilteredLocally: currentIDsVisible.filter(id => id !== action.payload.todoID)
+            allItems: currentIDsAll.filter(
+              (id) => id !== action.payload.todoID
+            ),
+            itemsFilteredLocally: currentIDsVisible.filter(
+              (id) => id !== action.payload.todoID
+            ),
           },
         },
       };
@@ -154,11 +166,11 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
 
       return {
         ...state,
-        allIDs: state.allIDs.filter(id => id !== removedListID),
+        allIDs: state.allIDs.filter((id) => id !== removedListID),
         byID: {
-          ...remainingLists
-        }
-      }
+          ...remainingLists,
+        },
+      };
 
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
       const filteredDataPerListID = action.payload.data.reduce(
@@ -180,7 +192,7 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
                 newItemIDs: filteredDataPerListID[id].allItems,
                 filters: action.payload.filters,
               }),
-              itemsFilteredGlobally: filteredDataPerListID[id].allItems
+              itemsFilteredGlobally: filteredDataPerListID[id].allItems,
             },
           };
         },

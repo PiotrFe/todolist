@@ -1,4 +1,6 @@
-export const generateCVSData = ({ localView, title }) => {
+
+
+export const generateCVSData = ({ visibleItems, title }) => {
   const fieldsToExclude = [
     "lists",
     "_id",
@@ -8,7 +10,9 @@ export const generateCVSData = ({ localView, title }) => {
     "__v",
   ];
 
-  if (localView.length === 0) {
+  debugger;
+
+  if (visibleItems.length === 0) {
     alert(
       `No items visible in list ${title}.
 Add items or remote filters and try again`
@@ -16,13 +20,13 @@ Add items or remote filters and try again`
     return;
   }
 
-  let headers = Object.keys(localView[0])
+  let headers = Object.keys(visibleItems[0])
     .filter((key) => !fieldsToExclude.includes(key))
     .join()
     .trim()
     .concat(`\n`);
 
-  let values = localView
+  let values = visibleItems
     .map((item) =>
       Object.entries(item)
         .filter(([key, value]) => !fieldsToExclude.includes(key))

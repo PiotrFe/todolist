@@ -19,13 +19,16 @@ import {
   removeList,
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
-import { selectTitle } from "../../redux/todo-list/todo-list.selectors";
-import { selectFilters, selectGlobalFiltersCount } from "../../redux/filters/filters.selectors";
+import {
+  selectTitle,
+} from "../../redux/todo-list/todo-list.selectors";
+import {
+  selectFilters,
+  selectGlobalFiltersCount,
+} from "../../redux/filters/filters.selectors";
 import { selectSorts } from "../../redux/sorts/sorts.selectors";
-
 import { fetchFilteredToDoS } from "../../redux/filter-bar/filter-bar.actions";
-
-import { selectDataFromMainFilter } from "../../redux/filter-bar/filter-bar.selectors";
+import { selectVisibleItems } from "../../redux/todo-item/todo-item.selectors";
 
 import {
   generateCVSData,
@@ -50,7 +53,8 @@ const ToDoItemsContainer = ({
   updateToDo,
   updateSorts,
   removeList,
-  fetchFilteredToDoS
+  fetchFilteredToDoS,
+  visibleItems
 }) => {
   const { DRAG, EDIT, REMOVE, SORT, UPDATE } = ActionTypes;
 
@@ -90,9 +94,8 @@ const ToDoItemsContainer = ({
   };
 
   const handleCSVDownload = () => {
-    // debugger;
-    // const CSVData = generateCVSData({ localView, title });
-    // downloadCSV(CSVData, title);
+    const CSVData = generateCVSData({ visibleItems, title });
+    downloadCSV(CSVData, title);
   };
 
   const handleRemoveList = () => {
@@ -112,8 +115,8 @@ const ToDoItemsContainer = ({
 
   const handleRefreshView = () => {
     console.log("click!");
-    fetchFilteredToDoS({listID, filters, sorts});
-  }
+    fetchFilteredToDoS({ listID, filters, sorts });
+  };
 
   // if component is rendered in cockpit, it gets a custom NavTob; otherwise gets a default one
   return (
@@ -146,7 +149,7 @@ const ToDoItemsContainer = ({
               toggleEditMode,
               handleCSVDownload,
               handleRemoveList,
-              handleRefreshView
+              handleRefreshView,
             }}
           />
         </div>
@@ -183,7 +186,8 @@ const mapStateToProps = createStructuredSelector({
   title: selectTitle,
   filters: selectFilters,
   sorts: selectSorts,
-  globalFiltersCount: selectGlobalFiltersCount
+  globalFiltersCount: selectGlobalFiltersCount,
+  visibleItems: selectVisibleItems
 });
 
 const mapDispatchToProps = (dispatch) => ({
