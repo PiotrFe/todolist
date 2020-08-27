@@ -9,14 +9,13 @@ const selectToDoItemsSubset = (state, props) => {
   const allItems = state.todoItems.byID;
   let itemSubset = [];
 
-  for (let item in allItems) {
-      if (idArray.includes(item)) {
-        itemSubset = [
-          ...itemSubset,
-          allItems[item]
-        ]
-      }
+  for (let id of idArray) {
+    itemSubset = [
+      ...itemSubset,
+      allItems[id]
+    ]
   }
+  
   return itemSubset;
 }
 const selectTodoByID = (state, props) => state.todoItems.byID[props._id];
