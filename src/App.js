@@ -24,7 +24,7 @@ require("dotenv").config();
 function App() {
   const [currentUser, updateCurrentUser] = useState("");
   const [cockpitVisible, toggleCockpit] = useState(false);
-  const [reportsVisible, toggleReports] = useState(false);
+  const [reportsVisible, toggleReports] = useState(true);
   const [drawerCompoment, updateDrawerComponent] = useState(null);
 
   useEffect(() => {

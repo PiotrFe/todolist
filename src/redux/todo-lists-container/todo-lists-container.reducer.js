@@ -72,7 +72,7 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         loading: false,
-        todoLists: [action.payload._id, ...state.todoLists],
+        todoLists: [...state.todoLists, action.payload._id],
       };
     case ADD_LIST_FAILURE:
       return {
