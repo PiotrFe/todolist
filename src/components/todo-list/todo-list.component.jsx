@@ -75,7 +75,7 @@ const ToDoList = ({
           <div className="todo-items">
             {!visibleToDos
               ? null
-              : visibleToDos.map((_id) => {
+              : visibleToDos.map((_id, idx) => {
                   return !dragModeOn ? (
                     <ToDoItem
                       _id={_id}
@@ -88,7 +88,7 @@ const ToDoList = ({
                       sorts={sorts}
                     />
                   ) : (
-                    <ToDoItemSmall key={`${_id}_small`} />
+                    <ToDoItemSmall _id={_id} idx={idx} key={`${_id}_small`} />
                   );
                 })}
           </div>

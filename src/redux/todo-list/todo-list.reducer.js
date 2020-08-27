@@ -11,6 +11,7 @@ const {
   ADD_TODO_FAILURE,
   REMOVE_TODO_SUCCESS,
   REMOVE_TODO_FAILURE,
+  DROP_TODO,
 } = ToDoListsActionTypes;
 const {
   FETCH_TODOS_SUCCESS,
@@ -43,6 +44,15 @@ const updateViewOnFilterChange = ({ filters = [], currentIDs, newItemIDs }) => {
       ...newItemIDs.filter((id) => !currentIDs.includes(id)),
     ];
 };
+
+const reorderItems = (todoItems, idxFrom, idxTo) => {
+  const reorderedArray = [...todoItems];
+  const item = reorderedArray.splice(idxFrom, 1)[0];
+  reorderedArray.splice(idxTo, 0, item);
+
+  return reorderedArray;
+};
+
 
 const ToDoListsReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -213,6 +223,30 @@ const ToDoListsReducer = (state = INITIAL_STATE, action) => {
           ...stateWithUpdatedItemIDs,
         },
       };
+
+      case DROP_TODO:
+        const list = state.byID[action.payload.listID];
+        const { from, to } = action.payload;
+        return {
+          ...state,
+          byID: {
+            ...state.byID,
+            [action.payload.listID]: {
+              ...list,
+              allItems: reorderItems(list.allItems, from, to),
+              itemsFilteredGlobally: reorderItems(
+                list.itemsFilteredGlobally,
+                from,
+                to
+              ),
+              itemsFilteredLocally: reorderItems(
+                list.itemsFilteredLocally,
+                from,
+                to
+              ),
+            },
+          },
+        };
 
     default:
       return state;

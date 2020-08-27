@@ -2,6 +2,7 @@ import { ToDoListsActionTypes } from "./todo-lists-container.types";
 import { ToDoListTypes } from "../todo-list/todo-list.types";
 import { FilterBarTypes } from "../filter-bar/filter-bar.types";
 import { reorderItems } from "./todo-lists-container.utils";
+import { selectItemsFilteredGlobally } from "../todo-list/todo-list.selectors";
 
 const {
   ASYNC_ACTION_START,
@@ -15,18 +16,14 @@ const {
   REMOVE_TODO_FAILURE,
   UPDATE_TODO_SUCCESS,
   UPDATE_TODO_FAILURE,
-  DROP_TODO,
   TOGGLE_ADD_LIST_MODE,
   REMOVE_LIST_SUCCESS,
-  REMOVE_LIST_FAILURE, 
+  REMOVE_LIST_FAILURE,
   REPLACE_TODO_SUCCESS,
-  REPLACE_TODO_FAILURE
+  REPLACE_TODO_FAILURE,
 } = ToDoListsActionTypes;
 
-const {
-  FETCH_TODOS_SUCCESS,
-  FETCH_TODOS_FAILURE,
-} = ToDoListTypes;
+const { FETCH_TODOS_SUCCESS, FETCH_TODOS_FAILURE } = ToDoListTypes;
 
 const {
   FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS,
@@ -37,7 +34,7 @@ const INITIAL_STATE = {
   todoLists: [],
   loading: false,
   error: null,
-  addListMode: false
+  addListMode: false,
 };
 
 const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
@@ -84,19 +81,19 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         error: action.payload,
       };
 
-    case REMOVE_LIST_SUCCESS: 
+    case REMOVE_LIST_SUCCESS:
       return {
         ...state,
         loading: false,
-        todoLists: state.todoLists.filter(id => id !== action.payload)
-      }
+        todoLists: state.todoLists.filter((id) => id !== action.payload),
+      };
 
     case REMOVE_LIST_FAILURE:
       return {
         ...state,
         loading: false,
-        error: action.payload
-      }
+        error: action.payload,
+      };
     case FETCH_TODOS_SUCCESS:
     case FETCH_TODOS_FAILURE:
     case FETCH_FILTERED_TODOS_MAIN_INPUT_SUCCESS:
@@ -112,29 +109,13 @@ const TodoListsContainerReducer = (state = INITIAL_STATE, action) => {
         loading: false,
       };
 
-    case DROP_TODO:
-      return {
-        ...state,
-        todoLists: state.todoLists.map((list) => {
-          if (list._id === action.payload.listID) {
-            return {
-              ...list,
-              todos: reorderItems(
-                list.todos,
-                action.payload.from,
-                action.payload.to
-              ),
-            };
-          }
-          return list;
-        }),
-      };
+
 
     case TOGGLE_ADD_LIST_MODE:
       return {
         ...state,
-        addListMode: !state.addListMode
-      }
+        addListMode: !state.addListMode,
+      };
 
     default:
       return state;

@@ -29,15 +29,11 @@ import { selectSorts } from "../../redux/sorts/sorts.selectors";
 import { fetchFilteredToDoS } from "../../redux/filter-bar/filter-bar.actions";
 import { selectVisibleItems } from "../../redux/todo-item/todo-item.selectors";
 
-import {
-  generateCVSData,
-  filterToDos,
-  onDrop,
-} from "./todo-items-container.utils";
+import { generateCVSData, onDrop } from "./todo-items-container.utils";
 import { downloadCSV } from "../../utils/utils";
+import { NO_SORTS } from "../../constants/constants";
 
 import "./todo-items-container.styles.scss";
-import { useCallback } from "react";
 
 const ToDoItemsContainer = ({
   listID,
@@ -78,7 +74,7 @@ const ToDoItemsContainer = ({
 
   // Methods
   const handleUpdateSorts = (sorts, field) => {
-    updateSorts(listID, sorts, field);
+    updateSorts({ listID, sorts, field });
   };
 
   const handleToDoRemove = ({ todoID }) => {
@@ -93,7 +89,7 @@ const ToDoItemsContainer = ({
     updateToDo({ todoID, field, value });
   };
 
-  const handleToDoEdit = ({todo }) => {
+  const handleToDoEdit = ({ todo }) => {
     replaceToDo({ listID, todo });
   };
 
@@ -108,6 +104,7 @@ const ToDoItemsContainer = ({
 
   const toggleDrag = (isEnabled) => {
     toggleDragMode(isEnabled);
+    if (isEnabled) updateSorts({ listID, sorts: NO_SORTS });
   };
 
   const handleDragEnd = (result) => {
@@ -118,7 +115,6 @@ const ToDoItemsContainer = ({
   };
 
   const handleRefreshView = () => {
-    console.log("click!");
     fetchFilteredToDoS({ listID, filters, sorts });
   };
 
@@ -201,7 +197,7 @@ const mapDispatchToProps = (dispatch) => ({
   removeToDo: ({ todoID, listID }) => dispatch(removeToDo({ todoID, listID })),
   updateToDo: ({ todoID, field, value }) =>
     dispatch(updateToDo({ todoID, field, value })),
-  updateSorts: (listID, sorts, field) =>
+  updateSorts: ({ listID, sorts, field }) =>
     dispatch(updateSorts({ listID, sorts, field })),
   fetchFilteredToDoS: ({ listID, filters, sorts }) =>
     dispatch(fetchFilteredToDoS({ listID, filters, sorts })),

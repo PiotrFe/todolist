@@ -1,13 +1,13 @@
 @import "../../constants/constants";
 
 .todo-item-small {
-  height: 5rem;
+  height: 4rem;
   width: 97%;
   border: 1px solid black;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   box-shadow: 0 1rem 3rem rgba($color-black, 0.15);
   margin: .5rem;
-  border-radius: 3%;
+  border-radius: 5px;
 
   display: flex;
   justify-content: space-around;
@@ -18,15 +18,16 @@
   }
 
   &__title {
-    flex: 0 0 45%;
-    padding: 0 0.5rem;
+    flex: 0 0 40%;
+    padding: 0 0.2rem;
     font-size: 1.5rem;
     font-weight: bold;
-    color: $color-white;
+    color: $color-black;
   }
 
   &__duedate {
-    flex: 0 0 20%;
+    // font-size: 1rem;
+    flex: 0 0 30%;
 
     @extend %duedate-format;
   }

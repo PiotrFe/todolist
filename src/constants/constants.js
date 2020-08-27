@@ -85,6 +85,13 @@ export const DEFAULT_SORTS = {
   [ToDoFields.COLOR]: 0,
 };
 
+export const NO_SORTS = {
+  [ToDoFields.TITLE]: 0,
+  [ToDoFields.DUE_DATE]: 0,
+  [ToDoFields.OWNER]: 0,
+  [ToDoFields.COLOR]: 0,
+}
+
 export const MAIN_INPUT_ID = "MAIN_INPUT_ID";
 
 export const FILTER_STATUS = {
