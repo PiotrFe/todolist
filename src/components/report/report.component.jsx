@@ -7,55 +7,78 @@ import HorizontalBarChart from "../charts/horizontalBarChart";
 import PieChart from "../charts/pieChart";
 
 import { selectToDos } from "../../redux/todo-item/todo-item.selectors";
-import { Dropdown } from "rsuite";
+import { Dropdown, CheckPicker } from "rsuite";
 
 import { sumItemsPerUser, sumItemCategories } from "./report.utils";
 
 import "./report.styles.scss";
 
 const ReportSection = ({ todos }) => {
-  const [activeName, updateActiveName] = useState(null);
+  const [activeNames, updateActiveNames] = useState(null);
+  const [fullNameList, updateFullNameList] = useState(null);
+  const [nameLabels, updateNameLabels] = useState(null);
   const [filteredItems, updateFilteredItems] = useState(null);
+  const [checkPicker, updateCheckPicker] = useState(null);
+
+  useEffect(() => {
+    if (Object.keys(todos).length === 0) return;
+
+    const items = Object.values(todos);
+    const nameCounter = items.reduce(
+      (acc, item) => ({
+        ...acc,
+        [item.owner]: acc[item.owner] ? (acc[item.owner] += 1) : 1,
+      }),
+      {}
+    );
+    const nameList = Object.keys(nameCounter).sort();
+    const nameLabels = Object.keys(nameCounter)
+      .sort()
+      .map((name) => ({
+        label: name,
+        value: name,
+      }));
+
+    updateFullNameList(nameList);
+    updateActiveNames(nameList);
+    updateNameLabels(nameLabels);
+  }, [todos]);
+
+  useEffect(() => {
+    if (fullNameList?.length && nameLabels?.length) {
+      const checkPicker = (
+        <CheckPicker
+          data={nameLabels}
+          onSelect={(value, item, event) => updateActiveNames(value)}
+          onClean={() => updateActiveNames(fullNameList)}
+        ></CheckPicker>
+      );
+
+      updateCheckPicker(checkPicker);
+    }
+  }, [fullNameList, nameLabels]);
 
   useEffect(() => {
     updateFilteredItems(Object.values(todos));
-  },[JSON.stringify(todos)]);
+  }, [JSON.stringify(todos)]);
 
   useEffect(() => {
-    const ownerItems = Object.values(todos).filter(item => item.owner === activeName);
-    updateFilteredItems(ownerItems);
-  }, [activeName])
-
-  const items = Object.values(todos);
-  const nameCounter = items.reduce(
-    (acc, item) => ({
-      ...acc,
-      [item.owner]: acc[item.owner] ? (acc[item.owner] += 1) : 1,
-    }),
-    {}
-  );
-  const nameList = Object.keys(nameCounter).sort();
-
-  const dropDown = (
-    <Dropdown title="Default">
-      {nameList.map((name, idx) => (
-        <Dropdown.Item
-          eventKey={idx}
-          onSelect={() => updateActiveName(nameList[idx])}
-        >
-          {name}
-        </Dropdown.Item>
-      ))}
-    </Dropdown>
-  );
+    const filteredItems = Object.values(todos).filter((item) =>
+      activeNames?.includes(item.owner)
+    );
+    updateFilteredItems(filteredItems);
+  }, [activeNames]);
 
   return (
     <div className="report">
       {filteredItems?.length ? (
         <>
-          {dropDown}
-          {activeName}
-          <ChartWrapper chart={PieChart} data={sumItemCategories(filteredItems)} />
+          {checkPicker}
+          {activeNames}
+          <ChartWrapper
+            chart={PieChart}
+            data={sumItemCategories(filteredItems)}
+          />
           <ChartWrapper
             chart={HorizontalBarChart}
             data={sumItemsPerUser(filteredItems)}
