@@ -1,4 +1,5 @@
 import * as d3 from "d3";
+import { arc } from "d3";
 
 // const MARGIN = { TOP: 30, BOTTOM: 30, LEFT: 30, RIGHT: 30 };
 const MARGIN = 15;
@@ -42,29 +43,44 @@ class PieChart {
     const vis = this;
     vis.data = data;
 
-    vis.color = d3.scaleOrdinal().domain(data).range(["orange", "grey"]);
+    vis.color = d3.scaleOrdinal()
+      .domain(data.map(d => d.category))
+      .range(["orange", "grey"]);
+    const t = d3.transition().duration(500);
 
-    vis.arcs = vis.svg
-      .selectAll("arc")
-      .data(vis.pie(d3.values(vis.data)))
-      .enter()
-      .append("g")
-      .attr("class", "arc");
+    const pie = d3
+      .pie()
+      .sort(null)
+      .value((d) => d.count);
 
-    vis.arcs
-      .append("path")
-      .attr("d", vis.arc)
-      .attr("fill", (d, i) => vis.color(i));
+    const arcs = pie(vis.data);
 
-    vis.arcs
-      .append("text")
-      .attr("class", "pie-chart-label")
-      .attr("transform", function (d) {
-        return `translate(${vis.label.centroid(d)})`;
-      })
-      .text((d, i) => {
-        return `${d3.keys(vis.data)[i]} ${d3.values(vis.data)[i]}`;
-      });
+    vis.svg.append("g")
+        .attr("stroke", "white")
+      .selectAll("path")
+      .data(arcs)
+      .join(
+        enter => enter.append("path")
+        .call(enter => enter.transition(t)
+          .attr("fill", (d, i) => vis.color(i))
+          .attr("d", vis.arc)),
+        update => update.call(update => update.transition(t)
+          .attr("fill", (d, i) => vis.color(i))
+          .attr("d", vis.arc)),
+        exit => exit.call(exit => exit.transition(t)
+          .remove())
+    )
+
+    vis.svg.append("g")
+        .attr("text-anchor", "middle")
+      .selectAll("text")
+      .data(arcs)
+      .join("text")
+        .attr("transform", d => `translate(${vis.label.centroid(d)})`)
+        .call(text => text.append("tspan")
+          .attr("y", "-0.2rem")
+          .text(d => `${d.data.category} ${d.data.count}`))
+     
   }
 }
 

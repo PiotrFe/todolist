@@ -20,21 +20,27 @@ export const sumItemsPerUser = (data) => {
 };
 
 export const sumItemCategories = (data) => {
-  const obj = data.reduce(
+  const counter = data.reduce(
     (acc, { done }) => {
       if (done) {
         return {
           ...acc,
-          done: acc.done += 1,
+          done: (acc.done += 1),
         };
       } else {
         return {
           ...acc,
-          pending: acc.pending += 1,
+          pending: (acc.pending += 1),
         };
       }
     },
     { done: 0, pending: 0 }
   );
-  return obj;
+
+  const returnObj = Object.entries(counter).reduce(
+    (acc, [key, val]) => [...acc, { category: key, count: val }],
+    []
+  );
+
+  return returnObj;
 };

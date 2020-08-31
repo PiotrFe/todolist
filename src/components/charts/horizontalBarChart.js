@@ -52,31 +52,24 @@ class HorizontalBarChart {
     const yAxisCall = d3.axisLeft(y);
     vis.yAxisGroup.transition().duration(500).call(yAxisCall);
 
-    const bars = vis.svg
-      .selectAll("rect")
+    const t = d3.transition().duration(500);
+
+    vis.svg.selectAll("rect")
       .data(vis.data)
-
-    bars.exit()
-      .transition().duration(500)
-      .attr("width", 0)
-      .remove()
-
-    bars
+      .join(
+        enter => enter.append("rect"),
+        update => update,
+        exit => exit
+          .transition().duration(500)
+            .attr("width", 0)
+            .remove()
+      )
       .transition().duration(500)
         .attr("x", 0)
-        .attr("y", d => y(d.owner))
-        .attr("width", d => x(d.items))
+        .attr("y", (d) => y(d.owner))
+        .attr("width", (d) => x(d.items))
         .attr("height", y.bandwidth())
-        .attr("fill", "orange");
-
-    bars
-      .enter()
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", (d) => y(d.owner))
-      .attr("width", (d) => x(d.items))
-      .attr("height", y.bandwidth())
-      .attr("fill", "orange");
+        .attr("fill", "orange")
   }
 }
 
