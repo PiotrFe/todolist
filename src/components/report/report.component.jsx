@@ -10,22 +10,9 @@ import BarChart from "../charts/barChart";
 import { selectToDos } from "../../redux/todo-item/todo-item.selectors";
 import { Dropdown, CheckPicker } from "rsuite";
 
-import { sumItemsPerUser, sumItemCategories } from "./report.utils";
+import { sumItemsPerUser, sumItemCategories, sumItemsForTwoWeekPeriod } from "./report.utils";
 
 import "./report.styles.scss";
-
-const data = [
-  { date: "20-8", count: 4 },
-  { date: "21-8", count: 3 },
-  { date: "22-8", count: 6 },
-  { date: "23-8", count: 1 },
-  { date: "24-8", count: 10 },
-  { date: "25-8", count: 3 },
-  { date: "26-8", count: 4 },
-  { date: "27-8", count: 5 },
-  { date: "28-8", count: 5 }
-]
-
 
 const ReportSection = ({ todos }) => {
   const [activeNames, updateActiveNames] = useState(null);
@@ -98,7 +85,7 @@ const ReportSection = ({ todos }) => {
           />
           <ChartWrapper
             chart={BarChart}
-            data={data}
+            data={sumItemsForTwoWeekPeriod(filteredItems)}
           />
         </>
       ) : (

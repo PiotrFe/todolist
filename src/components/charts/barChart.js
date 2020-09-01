@@ -1,8 +1,19 @@
 import * as d3 from "d3";
+import moment from "moment";
 
 const MARGIN = { TOP: 30, BOTTOM: 30, LEFT: 50, RIGHT: 30 };
-const WIDTH = 300 - MARGIN.LEFT - MARGIN.RIGHT;
-const HEIGHT = 200 - MARGIN.TOP - MARGIN.BOTTOM;
+const WIDTH = 350 - MARGIN.LEFT - MARGIN.RIGHT;
+const HEIGHT = 250 - MARGIN.TOP - MARGIN.BOTTOM;
+
+const getFillColor = date => {
+  let today = moment();
+  let refDate = moment(date);
+  
+  if (refDate.isBefore(today)) return "red"
+  else return "orange";
+}
+
+const getDayAndMonth = date => moment(date).format("D-M");
 
 class BarChart {
   constructor(element) {
@@ -39,7 +50,7 @@ class BarChart {
         .range([HEIGHT, 0])
 
       const x = d3.scaleBand()
-        .domain(data.map(d => d.date))
+        .domain(data.map(d => getDayAndMonth(d.date)))
         .range([0, WIDTH])
         .padding(0.1);
 
@@ -52,11 +63,12 @@ class BarChart {
       vis.svg.selectAll("rect")
         .data(vis.data)
         .join("rect")
-            .attr("x", d => x(d.date))
-            .attr("width", x.bandwidth())
-            .attr("y", d => y(d.count))
-            .attr("height", d => HEIGHT - y(d.count))
-            .attr("fill", "orange")
+            .transition().duration(500)
+              .attr("x", d => x(getDayAndMonth(d.date)))
+              .attr("width", x.bandwidth())
+              .attr("y", d => y(d.count))
+              .attr("height", d => HEIGHT - y(d.count))
+              .attr("fill", d => getFillColor(d.date))
   }
 }
 
