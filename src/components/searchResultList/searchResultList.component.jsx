@@ -53,7 +53,7 @@ const SearchResultList = ({ preview = [], word, search, filters, loading }) => {
           {(!loading && preview.length === 0) && "No results"}
           {loading && (
             <div>
-              <Loader /> LOADING..
+              <Loader /> LOADING...
             </div>
           )}
         </div>

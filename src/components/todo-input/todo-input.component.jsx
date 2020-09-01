@@ -11,6 +11,7 @@ const TodoInput = React.forwardRef(
       onSubmit = null,
       onClick= null,
       disabled = false,
+      onBlur
     },
     ref
   ) => {
@@ -40,6 +41,7 @@ const TodoInput = React.forwardRef(
             else updateInputVal(e.target.value);
           }}
           onClick={onClick}
+          onBlur={onBlur}
         />
       </form>
     );

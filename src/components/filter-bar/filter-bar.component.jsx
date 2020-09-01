@@ -53,7 +53,6 @@ const FilterBar = ({
   fetchFilteredToDoS,
 }) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
-
   const [filterMode, updateFilterMode] = useState(true);
   const [filterWord, updateFilterWord] = useState("");
   const [activeFilters, setActiveFilters] = useState([]);
@@ -124,6 +123,8 @@ const FilterBar = ({
     removeFilter({ listID, filter });
   };
 
+  const handleOnBlur = () => updateFilterMode(false)
+
   return (
     <>
       <div
@@ -142,9 +143,14 @@ const FilterBar = ({
           placeholder={placeholder}
           inCockpit={inCockpit}
           disabled={disabled}
+          onBlur={handleOnBlur}
         />
         <div className="clear-filters-icon">
-          <Icon icon="close-circle" onClick={() => clearFilters({ listID })} />
+          <Icon icon="close-circle" onClick={() => {
+            clearFilters({ listID });
+            updateFilterBarContent("");
+            inputEl.current.focus();
+          } } />
         </div>
       </div>
       {filterMode && (
