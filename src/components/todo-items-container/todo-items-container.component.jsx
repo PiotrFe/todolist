@@ -135,13 +135,6 @@ const ToDoItemsContainer = ({
             [SORT]: handleUpdateSorts,
           }}
         />
-        <FilterBar
-          listID={listID}
-          inCockpit={inCockpit}
-          placeholder={"Type to search in list"}
-          disabled={inputDisabled}
-        />
-
         <div className="header-top__action-icons">
           <ButtonBar
             actions={{
@@ -153,6 +146,12 @@ const ToDoItemsContainer = ({
             }}
           />
         </div>
+        <FilterBar
+          listID={listID}
+          inCockpit={inCockpit}
+          placeholder={"Type to search in list"}
+          disabled={inputDisabled}
+        />
       </div>
 
       <ToDoList

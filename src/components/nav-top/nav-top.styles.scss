@@ -2,8 +2,8 @@
 
 .header-top {
   height: 4rem;
-  background-color: $color-grey-dark-3;
-  color: $color-black;
+  background-color: $color-primary-6;
+  color: $color-primary-1;
   width: 100%;
 
   align-items: center;
@@ -29,7 +29,7 @@
     }
 
     &--sorted {
-      background-color: $color-blue-light-2;
+      background-color: $color-primary-2;
       background-image: $sorted-item-background;
     }
 

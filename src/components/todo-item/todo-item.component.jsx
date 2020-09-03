@@ -116,7 +116,8 @@ const ToDoItem = ({
                   sorts[TITLE] !== 0 ? "todo-item__field--sorted" : null
                 }`}
               >
-                {title}
+                <span>{title}</span>
+                
               </div>
             </div>
 
@@ -162,19 +163,27 @@ const ToDoItem = ({
           </div>
           <div className="todo-item__more">{details}</div>
 
-          <div
-            className={`todo-item__duedate todo-item__duedate--back ${
-              sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null
-            }`}
-          >
-            <span>{formattedDate}</span>
+          <div>
+            <div className={`todo-item__duedate todo-item__duedate--back`}>
+              <span
+                className={`todo-item__duedate todo-item__duedate--back ${
+                  sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null
+                }`}
+              >
+                {formattedDate}
+              </span>
+            </div>
           </div>
-          <div
-            className={`todo-item__owner todo-item__owner--back ${
-              sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null
-            }`}
-          >
-            <span>{owner}</span>
+          <div>
+            <div className={`todo-item__owner todo-item__owner--back`}>
+              <span
+                className={`todo-item__owner todo-item__owner--back ${
+                  sorts[OWNER] !== 0 ? "todo-item__field--sorted" : null
+                }`}
+              >
+                {owner}
+              </span>
+            </div>
           </div>
         </div>
       </div>

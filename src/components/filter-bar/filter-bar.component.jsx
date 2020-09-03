@@ -4,7 +4,7 @@ import { createStructuredSelector } from "reselect";
 
 import { Icon } from "rsuite";
 import TodoInput from "../todo-input/todo-input.component";
-import FilterCard from "../../components/filter-card/filter-card.component";
+// import FilterCard from "../../components/filter-card/filter-card.component";
 import SearchResultList from "../../components/searchResultList/searchResultList.component";
 
 import {
@@ -123,7 +123,7 @@ const FilterBar = ({
     removeFilter({ listID, filter });
   };
 
-  const handleOnBlur = () => updateFilterMode(false)
+  const handleClearInput = () => updateFilterBarContent("");
 
   return (
     <>
@@ -133,24 +133,28 @@ const FilterBar = ({
           inputEl.current.focus();
         }}
       >
-        {activeFilters.map((item, idx) => (
-          <FilterCard key={idx} item={item} remove={deleteFilter} />
-        ))}
-        <TodoInput
-          onChange={updateFilterBar}
-          content={filterBarContent}
-          ref={inputEl}
-          placeholder={placeholder}
-          inCockpit={inCockpit}
-          disabled={disabled}
-          onBlur={handleOnBlur}
-        />
-        <div className="clear-filters-icon">
-          <Icon icon="close-circle" onClick={() => {
-            clearFilters({ listID });
-            updateFilterBarContent("");
-            inputEl.current.focus();
-          } } />
+        <div className="todo-input-wrapper">
+          <TodoInput
+            onChange={updateFilterBar}
+            content={filterBarContent}
+            ref={inputEl}
+            activeFilters={activeFilters}
+            placeholder={placeholder}
+            inCockpit={inCockpit}
+            disabled={disabled}
+            onEscPress={handleClearInput}
+            deleteFilter={deleteFilter}
+          />
+          <div className="clear-filters-icon">
+            <Icon
+              icon="close-circle"
+              onClick={() => {
+                clearFilters({ listID });
+                updateFilterBarContent("");
+                inputEl.current.focus();
+              }}
+            />
+          </div>
         </div>
       </div>
       {filterMode && (

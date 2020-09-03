@@ -6,7 +6,8 @@
   font-size: 1.2rem;
   background-color: $color-black;
   color: white;
-
+  display: flex;
+  
   &--highlighted {
     opacity: 70%;
   }

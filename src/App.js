@@ -8,6 +8,7 @@ import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
 import FilterBar from "./components/filter-bar/filter-bar.component";
 import ReportSection from "./components/report/report.component";
 
+
 import { MAIN_INPUT_ID } from "./constants/constants";
 
 import "rsuite/lib/styles/index.less";
@@ -92,11 +93,13 @@ function App() {
         </div>
         <div className="app-main">
           <>
+            <div className="main-filter-wrapper">
             <FilterBar
               listID={MAIN_INPUT_ID}
               inCockpit={false}
               placeholder={"Type to search in all lists"}
             />
+            </div>
             <ToDoListsContainer />
           </>
         </div>

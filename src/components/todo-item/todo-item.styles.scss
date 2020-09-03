@@ -18,9 +18,7 @@
     transform: translateY(-0.3rem) scale(1.04);
   }
 
-  &__field--sorted {
-    background-image: $sorted-item-background;
-  }
+
 
   &__icons {
     position: relative;
@@ -88,6 +86,7 @@
       grid-template-columns: repeat(2, 1fr);
       grid-template-rows: 20% 1fr 20%;
       align-items: center;
+      justify-items: center;
 
       &--visible {
         transform: rotateX(0);
@@ -102,17 +101,26 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    width: 90%;
   }
 
   &__title {
-    font-size: 1.8rem;
-    font-weight: bold;
+    font-size: 1.7rem;
+    // font-weight: bold;
+    width: 100%;
+    
+    span {
+      margin-left: .3rem;
+    }
 
 
     &--back {
-      grid-column: 1 / span 1;
+      grid-column: 1 / -1;
       grid-row: 1 / 2;
       margin: 0 1rem;
+      font-size: 1.4rem;
+      width: 77%;
+      justify-self: left;
     }
   }
 
@@ -125,6 +133,8 @@
     overflow: auto;
     height: 90%;
     margin: 0 1rem;
+    font-size: 1rem;
+    width: 85%;
   }
 
   &__details {
@@ -147,6 +157,7 @@
     &--back {
       grid-column: 1 / 2;
       justify-self: center;
+      font-size: 1rem;
     }
   }
 
@@ -163,7 +174,7 @@
 
     &--back {
       grid-column: 2 / 2;
-      justify-self: center;
+      font-size: 1rem;
     }
   }
 
@@ -171,6 +182,11 @@
     &--done {
       text-decoration: line-through;
     }
+  }
+
+  &__field--sorted {
+    background-image: $sorted-item-background;
+    color: $color-white;
   }
 }
 

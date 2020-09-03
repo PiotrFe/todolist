@@ -13,6 +13,8 @@ import {
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
 import { useEffect } from "react";
 
+import "./nav-side.styles.scss";
+
 const NavSide = ({
   toggleCockpit,
   toggleAddListMode,
@@ -48,7 +50,7 @@ const NavSide = ({
           />
         </Overlay>
       )}
-      <div>
+      <div className="side-nav-wrapper">
         <Sidenav
           expanded={false}
           defaultOpenKeys={["3", "4"]}

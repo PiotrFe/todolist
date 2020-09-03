@@ -1,14 +1,13 @@
-$color-blue-light-1: #bbe1fa;
-$color-blue-light-2: #3282b8;
-$color-blue-dark: #0f4c75;
-$color-blue-very-dark: #1b262c;
+$color-primary-1: #CDE0E3;
+$color-primary-2: #69969C;
+$color-primary-3: #66949A;
+$color-primary-4: #427A82;
+$color-primary-5: #246068;
+$color-primary-6: #0E464E;
+$color-primary-7: #012E34;
 
-$color-white: #eee;
+$color-white: #f7f7fa;
 $color-black: #000;
-
-$color-primary: #eb2f64;
-$color-primary-light: #ff3366;
-$color-primary-dark: #ba265d;
 
 $color-grey-light-3: #f0eeee;
 $color-grey-light-1: #faf9f9;
@@ -19,13 +18,13 @@ $color-grey-dark-1: #333;
 $color-grey-dark-2: #777;
 $color-grey-dark-3: #999;
 
-$color-custom-1: #3D348B;
-$color-custom-2: #7678ED;
-$color-custom-3: #F7B801;
-$color-custom-4: #F18701;
-$color-custom-5: #F35B04;
+$color-custom-1: #206a5d;
+$color-custom-2: #00416d;
+$color-custom-3: #fa1616;
+$color-custom-4: #F7B801;
+$color-custom-5: #eb8f8f; 
 
-$sorted-item-background: linear-gradient(to right, $color-custom-3, 80%, $color-custom-4);
+$sorted-item-background: linear-gradient(to right, $color-primary-5, 60%, $color-primary-3);
 
 %duedate-format {
     padding: 0 0.3rem;

@@ -37,7 +37,7 @@ const FilterCard = ({ item, remove }) => {
 
   return (
     <div className={`filter-card ${classNameModifiers}`}>
-      {`${key} - ${value}`}
+      {`${key}: ${value}`}
       <button className="filter-card__button" {...buttonProps}>
         x
       </button>

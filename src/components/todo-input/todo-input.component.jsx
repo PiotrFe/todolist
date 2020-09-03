@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Icon } from 'rsuite';
+import FilterCard from "../../components/filter-card/filter-card.component";
 
 import "./todo-input.styles.scss";
 
@@ -7,11 +9,13 @@ const TodoInput = React.forwardRef(
     {
       content = "",
       placeholder = "",
+      activeFilters,
+      deleteFilter,
       onChange = null,
       onSubmit = null,
       onClick= null,
       disabled = false,
-      onBlur
+      onEscPress,
     },
     ref
   ) => {
@@ -27,6 +31,10 @@ const TodoInput = React.forwardRef(
           else if (onSubmit) onSubmit(inputVal);
         }}
       >
+        <Icon icon="search" className="search-icon" />
+        {activeFilters.map((item, idx) => (
+          <FilterCard key={idx} item={item} remove={deleteFilter} />
+        ))}
         <input
           disabled={disabled}
           type="text"
@@ -41,7 +49,9 @@ const TodoInput = React.forwardRef(
             else updateInputVal(e.target.value);
           }}
           onClick={onClick}
-          onBlur={onBlur}
+          onKeyDown={e => {
+            if(e.keyCode === 27) onEscPress()
+          } }
         />
       </form>
     );

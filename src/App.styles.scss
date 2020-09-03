@@ -12,7 +12,17 @@
   flex-basis: 100%;
 }
 
-.filter-bar-main {
-  padding-bottom: 2rem;
+.main-filter-wrapper {
+  width: 60%;
+  padding: .5rem;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  margin-left: 1rem;
+}
+
+.nav-side {
+  height: 100%;
 }
 

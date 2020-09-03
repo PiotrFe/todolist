@@ -2,8 +2,10 @@ import React from "react";
 
 import { Toggle, IconButton, Icon } from "rsuite";
 
+import "./button-bar.styles.scss";
+
 const ButtonBar = ({ actions }) => (
-  <>
+  <div className="button-bar">
     <Toggle
       size="md"
       checkedChildren="Ready"
@@ -13,29 +15,32 @@ const ButtonBar = ({ actions }) => (
     />
     <IconButton
       icon={<Icon icon="plus-square" />}
-      color="cyan"
+      appearance="ghost"
       size="sm"
       onClick={actions.toggleEditMode}
     />
     <IconButton
       icon={<Icon icon="download2" />}
-      color="cyan"
+      appearance="ghost"
+      // color="green"
       size="sm"
       onClick={actions.handleCSVDownload}
     />
     <IconButton
       icon={<Icon icon="trash2" />}
-      color="cyan"
+      appearance="ghost"
+      // color="cyan"
       size="sm"
       onClick={actions.handleRemoveList}
     />
     <IconButton
       icon={<Icon icon="refresh2" />}
-      color="cyan"
+      appearance="ghost"
+      // color="cyan"
       size="sm"
       onClick={actions.handleRefreshView}
     />
-  </>
+  </div>
 );
 
 export default ButtonBar;

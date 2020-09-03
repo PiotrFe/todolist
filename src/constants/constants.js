@@ -53,11 +53,11 @@ export const Colors = {
 };
 
 export const ColorPickerColors = {
-  COLOR_1: "#3D348B",
-  COLOR_2: "#7678ED",
-  COLOR_3: "#F7B801",
-  COLOR_4: "#F18701",
-  COLOR_5: "#F35B04",
+  COLOR_1: "#00416d",
+  COLOR_2: "#206a5d",
+  COLOR_3: "#fa1616",
+  COLOR_4: "#F7B801",
+  COLOR_5: "#eb8f8f",
 
 }
 

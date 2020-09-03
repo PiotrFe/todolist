@@ -5,12 +5,13 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    color: $color-white;
 
     z-index: 30;
 
     height: 80vh;
-    width: 70vw;
-    background-color: orangered;
+    width: 55vw;
+    background-color: $color-primary-6;
 
     display: flex;
     flex-direction: column;
@@ -18,33 +19,33 @@
     box-shadow: 0 2rem 5rem rgba(0, 0, 0, .2);
 
     &__header {
-        flex: 0 0 12%;
+        flex: 0 0 10%;
         background-color: $color-grey-dark-1;
-        font-size: 3rem;
-        color: $color-grey-light-1;
+        font-size: 2rem;
+        color: $color-white;
         font-weight: 600;
 
         display: flex;
         flex-direction: row;
         justify-content: center;
-        align-items: center;;
+        align-items: center;
 
     }
 
     &__form {
         flex: 0 0 80%;
-        padding: 2rem;
-
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 25vw);
         grid-template-rows: [title-start] 1fr [title-end date-owner-start] 1fr [date-owner-end details-start] 50% [details-end buttons-start] 1fr [buttons-end];
-        
+        grid-column-gap: 1.5rem;
 
     }
 
     &__form-group {
         width: 100%;
-        padding: .7rem 0;
+        padding: .7rem;
+        margin: 0 1rem;
+
 
         display: flex;
         flex-direction: column;
@@ -90,7 +91,6 @@
     border-radius: 2px;
     border: none;
     border-bottom: 3px solid transparent;
-    width: 90%;
     padding: 1rem;
     color: inherit;
     font-family: inherit;
@@ -101,6 +101,7 @@
     }
 
     &__charcount {
+        font-size: 1rem;
 
     }
 
@@ -114,12 +115,13 @@
     font-size: 1.5rem;
     border: none;
     border-radius: 2px;
+    background-color: $color-primary-2;
     cursor: pointer;
     transition: all .2s;
 
     &--submit {
-        background-color: $color-blue-light-2;
-        color: $color-grey-light-1;
+        background-color: $color-grey-dark-1;
+        color: $color-white;
     }
 
     &:not(:last-child) {
@@ -127,7 +129,7 @@
     }
 
     &:hover {
-        background-color: $color-grey-dark-1;
+        background-color: $color-primary-4;
         color: $color-grey-light-1;
     }
 
