@@ -14,7 +14,7 @@ const ButtonBar = ({ actions }) => (
       onChange={actions.toggleDrag}
     />
     <IconButton
-      icon={<Icon icon="plus-square" />}
+      icon={<Icon icon="plus" />}
       appearance="ghost"
       size="sm"
       onClick={actions.toggleEditMode}

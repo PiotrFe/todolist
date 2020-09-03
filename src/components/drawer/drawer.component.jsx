@@ -4,7 +4,7 @@ import { Drawer } from "rsuite";
 export default ({
   children,
   onHide,
-  size = "xs",
+  size = "sm",
   show = true,
   placement = "left",
   title,

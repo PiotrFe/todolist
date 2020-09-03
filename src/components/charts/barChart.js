@@ -2,15 +2,15 @@ import * as d3 from "d3";
 import moment from "moment";
 
 const MARGIN = { TOP: 30, BOTTOM: 30, LEFT: 50, RIGHT: 30 };
-const WIDTH = 350 - MARGIN.LEFT - MARGIN.RIGHT;
-const HEIGHT = 250 - MARGIN.TOP - MARGIN.BOTTOM;
+const WIDTH = 400 - MARGIN.LEFT - MARGIN.RIGHT;
+const HEIGHT = 300 - MARGIN.TOP - MARGIN.BOTTOM;
 
 const getFillColor = date => {
   let today = moment();
   let refDate = moment(date);
   
-  if (refDate.isBefore(today)) return "red"
-  else return "orange";
+  if (refDate.isBefore(today)) return "#999"
+  else return "#246068";
 }
 
 const getDayAndMonth = date => moment(date).format("D-M");

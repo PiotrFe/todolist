@@ -49,6 +49,7 @@ const ReportSection = ({ todos }) => {
     if (fullNameList?.length && nameLabels?.length) {
       const checkPicker = (
         <CheckPicker
+          size="sm"
           data={nameLabels}
           onSelect={(value, item, event) => updateActiveNames(value)}
           onClean={() => updateActiveNames(fullNameList)}
@@ -71,9 +72,10 @@ const ReportSection = ({ todos }) => {
   }, [activeNames]);
 
   return (
-    <div className="report">
+    <div className="report-section-wrapper">
       {filteredItems?.length ? (
         <>
+          <div className="report-section">
           {checkPicker}
           <ChartWrapper
             chart={PieChart}
@@ -87,6 +89,7 @@ const ReportSection = ({ todos }) => {
             chart={BarChart}
             data={sumItemsForTwoWeekPeriod(filteredItems)}
           />
+          </div>
         </>
       ) : (
         <div>No data to report</div>

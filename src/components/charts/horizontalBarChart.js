@@ -1,8 +1,8 @@
 import * as d3 from "d3";
 
 const MARGIN = { TOP: 30, BOTTOM: 50, LEFT: 50, RIGHT: 30 };
-const WIDTH = 300 - MARGIN.LEFT - MARGIN.RIGHT;
-const HEIGHT = 200 - MARGIN.TOP - MARGIN.BOTTOM;
+const WIDTH = 400 - MARGIN.LEFT - MARGIN.RIGHT;
+const HEIGHT = 300 - MARGIN.TOP - MARGIN.BOTTOM;
 
 
 class HorizontalBarChart {
@@ -46,7 +46,7 @@ class HorizontalBarChart {
       .range([0, HEIGHT])
       .padding(0.1);
 
-    const xAxisCall = d3.axisBottom(x).ticks(5);
+    const xAxisCall = d3.axisBottom(x).ticks(d3.max(vis.data, d => d.items)).tickFormat(d3.format("d"))
     vis.xAxisGroup.transition().duration(500).call(xAxisCall);
 
     const yAxisCall = d3.axisLeft(y);
@@ -69,7 +69,7 @@ class HorizontalBarChart {
         .attr("y", (d) => y(d.owner))
         .attr("width", (d) => x(d.items))
         .attr("height", y.bandwidth())
-        .attr("fill", "orange")
+        .attr("fill", "#246068")
   }
 }
 

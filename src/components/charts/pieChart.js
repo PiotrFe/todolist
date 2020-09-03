@@ -2,9 +2,9 @@ import * as d3 from "d3";
 import { arc } from "d3";
 
 // const MARGIN = { TOP: 30, BOTTOM: 30, LEFT: 30, RIGHT: 30 };
-const MARGIN = 15;
-const WIDTH = 230 - MARGIN;
-const HEIGHT = 230 - MARGIN;
+const MARGIN = 30;
+const WIDTH = 260 - MARGIN;
+const HEIGHT = 260 - MARGIN;
 const RADIUS = Math.min(WIDTH, HEIGHT) / 2;
 
 class PieChart {
@@ -45,7 +45,7 @@ class PieChart {
 
     vis.color = d3.scaleOrdinal()
       .domain(data.map(d => d.category))
-      .range(["orange", "grey"]);
+      .range(["#246068", "#999"]);
     const t = d3.transition().duration(500);
 
     const pie = d3
