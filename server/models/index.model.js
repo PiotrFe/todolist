@@ -11,3 +11,4 @@ mongoose.Promise = Promise;
 
 module.exports.ToDo = require("./todos.model");
 module.exports.ToDoList = require("./todolist.model");
+module.exports.User = require("./user.model");

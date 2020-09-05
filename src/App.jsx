@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect} from "react";
 
 import Drawer from "./components/drawer/drawer.component";
 import NavSide from "./components/nav-side/nav-side.component";
@@ -22,7 +22,7 @@ import {
 
 require("dotenv").config();
 
-function App() {
+const App = () => {
   const [currentUser, updateCurrentUser] = useState("");
   const [cockpitVisible, toggleCockpit] = useState(false);
   const [reportsVisible, toggleReports] = useState(false);

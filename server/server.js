@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require('cors');
 const toDoRoutes = require("./routes/todos.routes");
+const authRoutes = require("./routes/auth.routes");
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.text());
 app.use(cors());
 app.use("/api/todos", toDoRoutes);
+app.use("/auth", authRoutes)
 
 app.listen(port, () => {
   console.log(`Server running on ${port}`);

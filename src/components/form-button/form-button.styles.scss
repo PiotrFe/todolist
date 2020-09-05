@@ -13,11 +13,11 @@
     }
 
     &--google {
-        background-color: $color-blue-light-2;
+        background-color: $color-primary-5;
         width: 14rem;
 
         &:hover {
-            background-color: $color-blue-light-1;
+            background-color: $color-primary-5;
             color: black
         }
     }
