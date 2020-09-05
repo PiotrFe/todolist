@@ -1,4 +1,13 @@
 const db = require("../models/index.model");
+const jwt = require('jwt-simple');
+const config = require("../config");
+const { create } = require("../models/user.model");
+
+const createTokenForUser = user => {
+    const timestamp = new Date().getTime();
+
+    return jwt.encode({sub: user._id, iat: timestamp}, config.JWT_SECRET)
+}
 
 exports.signUp = (req, res, next) => {
   const { email, password } = req.body;
@@ -28,7 +37,7 @@ exports.signUp = (req, res, next) => {
 
 exports.signIn = async (req, res) => {
     // user object attached to req object by passport middleware
-    res.send(req.user);
+    res.send(createTokenForUser(req.user));
 };
 
 module.exports = exports;
