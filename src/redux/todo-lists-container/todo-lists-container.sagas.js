@@ -20,7 +20,7 @@ import {
   replaceToDoFailure,
 } from "./todo-lists-container.actions";
 
-export function* fetchLists() {
+function* fetchLists() {
   yield put(asyncActionStart());
   try {
     const data = yield fetch("/api/todos", {
@@ -38,7 +38,7 @@ export function* fetchLists() {
   }
 }
 
-export function* addToDo({ payload: { listID, todo } }) {
+function* addToDo({ payload: { listID, todo } }) {
   yield put(asyncActionStart());
   try {
     const res = yield fetch("/api/todos", {
@@ -56,7 +56,7 @@ export function* addToDo({ payload: { listID, todo } }) {
   }
 }
 
-export function* removeToDo({ payload: { listID, todoID } }) {
+function* removeToDo({ payload: { listID, todoID } }) {
   yield put(asyncActionStart());
   try {
     const res = yield fetch(`/api/todos/${listID}`, {
@@ -74,7 +74,7 @@ export function* removeToDo({ payload: { listID, todoID } }) {
   }
 }
 
-export function* updateTodoField({ payload: { todoID, field, value } }) {
+function* updateTodoField({ payload: { todoID, field, value } }) {
   yield put(asyncActionStart());
   try {
     const res = yield fetch(`/api/todos/${todoID}`, {
@@ -98,7 +98,7 @@ export function* updateTodoField({ payload: { todoID, field, value } }) {
   }
 }
 
-export function* addList({ payload: { title } }) {
+function* addList({ payload: { title } }) {
   yield put(asyncActionStart());
   try {
     const res = yield fetch("api/todos/lists", {
@@ -116,7 +116,7 @@ export function* addList({ payload: { title } }) {
   }
 }
 
-export function* removeList({ payload: listID }) {
+function* removeList({ payload: listID }) {
   yield put(asyncActionStart());
 
   try {
@@ -135,7 +135,7 @@ export function* removeList({ payload: listID }) {
   }
 }
 
-export function* replaceToDo({payload: {listID, todo} }) {
+function* replaceToDo({payload: {listID, todo} }) {
   yield put(asyncActionStart());
 
   try {
@@ -155,31 +155,31 @@ export function* replaceToDo({payload: {listID, todo} }) {
   }
 }
 
-export function* onFetchLists() {
+function* onFetchLists() {
   yield takeLatest(ToDoListsActionTypes.FETCH_LISTS_START, fetchLists);
 }
 
-export function* onToDoAdd() {
+function* onToDoAdd() {
   yield takeLatest(ToDoListsActionTypes.ADD_TODO_START, addToDo);
 }
 
-export function* onToDoRemove() {
+function* onToDoRemove() {
   yield takeLatest(ToDoListsActionTypes.REMOVE_TODO_START, removeToDo);
 }
 
-export function* onToDoUpdate() {
+function* onToDoUpdate() {
   yield takeLatest(ToDoListsActionTypes.UPDATE_TODO_START, updateTodoField);
 }
 
-export function* onAddList() {
+function* onAddList() {
   yield takeLatest(ToDoListsActionTypes.ADD_LIST_START, addList);
 }
 
-export function* onRemoveList() {
+function* onRemoveList() {
   yield takeLatest(ToDoListsActionTypes.REMOVE_LIST_START, removeList);
 }
 
-export function* onToDoReplace() {
+function* onToDoReplace() {
   yield takeLatest(ToDoListsActionTypes.REPLACE_TODO_START, replaceToDo);
 }
 

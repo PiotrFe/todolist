@@ -2,17 +2,18 @@ const express = require("express");
 const helpers = require("../helpers/auth.helpers");
 const router = express.Router();
 const passport = require("passport");
-require("../services/passport");
 
-const requireSignIn = passport.authenticate("local", {session: false
-});
+const requireSignIn = passport.authenticate("local");
 
 router.use("/signin", requireSignIn);
 
-router.route("/signup").post(helpers.signUp);
+router.route("/signup")
+  .post(helpers.signUp);
 
 router.route("/signin")
-  .post(helpers.signIn)
-  .get((req, res) => res.send("SIGN IN"));
+  .post(helpers.signIn);
+
+router.route("/signout")
+  .post(helpers.signOut);
 
 module.exports = router;

@@ -7,6 +7,7 @@ import UserLogo from "./components/user-logo/user-logo.component";
 import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
 import FilterBar from "./components/filter-bar/filter-bar.component";
 import ReportSection from "./components/report/report.component";
+import requireAuth from "./components/hocs/requireAuth";
 
 
 import { MAIN_INPUT_ID } from "./constants/constants";
@@ -109,4 +110,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default requireAuth(App);

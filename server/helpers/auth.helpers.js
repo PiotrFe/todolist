@@ -1,7 +1,7 @@
 const db = require("../models/index.model");
 const jwt = require('jwt-simple');
 const config = require("../config");
-const { create } = require("../models/user.model");
+// const { create } = require("../models/user.model");
 
 const createTokenForUser = user => {
     const timestamp = new Date().getTime();
@@ -30,14 +30,21 @@ exports.signUp = (req, res, next) => {
 
     user.save((err) => {
       if (err) return next(err);
-      res.send(user);
+      res.send(createTokenForUser(user));
     });
   });
 };
 
-exports.signIn = async (req, res) => {
+exports.signIn = (req, res) => {
     // user object attached to req object by passport middleware
-    res.send(createTokenForUser(req.user));
+    req.session.token = createTokenForUser(req.user);
+
+    res.status(200).send("Logged in");
 };
+
+exports.signOut = (req, res) => {
+    req.session = null;
+    res.status(200).send("Logged out");
+}
 
 module.exports = exports;

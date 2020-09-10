@@ -4,6 +4,8 @@ const { populate } = require("../models/todos.model");
 const fieldArray = ["owner", "title", "details"];
 
 exports.getTodos = (req, res) => {
+  if (!req.session.token) return res.status(401).send("Access denied");
+  
   db.ToDoList.find()
     .populate("todos")
     .then((todos) => {

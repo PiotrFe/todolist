@@ -1,8 +1,8 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 
-import { Sidenav, Toggle, Nav, Icon } from "rsuite";
+import { Sidenav, Nav, Icon } from "rsuite";
 import TodoInput from "../todo-input/todo-input.component";
 import Overlay from "../../components/overlay/overlay.component";
 
@@ -11,7 +11,8 @@ import {
   toggleAddListMode,
   addList,
 } from "../../redux/todo-lists-container/todo-lists-container.actions";
-import { useEffect } from "react";
+import { signOutStart } from "../../redux/sign-in-sign-up-page/sign-in-sign-up-page.actions";
+import nav from "../../nav";
 
 import "./nav-side.styles.scss";
 
@@ -21,6 +22,7 @@ const NavSide = ({
   toggleReports,
   addListMode,
   addList,
+  signOut
 }) => {
   const [newListName, updateNewListName] = useState("");
 
@@ -74,11 +76,18 @@ const NavSide = ({
                 New List
               </Nav.Item>
               <Nav.Item
-                eventKey="2"
+                eventKey="3"
                 onClick={toggleReports}
                 icon={<Icon icon="bar-chart" />}
               >
                 Reports
+              </Nav.Item>
+              <Nav.Item
+                eventKey="4"
+                onClick={() => signOut(() => nav("/"))}
+                icon={<Icon icon="exit" />}
+              >
+                Log out
               </Nav.Item>
             </Nav>
           </Sidenav.Body>
@@ -95,6 +104,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   toggleAddListMode: () => dispatch(toggleAddListMode()),
   addList: (listTitle) => dispatch(addList(listTitle)),
+  signOut: (callback) => dispatch(signOutStart(callback))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavSide);

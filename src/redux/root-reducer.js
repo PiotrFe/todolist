@@ -7,6 +7,7 @@ import TodoItemsReducer from "./todo-item/todo-item.reducer";
 import filterBarReducer from "./filter-bar/filter-bar.reducer";
 import FiltersReducer from "./filters/filters.reducer";
 import SortsReducer from "./sorts/sorts.reducer";
+import SignInSignUpReducer from "./sign-in-sign-up-page/sign-in-sign-up-page.reducer";
 
 export default combineReducers({
   todoListsContainer: TodoListsContainerReducer,
@@ -15,5 +16,6 @@ export default combineReducers({
   todoItems: TodoItemsReducer,
   filterBar: filterBarReducer,
   filters: FiltersReducer,
-  sorts: SortsReducer
+  sorts: SortsReducer,
+  auth: SignInSignUpReducer
 });
