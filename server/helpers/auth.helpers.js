@@ -30,7 +30,9 @@ exports.signUp = (req, res, next) => {
 
     user.save((err) => {
       if (err) return next(err);
-      res.send(createTokenForUser(user));
+      const token = createTokenForUser(user);
+      req.session.token = token;
+      res.status(201).send(token);
     });
   });
 };
@@ -45,6 +47,17 @@ exports.signIn = (req, res) => {
 exports.signOut = (req, res) => {
     req.session = null;
     res.status(200).send("Logged out");
+}
+
+exports.verifySession = (req, res) => {
+  // user object attached to req object by passport middleware
+  if (req.user) {
+    return res.status(200).send("Logged in");
+  }
+  // if (req.session.token) {
+  //   return res.status(200).send("Logged in");
+  // } 
+  return res.status(401).send("No active session");
 }
 
 module.exports = exports;

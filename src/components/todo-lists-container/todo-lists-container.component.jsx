@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
 import { createStructuredSelector } from "reselect";
 
@@ -14,10 +14,21 @@ import {
 import { fetchLists } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import "./todo-lists-container.styles.scss";
+import { useCallback } from "react";
 
 const ToDoListsContainer = ({ todoLists, loading, fetchLists }) => {
+  const didMount = useRef(false);
+
+  const doFetchLists = useCallback(() => {
+    if (!didMount.current) {
+      fetchLists();
+    }
+  }, [didMount.current]);
+
   useEffect(() => {
-    fetchLists();
+    doFetchLists();
+    didMount.current = true;
+    return () => (didMount.current = false);
   }, []);
 
   return (

@@ -3,10 +3,9 @@ const helpers = require("../helpers/todos.helpers");
 const router = express.Router();
 const passport = require("passport");
 
-// const requireAuth = passport.authenticate("jwt", { session: false });
+const requireAuth = passport.authenticate("jwt");
 
-// router.use(requireAuth);
-
+router.use(requireAuth);
 
 router.route("/")
     .get(helpers.getTodos)

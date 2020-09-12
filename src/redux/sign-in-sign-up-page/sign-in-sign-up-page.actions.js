@@ -7,6 +7,7 @@ const {
   SIGN_OUT_START,
   SIGN_OUT_SUCCESS,
   SIGN_OUT_FAILURE,
+  CHECK_SESSION_START
 } = SignInSignUpTypes;
 
 export const signInStart = ({ email, password, callback }) => ({
@@ -36,3 +37,7 @@ export const signOutFailure = (error) => ({
   type: SIGN_OUT_FAILURE,
   payload: error,
 });
+
+export const checkSessionStart = () => ({
+  type: CHECK_SESSION_START
+})

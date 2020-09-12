@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import Drawer from "./components/drawer/drawer.component";
 import NavSide from "./components/nav-side/nav-side.component";
@@ -8,7 +8,6 @@ import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
 import FilterBar from "./components/filter-bar/filter-bar.component";
 import ReportSection from "./components/report/report.component";
 import requireAuth from "./components/hocs/requireAuth";
-
 
 import { MAIN_INPUT_ID } from "./constants/constants";
 
@@ -20,8 +19,6 @@ import {
   auth,
   createUserProfileDocument,
 } from "./firebase/firebase.utils";
-
-require("dotenv").config();
 
 const App = () => {
   const [currentUser, updateCurrentUser] = useState("");
@@ -78,36 +75,36 @@ const App = () => {
 
   return (
     <>
-      <div className="app" id="app">
-        {currentUser ? (
-          <UserLogo
-            initials={currentUser.email}
-            onClick={() => signOutUser()}
-          />
-        ) : null}
-        {drawerCompoment}
-        <div className="nav-side">
-          <NavSide
-            toggleCockpit={() => toggleCockpit(!cockpitVisible)}
-            toggleReports={() => toggleReports(!reportsVisible)}
-          />
-        </div>
-        <div className="app-main">
-          <>
-            <div className="main-filter-wrapper">
+    <div className="app" id="app">
+      {currentUser && (
+        <UserLogo
+          initials={currentUser.email}
+          onClick={() => signOutUser()}
+        />
+      )}
+      {drawerCompoment}
+      <div className="nav-side">
+        <NavSide
+          toggleCockpit={() => toggleCockpit(!cockpitVisible)}
+          toggleReports={() => toggleReports(!reportsVisible)}
+        />
+      </div>
+      <div className="app-main">
+        <>
+          <div className="main-filter-wrapper">
             <FilterBar
               listID={MAIN_INPUT_ID}
               inCockpit={false}
               placeholder={"Type to search in all lists"}
             />
-            </div>
-            <ToDoListsContainer />
-          </>
-        </div>
+          </div>
+          <ToDoListsContainer />
+        </>
       </div>
-      <div className="modal-root" id="modal-root"></div>
-    </>
-  );
-}
+    </div>
+    <div className="modal-root" id="modal-root"></div>
+  </>
+  )
+};
 
 export default requireAuth(App);

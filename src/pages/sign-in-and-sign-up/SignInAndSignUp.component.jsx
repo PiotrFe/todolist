@@ -1,32 +1,47 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { connect } from "react-redux";
+import { createStructuredSelector } from "reselect";
 
 import SignIn from "../../components/sign-in/sign-in.component";
 import SignUp from "../../components/sign-up/sign-up.component";
 
+import { selectAuthStatus } from "../../redux/sign-in-sign-up-page/sign-in-sign-up-page.selectors";
+
 import nav from "../../nav";
 
-import { signInStart } from "../../redux/sign-in-sign-up-page/sign-in-sign-up-page.actions";
+import { signInStart, checkSessionStart } from "../../redux/sign-in-sign-up-page/sign-in-sign-up-page.actions";
 
 import "./SignInAndSignUp.styles.scss";
 
-// https://github.com/ReactTraining/react-router/blob/master/FAQ.md#how-do-i-access-the-history-object-outside-of-components
+const SignInAndSignUp = ({ authenticated, signIn, checkSession }) => {
 
-const SignInAndSignUp = ({ signIn }) => (
-  <div className="sign-in-and-sign-up">
-    <SignIn
-      onSubmit={({ email, password }) => {
-        signIn({ email, password, callback: () => {
-          nav("/app");
-        } });
-      }}
-    />
-    <SignUp />
-  </div>
-);
+  useEffect(() => {
+    checkSession()
+  }, []);
 
-const mapDispatchToProps = (dispatch) => ({
-  signIn: ({ email, password, callback }) => dispatch(signInStart({ email, password, callback })),
+  useEffect(() => {
+    if (authenticated) nav("/app");
+  }, [authenticated]);
+
+  return (
+    <div className="sign-in-and-sign-up">
+      <SignIn
+        onSubmit={({ email, password }) => {
+          signIn({ email, password });
+        }}
+      />
+      <SignUp />
+    </div>
+  );
+};
+
+const mapStateToProps = createStructuredSelector({
+  authenticated: selectAuthStatus,
 });
 
-export default connect(null, mapDispatchToProps)(SignInAndSignUp);
+const mapDispatchToProps = (dispatch) => ({
+  signIn: ({ email, password }) => dispatch(signInStart({ email, password })),
+  checkSession: () => dispatch((checkSessionStart()))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInAndSignUp);
