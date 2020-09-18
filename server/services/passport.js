@@ -23,8 +23,6 @@ const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
 
 const cookieExtractor = (req) => {
   let token = null;
-  console.log("======================")
-  console.log(req.session.token);
   if (req && req.session && req.session.token) {
     token = req.session.token;
   }

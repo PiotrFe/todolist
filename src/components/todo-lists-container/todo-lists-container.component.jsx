@@ -5,6 +5,7 @@ import { createStructuredSelector } from "reselect";
 import ToDoItemsContainer from "../todo-items-container/todo-items-container.component";
 import Overlay from "../../components/overlay/overlay.component";
 import Input from "../../components/todo-input/todo-input.component";
+import ErrorBoundary from "../utils/ErrorBoundary";
 
 import {
   selectToDoLists,
@@ -29,12 +30,14 @@ const ToDoListsContainer = ({ todoLists, loading, fetchLists }) => {
     doFetchLists();
     didMount.current = true;
     return () => (didMount.current = false);
-  }, []);
+  }, [doFetchLists]);
 
   return (
     <div className="todo-list-container">
       {todoLists.map((_id) => (
+        <ErrorBoundary key={_id} message="Unable to load container" fallback={<h4>Unable to show container</h4>}>
         <ToDoItemsContainer key={_id} listID={_id} />
+        </ErrorBoundary>
       ))}
       {loading && <Overlay withSpinner={true} />}
     </div>

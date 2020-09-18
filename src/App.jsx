@@ -8,6 +8,7 @@ import ToDoCockpit from "./components/todo-cockpit/todo-cockpit.component";
 import FilterBar from "./components/filter-bar/filter-bar.component";
 import ReportSection from "./components/report/report.component";
 import requireAuth from "./components/hocs/requireAuth";
+import ErrorBoundary from "./components/utils/ErrorBoundary";
 
 import { MAIN_INPUT_ID } from "./constants/constants";
 
@@ -98,7 +99,9 @@ const App = () => {
               placeholder={"Type to search in all lists"}
             />
           </div>
+          <ErrorBoundary message="Unable to load lists. Try again" fallback={<h4>Unable to display data</h4>} >
           <ToDoListsContainer />
+          </ErrorBoundary>
         </>
       </div>
     </div>

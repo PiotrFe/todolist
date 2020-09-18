@@ -7,6 +7,8 @@ import FilterBar from "../../components/filter-bar/filter-bar.component";
 import ToDoList from "../../components/todo-list/todo-list.component";
 import ToDoModal from "../../components/todo-new-modal/todo-new-modal";
 import ButtonBar from "../../components/button-bar/button-bar.component";
+import ErrorBoundary from "../utils/ErrorBoundary";
+
 
 import { ActionTypes } from "../../constants/constants";
 
@@ -70,7 +72,7 @@ const ToDoItemsContainer = ({
         toggleInputDisabled(true);
       }
     } else mainInputFiltersChangedAfterRender.current = true;
-  }, [JSON.stringify(globalFiltersCount)]);
+  }, [globalFiltersCount]);
 
   // Methods
   const handleUpdateSorts = (sorts, field) => {
@@ -153,7 +155,7 @@ const ToDoItemsContainer = ({
           disabled={inputDisabled}
         />
       </div>
-
+      <ErrorBoundary message="Unable to load items" fallback={<p>Unable to load items</p>}>
       <ToDoList
         listID={listID}
         actions={{
@@ -164,6 +166,7 @@ const ToDoItemsContainer = ({
         }}
         dragModeOn={dragModeOn}
       />
+      </ErrorBoundary>
       {!inCockpit && editMode ? (
         <>
           <ToDoModal
