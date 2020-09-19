@@ -1,16 +1,15 @@
-import React, { useEffect } from "react";
-import ReactDom from "react-dom";
+import React, { useEffect, useState } from "react";
 import { Alert } from "rsuite";
 
 const ErrorAlert = ({ message }) => {
-  let alert;
+  const [alert, updateAlert] = useState(null);
 
   useEffect(() => {
-    alert = Alert.error(message);
+    updateAlert(Alert.error(message));
   }, []);
 
   return <div>{alert}</div>;
-
+  // return <div>This used to be a problem</div>
 };
 
 export default ErrorAlert;

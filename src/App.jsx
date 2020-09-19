@@ -10,6 +10,8 @@ import ReportSection from "./components/report/report.component";
 import requireAuth from "./components/hocs/requireAuth";
 import ErrorBoundary from "./components/utils/ErrorBoundary";
 
+import ErrorAlertList from "./components/error-alert-list/error-alert-list.component";
+
 import { MAIN_INPUT_ID } from "./constants/constants";
 
 import "rsuite/lib/styles/index.less";
@@ -93,6 +95,7 @@ const App = () => {
       <div className="app-main">
         <>
           <div className="main-filter-wrapper">
+            <ErrorAlertList />
             <FilterBar
               listID={MAIN_INPUT_ID}
               inCockpit={false}

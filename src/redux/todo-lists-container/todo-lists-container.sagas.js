@@ -2,6 +2,8 @@ import { put, takeEvery, all, call, takeLatest } from "redux-saga/effects";
 
 import { ToDoListsActionTypes } from "./todo-lists-container.types";
 
+import { handleServerErrors } from "../../utils/utils";
+
 import {
   asyncActionStart,
   fetchListsSuccess,
@@ -20,21 +22,29 @@ import {
   replaceToDoFailure,
 } from "./todo-lists-container.actions";
 
+import { showAlert } from "../error-alert/error-alert.actions";
+
+function* generateAlert(error, logout = false) {
+  yield put(showAlert({ [Date.now()]: { error, logout } }));
+}
+
 function* fetchLists() {
   yield put(asyncActionStart());
   try {
-    const data = yield fetch("/api/todos", {
+    const response = yield fetch("/api/todos", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
 
-    const todoLists = yield data.json();
+    yield handleServerErrors(response);
 
-    yield put(fetchListsSuccess(todoLists));
+    const data = yield response.json();
+    yield put(fetchListsSuccess(data));
   } catch (error) {
     yield put(fetchListsFailure(error));
+    yield generateAlert(error.message, true);
   }
 }
 
@@ -49,10 +59,13 @@ function* addToDo({ payload: { listID, todo } }) {
       body: JSON.stringify({ listID, todo }),
     });
 
+    yield handleServerErrors(res);
+
     const json = yield res.json();
     yield put(addToDoSuccess({ listID: json.listID, todo: json.todo }));
   } catch (error) {
     yield put(addToDoFailure(error));
+    yield generateAlert(error.message, false);
   }
 }
 
@@ -67,10 +80,13 @@ function* removeToDo({ payload: { listID, todoID } }) {
       body: JSON.stringify({ listID, todoID }),
     });
 
+    yield handleServerErrors(res);
+
     const json = yield res.json();
     yield put(removeToDoSuccess({ listID: json.listID, todoID: json.todoID }));
   } catch (error) {
     yield put(removeToDoFailure(error));
+    yield generateAlert(error.message, false);
   }
 }
 
@@ -84,6 +100,8 @@ function* updateTodoField({ payload: { todoID, field, value } }) {
       },
       body: JSON.stringify({ todoID, field, value }),
     });
+    yield handleServerErrors(res);
+
     const json = yield res.json();
 
     yield put(
@@ -95,6 +113,7 @@ function* updateTodoField({ payload: { todoID, field, value } }) {
     );
   } catch (error) {
     yield put(updateToDoFailure(error));
+    yield generateAlert(error.message, false);
   }
 }
 
@@ -108,11 +127,14 @@ function* addList({ payload: { title } }) {
       },
       body: JSON.stringify({ title }),
     });
+    yield handleServerErrors(res);
+
     const list = yield res.json();
 
     yield put(addListSuccess(list));
   } catch (error) {
     yield put(addListFailure(error));
+    yield generateAlert(error.message, false);
   }
 }
 
@@ -127,15 +149,18 @@ function* removeList({ payload: listID }) {
       },
     });
 
+    yield handleServerErrors(res);
+
     const deletedListID = yield res.json();
 
     yield put(removeListSuccess(deletedListID));
   } catch (error) {
     yield put(removeListFailure(error));
+    yield generateAlert(error.message, false);
   }
 }
 
-function* replaceToDo({payload: {listID, todo} }) {
+function* replaceToDo({ payload: { listID, todo } }) {
   yield put(asyncActionStart());
 
   try {
@@ -146,12 +171,15 @@ function* replaceToDo({payload: {listID, todo} }) {
       },
       body: JSON.stringify(todo),
     });
+    
+    yield handleServerErrors(res);
 
     const updatedToDo = yield res.json();
 
     yield put(replaceToDoSuccess({ todo: updatedToDo }));
   } catch (error) {
     yield put(replaceToDoFailure({ error }));
+    yield generateAlert(error.message, false);
   }
 }
 

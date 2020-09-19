@@ -12,6 +12,8 @@ import {
   setPreviewLoading,
 } from "./filter-bar.actions";
 
+import { showAlert } from "../error-alert/error-alert.actions";
+
 import { fetchListsSuccess } from "../../redux/todo-lists-container/todo-lists-container.actions";
 
 import { asyncActionStart } from "../todo-lists-container/todo-lists-container.actions";

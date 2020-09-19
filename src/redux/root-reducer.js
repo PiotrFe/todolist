@@ -8,6 +8,7 @@ import filterBarReducer from "./filter-bar/filter-bar.reducer";
 import FiltersReducer from "./filters/filters.reducer";
 import SortsReducer from "./sorts/sorts.reducer";
 import SignInSignUpReducer from "./sign-in-sign-up-page/sign-in-sign-up-page.reducer";
+import ErrorAlertReducer from "./error-alert/error-alert.reducer";
 
 export default combineReducers({
   todoListsContainer: TodoListsContainerReducer,
@@ -17,5 +18,6 @@ export default combineReducers({
   filterBar: filterBarReducer,
   filters: FiltersReducer,
   sorts: SortsReducer,
-  auth: SignInSignUpReducer
+  auth: SignInSignUpReducer,
+  errors: ErrorAlertReducer
 });

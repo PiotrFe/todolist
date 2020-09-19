@@ -18,9 +18,7 @@ function* signIn({ payload: { email, password } }) {
       },
     });
 
-    const status = res.status;
-
-    if (status === 200) {
+    if (res.ok) {
       yield put(signInSuccess());
     } else {
       yield put(signInFailure(res.statusText));

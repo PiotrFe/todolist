@@ -17,3 +17,11 @@ export const downloadCSV = (csvData, fileName) => {
     a.addEventListener("click", clickHandler, false);
     a.click();
 }
+
+export const handleServerErrors = async response => {
+    if (!response.ok) {
+        const text = await response.text()
+        throw new Error(text);
+    }
+    return response;
+}

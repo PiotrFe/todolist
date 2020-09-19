@@ -6,6 +6,9 @@ const fieldArray = ["owner", "title", "details"];
 exports.getTodos = (req, res) => {
   if (!req.session.token) return res.status(401).send("Access denied");
   
+  // req.session = null;
+  // res.status(401).send("Cannot find data")
+  
   db.ToDoList.find()
     .populate("todos")
     .then((todos) => {
@@ -17,6 +20,8 @@ exports.getTodos = (req, res) => {
 };
 
 exports.addTodo = async (req, res) => {
+
+  // res.status(401).send("Not allowing to add todo");
   try {
     const newToDo = await db.ToDo.create(req.body.todo);
     const list = await db.ToDoList.findById(req.body.listID);
@@ -35,6 +40,8 @@ exports.removeTodo = async (req, res) => {
   const listID = req.body.listID;
   const todoID = req.body.todoID;
   let updatedTodo;
+
+  //  res.status(401).send("Not allowing to remove todo");
 
   try {
     const list = await db.ToDoList.findById(listID);
