@@ -8,9 +8,10 @@ const HEIGHT = 300 - MARGIN.TOP - MARGIN.BOTTOM;
 const getFillColor = date => {
   let today = moment();
   let refDate = moment(date);
-  
-  if (refDate.isBefore(today)) return "#999"
-  else return "#246068";
+
+  if (refDate.isSame(today, "day")) return "#E67E22";
+  if (refDate.isBefore(today, "day")) return "#999";
+  return "#246068";
 }
 
 const getDayAndMonth = date => moment(date).format("D-M");
@@ -46,7 +47,7 @@ class BarChart {
       vis.data = data;
 
       const y = d3.scaleLinear()
-        .domain([0, d3.max(data, d => d.count)])
+        .domain([0, d3.max(data, d => d.count === 0 ? 1 : d.count)])
         .range([HEIGHT, 0])
 
       const x = d3.scaleBand()
@@ -55,7 +56,9 @@ class BarChart {
         .padding(0.1);
 
       const xAxis = d3.axisBottom(x);
-      const yAxis = d3.axisLeft(y).ticks(5);
+
+      const yAxisTicks = y.ticks().filter(tick => Number.isInteger(tick));
+      const yAxis = d3.axisLeft(y).tickValues(yAxisTicks).tickFormat(d3.format("d"))
 
       vis.xAxisGroup.transition().duration(500).call(xAxis);
       vis.yAxisGroup.transition().duration(500).call(yAxis);
@@ -67,7 +70,7 @@ class BarChart {
               .attr("x", d => x(getDayAndMonth(d.date)))
               .attr("width", x.bandwidth())
               .attr("y", d => y(d.count))
-              .attr("height", d => HEIGHT - y(d.count))
+              .attr("height", d => d.count === 0 ? 0 : HEIGHT - y(d.count))
               .attr("fill", d => getFillColor(d.date))
   }
 }

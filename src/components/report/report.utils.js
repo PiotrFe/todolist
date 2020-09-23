@@ -1,5 +1,11 @@
 import moment from "moment";
 
+const createOwnerArray = (obj) =>
+  Object.entries(obj).reduce(
+    (acc, [owner, {done, pending}]) => [...acc, { owner, done, pending }],
+    []
+  );
+
 export const sumItemsPerUser = (data) => {
   const obj = data.reduce((acc, { owner }) => {
     if (acc[owner] > 0) {
@@ -15,10 +21,29 @@ export const sumItemsPerUser = (data) => {
     }
   }, {});
 
-  return Object.entries(obj).reduce(
-    (acc, [owner, items]) => [...acc, { owner, items }],
-    []
-  );
+  // return Object.entries(obj).reduce(
+  //   (acc, [owner, items]) => [...acc, { owner, items }],
+  //   []
+  // );
+
+  return createOwnerArray(obj);
+};
+
+export const sumItemsWithStatusPerUser = (data) => {
+
+  const obj = data.reduce((acc, { owner, done }) => {
+    let currentStatus = acc[owner] || { done: 0, pending: 0 };
+    done ? currentStatus.done++ : currentStatus.pending++;
+
+    return {
+      ...acc,
+      [owner]: {
+        ...currentStatus,
+      },
+    };
+  }, {});
+
+  return createOwnerArray(obj);
 };
 
 export const sumItemCategories = (data) => {
@@ -62,16 +87,13 @@ export const sumItemsForTwoWeekPeriod = (data) => {
     dateArr.push(d);
   }
 
-  const sortedDateObject = dateArr.reduce(
-    (acc, item) => {
-      d = item.clone().format("YYYY-M-D");
-      return ({
-        ...acc,
-        [d]: 0
-      })
-    },
-    {}
-  );
+  const sortedDateObject = dateArr.reduce((acc, item) => {
+    d = item.clone().format("YYYY-M-D");
+    return {
+      ...acc,
+      [d]: 0,
+    };
+  }, {});
 
   const countPerDate = data.reduce((acc, { dueDate }) => {
     d = moment(dueDate).format("YYYY-M-D");

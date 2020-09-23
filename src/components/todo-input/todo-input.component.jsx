@@ -9,7 +9,7 @@ const TodoInput = React.forwardRef(
     {
       content = "",
       placeholder = "",
-      activeFilters,
+      activeFilters = [],
       deleteFilter,
       onChange = null,
       onSubmit = null,

@@ -9,14 +9,17 @@ import { selectAuthStatus } from "../../redux/sign-in-sign-up-page/sign-in-sign-
 
 import nav from "../../nav";
 
-import { signInStart, checkSessionStart } from "../../redux/sign-in-sign-up-page/sign-in-sign-up-page.actions";
+import {
+  signInStart,
+  signUpStart,
+  checkSessionStart,
+} from "../../redux/sign-in-sign-up-page/sign-in-sign-up-page.actions";
 
 import "./SignInAndSignUp.styles.scss";
 
-const SignInAndSignUp = ({ authenticated, signIn, checkSession }) => {
-
+const SignInAndSignUp = ({ authenticated, signIn, signUp, checkSession }) => {
   useEffect(() => {
-    checkSession()
+    checkSession();
   }, []);
 
   useEffect(() => {
@@ -30,7 +33,11 @@ const SignInAndSignUp = ({ authenticated, signIn, checkSession }) => {
           signIn({ email, password });
         }}
       />
-      <SignUp />
+      <SignUp
+        onSubmit={({ email, password }) => {
+          signUp({ email, password });
+        }}
+      />
     </div>
   );
 };
@@ -41,7 +48,8 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   signIn: ({ email, password }) => dispatch(signInStart({ email, password })),
-  checkSession: () => dispatch((checkSessionStart()))
+  signUp: ({ email, password }) => dispatch(signUpStart({ email, password })),
+  checkSession: () => dispatch(checkSessionStart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInAndSignUp);

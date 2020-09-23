@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import FormInput from "../form-input/form-input.component";
 import FormButton from "../form-button/form-button.component";
 
-import { signInWithGoogle } from "../../firebase/firebase.utils";
-
 import "./sign-in.styles.scss";
 
 const SignIn = ({ onSubmit }) => {
@@ -42,7 +40,7 @@ const SignIn = ({ onSubmit }) => {
           <FormButton
             text="Sign in with Google"
             isGoogle={true}
-            onClick={signInWithGoogle}
+            onClick={null}
           />
         </div>
       </form>

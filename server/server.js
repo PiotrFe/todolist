@@ -1,6 +1,6 @@
+require('dotenv').config();
 const express = require("express");
 const cookieSession = require("cookie-session");
-const { SESSION_SECRET } = require("./config");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const passport = require("passport");
@@ -19,7 +19,7 @@ app.use(cors());
 app.use(
   cookieSession({
     name: "session",
-    keys: [SESSION_SECRET],
+    keys: [process.env.SESSION_SECRET],
     maxAge: 24 * 60 * 60 * 1000,
   })
 );

@@ -10,7 +10,7 @@ import BarChart from "../charts/barChart";
 import { selectToDos } from "../../redux/todo-item/todo-item.selectors";
 import { Dropdown, CheckPicker } from "rsuite";
 
-import { sumItemsPerUser, sumItemCategories, sumItemsForTwoWeekPeriod } from "./report.utils";
+import { sumItemsPerUser, sumItemsWithStatusPerUser, sumItemCategories, sumItemsForTwoWeekPeriod } from "./report.utils";
 
 import "./report.styles.scss";
 
@@ -83,7 +83,7 @@ const ReportSection = ({ todos }) => {
           />
           <ChartWrapper
             chart={HorizontalBarChart}
-            data={sumItemsPerUser(filteredItems)}
+            data={sumItemsWithStatusPerUser(filteredItems)}
           />
           <ChartWrapper
             chart={BarChart}

@@ -4,6 +4,8 @@ import { SignInSignUpTypes } from "./sign-in-sign-up-page.types";
 import {
   signInSuccess,
   signInFailure,
+  signUpSuccess,
+  signUpFailure,
   signOutSuccess,
   signOutFailure,
 } from "./sign-in-sign-up-page.actions";
@@ -25,6 +27,28 @@ function* signIn({ payload: { email, password } }) {
     }
   } catch (error) {
     yield put(signInFailure(error));
+  }
+}
+
+function* signUp({payload: {email, password}}) {
+  try {
+    const res = yield fetch("/auth/signup", {
+      method: "POST",
+      body: JSON.stringify({ email, password }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (res.ok) {
+      yield put(signUpSuccess());
+    } else {
+      yield put(signUpFailure(res.statusText));
+    }
+
+  } catch (error) {
+    yield put(signUpFailure(error))
+
   }
 }
 
@@ -56,7 +80,7 @@ function* verifySession() {
 
     if (res.status === 200) {
       yield put(signInSuccess());
-    } 
+    }
   } catch (error) {
     console.log(error);
   }
@@ -64,6 +88,10 @@ function* verifySession() {
 
 function* onSignIn() {
   yield takeLatest(SignInSignUpTypes.SIGN_IN_START, signIn);
+}
+
+function* onSignUp() {
+  yield takeLatest(SignInSignUpTypes.SIGN_UP_START, signUp);
 }
 
 function* onSignOut() {
@@ -75,5 +103,10 @@ function* onCheckSession() {
 }
 
 export function* signInSignUpSaga() {
-  yield all([call(onSignIn), call(onSignOut), call(onCheckSession)]);
+  yield all([
+    call(onSignIn),
+    call(onSignUp),
+    call(onSignOut),
+    call(onCheckSession),
+  ]);
 }

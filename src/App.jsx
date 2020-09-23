@@ -17,12 +17,6 @@ import { MAIN_INPUT_ID } from "./constants/constants";
 import "rsuite/lib/styles/index.less";
 import "./App.styles.scss";
 
-import {
-  signOutUser,
-  auth,
-  createUserProfileDocument,
-} from "./firebase/firebase.utils";
-
 const App = () => {
   const [currentUser, updateCurrentUser] = useState("");
   const [cockpitVisible, toggleCockpit] = useState(false);
@@ -57,24 +51,6 @@ const App = () => {
     updateDrawerComponent(drawer);
   }, [cockpitVisible, reportsVisible]);
 
-  useEffect(() => {
-    const unsubscribeFromAuth = auth.onAuthStateChanged(async (userAuth) => {
-      if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
-
-        userRef.onSnapshot((snapshot) => {
-          updateCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data(),
-          });
-        });
-      } else {
-        updateCurrentUser(null);
-      }
-    });
-
-    return () => unsubscribeFromAuth();
-  }, []);
 
   return (
     <>
@@ -82,7 +58,6 @@ const App = () => {
       {currentUser && (
         <UserLogo
           initials={currentUser.email}
-          onClick={() => signOutUser()}
         />
       )}
       {drawerCompoment}

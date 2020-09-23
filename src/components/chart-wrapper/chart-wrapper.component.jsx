@@ -7,7 +7,7 @@ const ChartWrapper = ({ chart: passedChart, data }) => {
 
   useEffect(() => {
     if (!chart) setChart(new passedChart(chartArea.current));
-  }, [chart]);
+  }, [chart, passedChart]);
 
   useEffect(() => {
     if (chart && data) chart.update(data);

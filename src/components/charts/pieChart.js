@@ -55,7 +55,8 @@ class PieChart {
 
     const arcs = pie(vis.data);
 
-    vis.svg.append("g")
+    vis.svg
+    .append("g")
         .attr("stroke", "white")
       .selectAll("path")
       .data(arcs)

@@ -3,7 +3,7 @@ const LocalStrategy = require("passport-local");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 const db = require("../models/index.model");
-const config = require("../config");
+// const config = require("../config");
 
 const localOptions = { usernameField: "email" };
 
@@ -31,7 +31,7 @@ const cookieExtractor = (req) => {
 
 const jwtOptions = {
   jwtFromRequest: (req) => cookieExtractor(req),
-  secretOrKey: config.JWT_SECRET,
+  secretOrKey: process.env.JWT_SECRET,
 };
 
 const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
