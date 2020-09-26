@@ -35,7 +35,7 @@ const ToDoListsContainer = ({ todoLists, loading, fetchLists }) => {
   return (
     <div className="todo-list-container">
       {todoLists.map((_id) => (
-        <ErrorBoundary key={_id} message="Unable to load container" fallback={<h4>Unable to show container</h4>}>
+        <ErrorBoundary key={_id} message="Unable to load container" fallback={<h4>Unable to load container</h4>}>
         <ToDoItemsContainer key={_id} listID={_id} />
         </ErrorBoundary>
       ))}

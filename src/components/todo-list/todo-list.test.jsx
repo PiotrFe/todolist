@@ -1,96 +1,142 @@
 import React from "react";
-import { render, screen, getByText, getByTestId, getAllByText, queryByText, getAllByTestId } from "@testing-library/react";
+import {
+  render,
+  screen,
+  getByText,
+  getAllByText,
+} from "@testing-library/react";
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
 
-import ToDoItems from "./todo-items.component";
-import { IconTypes } from "../icon/icon.types";
+import ToDoList from "./todo-list.component";
 
-describe("<ToDoItems />", () => {
+import { DEFAULT_SORTS } from "../../constants/constants";
 
-    const todoItems = [
-        {
-        _id: "1",
-        title: "first todo",
-        details: "no details",
-        draft: "",
-        detailsDraft: "",
-        dueDate: new Date(2020, 11, 31),
-        owner: "John Smith",
-        done: false,
-        editMode: false,
-        color: "black",
+const mockStore = configureStore([]);
+
+describe("<TodoList />", () => {
+  const setup = ({ propOverrides = {}, storeOverrides = {} } = {}) => {
+    const props = Object.assign(
+      {
+        listID: "123",
+        actions: {
+          drag: jest.fn(),
+          remove: jest.fn(),
+          update: jest.fn(),
+          edit: jest.fn(),
         },
-        {
-        _id: "2",
-        title: "second todo",
-        details: "many details",
-        draft: "",
-        detailsDraft: "",
-        dueDate: new Date(2020, 10, 30),
-        owner: "Patty Smith",
-        done: true,
-        editMode: true,
-        color: "white",
+        dragModeOn: false,
+      },
+      propOverrides
+    );
+
+    const storeObj = Object.assign(
+      {
+        todoLists: {
+          byID: {
+            123: {
+              allItems: ["234", "456", "567"],
+              filters: [],
+              itemsFilteredGlobally: ["234", "456", "567"],
+              itemsFilteredLocally: ["234", "456", "567"],
+              sorts: DEFAULT_SORTS,
+              title: "first",
+            },
+          },
         },
-    ];
-
-    const actions = [];
-    const dragModeOn = false;
-
-    const setup = (propOverrides) => {
-        const props = Object.assign(
-        {
-            todoItems,
-            actions,
-            dragModeOn,
+        filters: {
+          byID: {
+            123: [],
+          },
         },
-        propOverrides
-        );
+        sorts: {
+          byID: {},
+        },
+        todoItems: {
+          byID: {
+            234: {
+              title: "item 1",
+              owner: "peter",
+              dueDate: "2018",
+              color: "black",
+              details: "these are the details",
+              done: false,
+            },
+            456: {
+              title: "item 2",
+              owner: "paul",
+              dueDate: "2018",
+              color: "black",
+              details: "these are the details",
+              done: false,
+            },
+            567: {
+              title: "item 3",
+              owner: "mary",
+              dueDate: "2018",
+              color: "black",
+              details: "these are the details",
+              done: false,
+            },
+          },
+        },
+      },
+      storeOverrides
+    );
 
-    const { getAllByText } = render(<ToDoItems {...props} />);
+    const store = mockStore(storeObj);
+
+    const { getByText, getAllByText } = render(
+      <Provider store={store}>
+        <ToDoList {...props} />
+      </Provider>
+    );
 
     return {
-        firstToDoTitle: getAllByText("first todo")[0],
-        firstToDoOwner: getAllByText("John Smith")[0],
-        firstToDoDate: getAllByText("31-12-2020")[0],
-        secondToDoTitle: getAllByText("second todo")[0],
-        secondToDoOwner: getAllByText("Patty Smith")[0],
-        secondToDoDate: getAllByText("30-11-2020")[0]
-
-    }
+      firstItemTitle: getAllByText("item 1")[0],
+      firstItemOwner: getAllByText("peter")[0],
+      secondItemTitle: getAllByText("item 2")[0],
+      secondItemOwner: getAllByText("paul")[0],
+      thirdItemTitle: getAllByText("item 3")[0],
+      thirdItemOwner: getAllByText("mary")[0],
+    };
   };
-    it("renders with default props", () => {
-        const {firstToDoTitle, firstToDoOwner, secondToDoTitle, secondToDoOwner, firstToDoDate, secondToDoDate} = setup();
 
-        const firstToDoDetails = screen.getAllByText("no details")[0];
-        const secondToDoDetails = screen.getAllByText("many details")[0];
+  it("displays default items", () => {
+    const {
+      firstItemTitle,
+      secondItemTitle,
+      thirdItemTitle,
+      firstItemOwner,
+      secondItemOwner,
+      thirdItemOwner,
+    } = setup();
 
-        expect(firstToDoTitle).toBeInTheDocument();
-        expect(firstToDoDetails).toBeInTheDocument();
-        expect(firstToDoOwner).toBeInTheDocument();
-        expect(firstToDoDate).toBeInTheDocument();
-        expect(secondToDoTitle).toBeInTheDocument();
-        expect(secondToDoDetails).toBeInTheDocument();
-        expect(secondToDoOwner).toBeInTheDocument();
-        expect(secondToDoDate).toBeInTheDocument();
+    expect(firstItemTitle).toBeInTheDocument();
+    expect(secondItemTitle).toBeInTheDocument();
+    expect(thirdItemTitle).toBeInTheDocument();
 
-    });
+    expect(firstItemOwner).toBeInTheDocument();
+    expect(secondItemOwner).toBeInTheDocument();
+    expect(thirdItemOwner).toBeInTheDocument();
+  });
 
-    it("renders small todo components if dragModeOn", () => {
-        const {firstToDoTitle, firstToDoOwner, secondToDoTitle, secondToDoOwner, firstToDoDate, secondToDoDate} = setup({dragModeOn: true});
+  it("shows correct item data", () => {
+    const {
+      firstItemTitle,
+      secondItemTitle,
+      thirdItemTitle,
+      firstItemOwner,
+      secondItemOwner,
+      thirdItemOwner,
+    } = setup();
 
-        const firstToDoDetails = screen.queryByText("no details");
-        const secondToDoDetails = screen.queryByText("many details");
+    expect(firstItemTitle).toHaveTextContent("item 1");
+    expect(secondItemTitle).toHaveTextContent("item 2");
+    expect(thirdItemTitle).toHaveTextContent("item 3");
 
-        expect(firstToDoTitle).toBeInTheDocument();
-        expect(firstToDoOwner).toBeInTheDocument();
-        expect(secondToDoTitle).toBeInTheDocument();
-        expect(secondToDoOwner).toBeInTheDocument();
-        expect(firstToDoDate).toBeInTheDocument();
-        expect(secondToDoDate).toBeInTheDocument();
-
-        expect(firstToDoDetails).toBeNull();
-        expect(secondToDoDetails).toBeNull();
-        
-    })
-}
-);
+    expect(firstItemOwner).toHaveTextContent("peter");
+    expect(secondItemOwner).toHaveTextContent("paul");
+    expect(thirdItemOwner).toHaveTextContent("mary");
+  });
+});

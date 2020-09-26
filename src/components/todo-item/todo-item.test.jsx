@@ -1,115 +1,105 @@
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  getAllByText,
-  getAllByTestId,
-  getByTestId,
-} from "@testing-library/react";
+import { Provider } from "react-redux";
+import configureStore from "redux-mock-store";
+import { ActionTypes } from "../../constants/constants";
 
-import userEvent from "@testing-library/user-event";
+import { render, fireEvent, waitFor, screen } from "@testing-library/react";
 
 import ToDoItem from "./todo-item.component";
+import { DEFAULT_SORTS } from "../../constants/constants";
+import { parseDate, formatDate } from "../utils/utils";
 
-import { ToDoFields } from "../../constants/constants";
-import { ActionTypes, Themes, Columns } from "../../constants/constants";
-
-import { useState } from "react";
+const mockStore = configureStore([]);
 
 describe("<ToDoItem />", () => {
-  const { DONE, REMOVE } = ActionTypes;
+  const date = "2020-09-25T00:00:00.000Z";
+  let props;
 
-  const setup = (propOverrides) => {
-    const props = Object.assign(
+  const setup = ({ propOverrides = {}, storeOverrides = {} } = {}) => {
+    props = Object.assign(
       {
+        _id: 123,
+        key: 123,
         actions: {
-          [DONE]: jest.fn(),
-          [REMOVE]: jest.fn(),
+          [ActionTypes.REMOVE]: jest.fn(),
+          [ActionTypes.UPDATE]: jest.fn(),
+          [ActionTypes.EDIT]: jest.fn(),
         },
-        details: "todo details",
-        done: false,
-        dueDate: new Date(),
-        id: Math.floor(Math.random() * 10),
-        owner: "John Smith",
-        title: "todo for today",
-        color: "#bbe1fa",
+        sorts: DEFAULT_SORTS,
       },
       propOverrides
     );
 
-    const setState = jest.fn();
-    const useStateSpy = jest.spyOn(React, "useState");
-    useStateSpy.mockImplementation((init) => [init, setState]);
+    const storeProps = Object.assign(
+      {
+        title: "my item",
+        owner: "peter",
+        dueDate: date,
+        color: "black",
+        details: "these are the details",
+        done: false,
+      },
+      storeOverrides
+    );
 
-    const {
-      getByText,
-      getAllByText,
-      getAllByTestId,
-      getByLabelText,
-      rerender,
-      debug,
-      container,
-    } = render(<ToDoItem {...props} />);
+    const storeObj = {
+      todoItems: {
+        byID: {
+          123: storeProps,
+        },
+      },
+    };
+
+    const store = mockStore(storeObj);
+
+    const displayDate = formatDate(
+      new Date(storeObj.todoItems.byID[123].dueDate)
+    );
+
+    const { getByText, getAllByText, getByTestId } = render(
+      <div className="root" id="root">
+      <Provider store={store}>
+        <ToDoItem {...props} />
+      </Provider>
+      <div className="modal-root" id="modal-root"></div>
+      </div>
+    );
 
     return {
-      props,
-      debug,
-      container,
-      titleFrontTextField: getAllByText(props.title)[0],
-      titleBackTextField: getAllByText(props.title)[1],
-      removeIcon: getAllByTestId("icon_remove")[0],
-      doneIcon: getAllByTestId("icon_done")[0],
-      editIcon: getAllByTestId("icon_edit")[0],
-      colorIcon: getAllByTestId("icon_color")[0],
+      title: getAllByText(storeObj.todoItems.byID[123].title),
+      owner: getAllByText(storeObj.todoItems.byID[123].owner),
+      details: getByText(storeObj.todoItems.byID[123].details),
+      date: getAllByText(displayDate),
+      buttonEdit: getByText("Edit"),
     };
   };
 
-  it("renders with defaults", () => {
-    const {
-      titleFrontTextField,
-      titleBackTextField,
-      removeIcon,
-      doneIcon,
-      debug,
-    } = setup();
+  it("renders with default props", () => {
+    const { title, owner, details, date, buttonEdit } = setup();
 
-    expect(titleFrontTextField).toBeInTheDocument();
-    expect(titleBackTextField).toBeInTheDocument();
-    expect(removeIcon).toBeInTheDocument();
-    expect(doneIcon).toBeInTheDocument();
+    expect(title[0]).toBeInTheDocument();
+    expect(title[1]).toBeInTheDocument();
+    expect(owner[0]).toBeInTheDocument();
+    expect(owner[1]).toBeInTheDocument();
+    expect(details).toBeInTheDocument();
+    expect(date[0]).toBeInTheDocument();
+    expect(buttonEdit).toBeInTheDocument();
   });
 
-  it("clicking icons fires related actions", () => {
-    const {
-      props: { actions },
-      doneIcon,
-      removeIcon,
-      debug,
-    } = setup();
+  it("renders with custom props", () => {
+    const { title, owner, details } = setup({
+      storeOverrides: {
+        owner: "paul",
+        title: "second item",
+        details: "new details",
+      },
+    });
 
-    fireEvent.click(doneIcon);
-    expect(actions[DONE]).toHaveBeenCalledTimes(1);
-
-    fireEvent.click(removeIcon);
-    expect(actions[REMOVE]).toHaveBeenCalledTimes(1);
+    expect(owner[0]).toHaveTextContent("paul");
+    expect(owner[1]).toHaveTextContent("paul");
+    expect(title[0]).toHaveTextContent("second item");
+    expect(title[1]).toHaveTextContent("second item");
+    expect(details).toHaveTextContent("new details");
   });
 
-  it("clicking edit icon toggles edit mode", () => {
-    const { editIcon, saveButton, titleEditableTextField, debug } = setup();
-    const onChange = jest.fn();
-
-    fireEvent.click(editIcon);
-    expect(screen.getByText("Save")).toBeInTheDocument();
-
-    userEvent.type(screen.getByLabelText("Title"), "my new todo");
-    expect(screen.getByLabelText("Title")).toHaveValue("my new todo");
-  });
-
-  it("clicking color icon toggles color edit more", () => {
-    const { colorIcon, debug } = setup();
-
-    fireEvent.click(colorIcon);
-    expect(screen.getByTestId("color-picker")).toBeInTheDocument();
-  });
 });

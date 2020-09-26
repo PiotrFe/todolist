@@ -20,6 +20,8 @@ import {
   ColorPickerColors,
 } from "../../constants/constants";
 
+import {formatDate} from "../utils/utils";
+
 import "./todo-item.styles.scss";
 
 const ToDoItem = ({
@@ -39,10 +41,7 @@ const ToDoItem = ({
   const { DONE, SUBMIT, EDIT, REMOVE, UPDATE, CANCEL } = ActionTypes;
   const { TITLE, DUE_DATE, OWNER, COLOR } = ToDoFields;
 
-  const date = new Date(dueDate);
-  const formattedDate = `${date.getDate()}-${
-    date.getMonth() + 1
-  }-${date.getFullYear()}`;
+  const displayDate = formatDate(new Date(dueDate))
 
   const handleToDoDone = () => {
     actions[UPDATE]({ todoID: _id, field: "done", value: !done });
@@ -129,7 +128,7 @@ const ToDoItem = ({
                     sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null
                   }`}
                 >
-                  {formattedDate}
+                  {displayDate}
                 </span>
               </div>
               <div className={`todo-item__owner todo-item__owner--front`}>
@@ -170,7 +169,7 @@ const ToDoItem = ({
                   sorts[DUE_DATE] !== 0 ? "todo-item__field--sorted" : null
                 }`}
               >
-                {formattedDate}
+                {displayDate}
               </span>
             </div>
           </div>
