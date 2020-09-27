@@ -1,47 +1,123 @@
 import FilterBarReducer from "./filter-bar.reducer";
-
 import * as actions from "./filter-bar.actions";
 import { FilterBarTypes } from "./filter-bar.types";
+import { FilterTypes } from "../filters/filter.types";
 
 describe("FilterBarReducer", () => {
   const INITIAL_STATE = {
-    filterPreview: [],
-    error: null,
+    previewByListID: {},
   };
 
-  const setup = (stateOverrides) => {
-    return Object.assign({}, INITIAL_STATE, stateOverrides);
-  };
+  const setup = (stateOverrides) =>
+    Object.assign({}, INITIAL_STATE, stateOverrides);
 
-  it("returns initial state", () => {
+  it("returns default state", () => {
     expect(FilterBarReducer(undefined, {})).toEqual(INITIAL_STATE);
   });
 
-  it("handles FETCH_FILTER_PREVIEW_SUCCESS action", () => {
-    const filterPreview = ["filter 1", "filter 2", "filter 3"];
-    const action = {
-      type: FilterBarTypes.FETCH_FILTER_PREVIEW_SUCCESS,
-      payload: filterPreview,
-    };
+  it("handles SET_PREVIEW_LOADING action", () => {
     const state = setup();
-    const expectedState = setup({
-      filterPreview,
-    });
-
+    const action = {
+      type: FilterBarTypes.SET_PREVIEW_LOADING,
+      payload: {
+        listID: 123,
+      },
+    };
+    const expectedState = {
+      previewByListID: {
+        123: {
+          loading: true,
+        },
+      },
+    };
     expect(FilterBarReducer(state, action)).toEqual(expectedState);
   });
 
   it("handles FETCH_FILTER_PREVIEW_SUCCESS action", () => {
-      const error = "FAILED TO FETCH";
-      const action = {
-          type: FilterBarTypes.FETCH_FILTER_PREVIEW_FAILURE,
-          payload: error
-      }
-      const state = setup();
-      const expectedState = setup({
-          error
-      })
+    const state = setup({
+      previewByListID: {
+        123: {
+          loading: true,
+        },
+      },
+    });
+    const action = {
+      type: FilterBarTypes.FETCH_FILTER_PREVIEW_SUCCESS,
+      payload: {
+        listID: 123,
+        data: ["preview 1", "preview 2"],
+      },
+    };
+    const expectedState = {
+      previewByListID: {
+        123: {
+          loading: false,
+          preview: ["preview 1", "preview 2"],
+          error: "",
+        },
+      },
+    };
 
-      expect(FilterBarReducer(state, action)).toEqual(expectedState);
-  })
+    expect(FilterBarReducer(state, action)).toEqual(expectedState);
+  });
+
+  it("handles FETCH_FILTER_PREVIEW_FAILURE action", () => {
+    const state = setup({
+      previewByListID: {
+        123: {
+          loading: true,
+        },
+      },
+    });
+
+    const action = {
+      type: FilterBarTypes.FETCH_FILTER_PREVIEW_FAILURE,
+      payload: {
+        listID: 123,
+        error: "an error occurred",
+      },
+    };
+
+    const expectedState = {
+      previewByListID: {
+        123: {
+          loading: false,
+          error: "an error occurred",
+        },
+      },
+    };
+
+    expect(FilterBarReducer(state, action)).toEqual(expectedState);
+  });
+
+  it("handles CLEAR_FILTER_PREVIEW action", () => {
+    const state = setup({
+      previewByListID: {
+        123: {
+          loading: false,
+          error: "",
+          preview: {
+            item1: "value1",
+            item2: "value2",
+          },
+        },
+      },
+    });
+
+    const action = {
+      type: FilterBarTypes.CLEAR_FILTER_PREVIEW,
+      payload: { listID: 123 },
+    };
+
+    const expectedState = {
+      previewByListID: {
+        123: {
+          loading: false,
+          error: "",
+          preview: {}
+        }
+      }
+    }
+    expect(FilterBarReducer(state, action)).toEqual(expectedState);
+  });
 });

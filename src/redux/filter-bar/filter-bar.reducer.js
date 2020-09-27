@@ -52,7 +52,7 @@ const FilterBarReducer = (state = INITIAL_STATE, action) => {
           [listID]: {
             ...state.previewByListID[listID],
             loading: false,
-            error: action.payload,
+            error: action.payload.error,
           },
         },
       };
