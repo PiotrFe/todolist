@@ -53,7 +53,7 @@ const FilterBar = ({
   fetchFilteredToDoS,
 }) => {
   const [filterBarContent, updateFilterBarContent] = useState("");
-  const [filterMode, updateFilterMode] = useState(true);
+  const [filterMode, updateFilterMode] = useState(false);
   const [filterWord, updateFilterWord] = useState("");
   const [activeFilters, setActiveFilters] = useState([]);
 
@@ -67,8 +67,9 @@ const FilterBar = ({
 
   const fetchPreview = useCallback(() => {
     if (filterBarContent.length >= 3) {
+      updateFilterWord(filterBarContent);
       updateFilterMode(true);
-      fetchFilterPreview(filterBarContent);
+      showFilterPreview({ listID, filters, word: filterBarContent });
     } else {
       updateFilterMode(false);
     }
@@ -97,14 +98,9 @@ const FilterBar = ({
     }
   }, [globalFilters.length]);
 
-  const updateFilterBar = (content) => {
-    updateFilterBarContent(content);
-  };
-
-  const fetchFilterPreview = (word) => {
-    updateFilterWord(word);
-    showFilterPreview({ listID, filters, word });
-  };
+  // const updateFilterBar = (content) => {
+  //   updateFilterBarContent(content);
+  // };
 
   const applyFilter = (filter) => {
     addFilter({
@@ -135,7 +131,7 @@ const FilterBar = ({
       >
         <div className="todo-input-wrapper">
           <TodoInput
-            onChange={updateFilterBar}
+            onChange={updateFilterBarContent}
             content={filterBarContent}
             ref={inputEl}
             activeFilters={activeFilters}
